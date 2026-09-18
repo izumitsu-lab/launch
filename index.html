@@ -89,9 +89,11 @@
 
     /* お気に入り＆検索のグリッドと小見出し */
     .grid, .engine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 24px; max-width: 1400px; margin: 0 auto; align-content: start; padding-bottom: 120px; min-height: 100%;}
+    
+    /* 📱 スマホ時のグリッド表示設定（3列に変更し余白を詰める） */
     @media (max-width: 768px) { 
-      .grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 16px; padding-bottom: 100px; }
-      .engine-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding-bottom: 100px; }
+      .grid { grid-template-columns: repeat(3, 1fr); gap: 12px; padding-bottom: 100px; }
+      .engine-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; padding-bottom: 100px; }
     }
     
     /* 🌟 小見出し */
@@ -146,7 +148,7 @@
     .add-heading-btn:hover { background: var(--menu-hover); color: var(--app-blue); border-color: var(--app-blue); transform: translateY(-2px); opacity: 1 !important; }
     .add-heading-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
-    /* カード・エンジンのスタイル */
+    /* カード（お気に入り）のスタイル */
     .card { background: var(--card-bg); border-radius: 12px; text-decoration: none; color: var(--text-main); display: flex; flex-direction: column; align-items: center; justify-content: space-between; aspect-ratio: 4 / 3; padding: 16px 12px 12px; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 2px 8px var(--shadow-color), 0 1px 2px var(--shadow-color); border: 1px solid rgba(128, 128, 128, 0.05); cursor: pointer; user-select: none; }
     .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px var(--hover-shadow), 0 4px 8px var(--shadow-color); }
     .card.dragging { opacity: 0.4; transform: scale(0.95); box-shadow: none; }
@@ -154,18 +156,31 @@
     .card-icon img { max-width: 56px; max-height: 56px; width: 100%; height: 100%; object-fit: contain; border-radius: 8px; background: transparent; }
     .card-title { font-size: 13px; font-weight: 600; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-sub); pointer-events: none; }
     
+    /* 📱 スマホ時のお気に入りカード調整 */
+    @media (max-width: 768px) {
+      .card { padding: 12px 8px 8px; border-radius: 10px; }
+      .card-title { font-size: 11px; }
+    }
+
     .add-bookmark-btn { background: transparent; border: 2px dashed var(--nav-border); box-shadow: none; opacity: 0; transition: opacity 0.3s, background 0.2s; justify-content: center;}
     .add-bookmark-btn:hover { opacity: 1 !important; background: var(--menu-hover); border-color: var(--app-blue); transform: translateY(-2px); box-shadow: none;}
     .add-bookmark-btn .card-icon svg { width: 32px; height: 32px; fill: var(--text-sub); transition: fill 0.2s; }
     .add-bookmark-btn:hover .card-icon svg { fill: var(--app-blue); }
 
-    .engine-btn { display: flex; align-items: center; justify-content: flex-start; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--nav-border); color: var(--text-main); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 8px var(--shadow-color); width: 100%; user-select: none; }
+    /* エンジン（検索モード）のスタイル */
+    .engine-btn { display: flex; align-items: center; justify-content: flex-start; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--nav-border); color: var(--text-main); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 8px var(--shadow-color); width: 100%; user-select: none; overflow: hidden; }
     .engine-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 16px var(--hover-shadow); }
     .engine-btn:active { transform: scale(0.96); }
     .engine-btn.dragging { opacity: 0.4; transform: scale(0.95); box-shadow: none; }
     .engine-btn img { width: 22px; height: 22px; border-radius: 4px; object-fit: contain; flex-shrink: 0; background: transparent; pointer-events: none;}
-    .engine-btn span { pointer-events: none; }
+    .engine-btn span { pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: left; }
     
+    /* 📱 スマホ時の検索ボタン調整 */
+    @media (max-width: 768px) {
+      .engine-btn { padding: 10px 8px; gap: 6px; font-size: 11px; border-radius: 10px; }
+      .engine-btn img { width: 18px; height: 18px; }
+    }
+
     .add-engine-btn { background: transparent; border: 2px dashed var(--nav-border); box-shadow: none; justify-content: center; color: var(--text-sub); opacity: 0; transition: all 0.3s; }
     .add-engine-btn:hover { opacity: 1 !important; border-color: var(--app-blue); color: var(--app-blue); transform: translateY(-2px); }
 
