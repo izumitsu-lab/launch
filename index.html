@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Launch</title>
+  
+  <style>
+    /* 🎨 カラーパレット (ライトモード) */
+    :root {
+      --bg-color: #f2f2f7;
+      --card-bg: #ffffff;
+      --text-main: #1c1c1e;
+      --text-sub: #8e8e93;
+      --accent-color: #000000;
+      --nav-border: #e5e5ea;
+      --shadow-color: rgba(0, 0, 0, 0.04);
+      --hover-shadow: rgba(0, 0, 0, 0.08);
+      --menu-bg: #ffffff;
+      --menu-hover: #f2f2f7;
+      --menu-border: rgba(0,0,0,0.1);
+      --app-blue: #007aff;
+      --app-green: #34c759;
+    }
+
+    /* 🌙 カラーパレット (ダークモード対応) */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #000000;
+        --card-bg: #1c1c1e;
+        --text-main: #ffffff;
+        --text-sub: #8e8e93;
+        --accent-color: #ffffff;
+        --nav-border: #38383a;
+        --shadow-color: rgba(0, 0, 0, 0.2);
+        --hover-shadow: rgba(0, 0, 0, 0.4);
+        --menu-bg: #2c2c2e;
+        --menu-hover: #3a3a3c;
+        --menu-border: rgba(255,255,255,0.1);
+        --app-blue: #0a84ff;
+        --app-green: #30d158;
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color); color: var(--text-main);
+      height: 100vh; width: 100vw; overflow: hidden;
+      display: flex; flex-direction: column; transition: background-color 0.3s ease;
+    }
+
+    .main-content { flex: 1; display: flex; overflow: hidden; position: relative; background-color: var(--bg-color); }
+    
+    .view {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      display: flex; flex-direction: column; opacity: 0; pointer-events: none; 
+      background-color: var(--bg-color);
+      transition: opacity 0.25s ease;
+    }
+    .view.scrollable { overflow-y: auto; }
+    .view.active { opacity: 1; pointer-events: auto; z-index: 5; }
+
+    /* 共通コンポーネント: ヘッダー＆タブ */
+    header {
+      background-color: var(--bg-color);
+      @supports (backdrop-filter: blur(20px)) { background-color: color-mix(in srgb, var(--bg-color) 85%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+      position: relative; z-index: 10; border-bottom: 1px solid var(--nav-border); flex-shrink: 0;
+    }
+    .tabs { display: flex; gap: 28px; padding: 16px 32px 0; overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none; align-items: baseline;}
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab { font-size: 15px; font-weight: 500; color: var(--text-sub); cursor: pointer; padding-bottom: 12px; white-space: nowrap; transition: all 0.2s ease; position: relative; user-select: none; }
+    .tab:hover { color: var(--text-main); }
+    .tab.active { color: var(--text-main); font-weight: 600; }
+    .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--accent-color); border-radius: 2px 2px 0 0; }
+    .tab.dragging { opacity: 0.4; transform: scale(0.95); }
+    .tab.drag-over { color: var(--app-blue); background: var(--menu-hover); border-radius: 6px 6px 0 0; }
+    
+    .add-folder-btn { font-size: 14px; font-weight: 600; opacity: 0; color: var(--app-blue); padding-left: 8px; padding-right: 8px; transition: opacity 0.3s ease; }
+    .add-folder-btn:hover { opacity: 1 !important; transform: translateY(-1px); }
+
+    .slider { display: flex; flex: 1; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .slider::-webkit-scrollbar { display: none; }
+    .folder { min-width: 100%; height: 100%; padding: 32px; scroll-snap-align: start; overflow-y: auto; }
+    @media (max-width: 768px) { .folder { padding: 20px 16px; } }
+
+    /* お気に入り＆検索のグリッドと小見出し */
+    .grid, .engine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 24px; max-width: 1400px; margin: 0 auto; align-content: start; padding-bottom: 120px; min-height: 100%;}
+    @media (max-width: 768px) { 
+      .grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 16px; padding-bottom: 100px; }
+      .engine-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding-bottom: 100px; }
+    }
+    
+    /* 🌟 小見出し */
+    .section-heading {
+      grid-column: 1 / -1;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: -0.2px;
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+      cursor: grab;
+      transition: opacity 0.2s;
+    }
+    .section-heading:active { cursor: grabbing; }
+    .section-heading.dragging { opacity: 0.4; }
+    
+    /* 小見出しのスペース設定 */
+    body.heading-space-small .section-heading { margin-top: 0px; margin-bottom: -16px; }
+    body.heading-space-medium .section-heading { margin-top: 16px; margin-bottom: -12px; }
+    body.heading-space-large .section-heading { margin-top: 32px; margin-bottom: 0px; }
+    .section-heading:first-child { margin-top: -16px !important; }
+
+    @media (max-width: 768px) {
+      body.heading-space-small .section-heading { margin-bottom: -8px; }
+      body.heading-space-medium .section-heading { margin-bottom: -4px; }
+    }
+
+    /* 🌟 小見出し追加ボタン */
+    .add-heading-btn {
+      grid-column: 1 / -1;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+      background: transparent;
+      border: 2px dashed var(--nav-border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      opacity: 0;
+    }
+    .add-heading-btn:hover { background: var(--menu-hover); color: var(--app-blue); border-color: var(--app-blue); transform: translateY(-2px); opacity: 1 !important; }
+    .add-heading-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+    /* カード・エンジンのスタイル */
+    .card { background: var(--card-bg); border-radius: 12px; text-decoration: none; color: var(--text-main); display: flex; flex-direction: column; align-items: center; justify-content: space-between; aspect-ratio: 4 / 3; padding: 16px 12px 12px; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 2px 8px var(--shadow-color), 0 1px 2px var(--shadow-color); border: 1px solid rgba(128, 128, 128, 0.05); cursor: pointer; user-select: none; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px var(--hover-shadow), 0 4px 8px var(--shadow-color); }
+    .card.dragging { opacity: 0.4; transform: scale(0.95); box-shadow: none; }
+    .card-icon { width: 100%; flex-grow: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; pointer-events: none; }
+    .card-icon img { max-width: 56px; max-height: 56px; width: 100%; height: 100%; object-fit: contain; border-radius: 8px; background: transparent; }
+    .card-title { font-size: 13px; font-weight: 600; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-sub); pointer-events: none; }
+    
+    .add-bookmark-btn { background: transparent; border: 2px dashed var(--nav-border); box-shadow: none; opacity: 0; transition: opacity 0.3s, background 0.2s; justify-content: center;}
+    .add-bookmark-btn:hover { opacity: 1 !important; background: var(--menu-hover); border-color: var(--app-blue); transform: translateY(-2px); box-shadow: none;}
+    .add-bookmark-btn .card-icon svg { width: 32px; height: 32px; fill: var(--text-sub); transition: fill 0.2s; }
+    .add-bookmark-btn:hover .card-icon svg { fill: var(--app-blue); }
+
+    .engine-btn { display: flex; align-items: center; justify-content: flex-start; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--nav-border); color: var(--text-main); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 8px var(--shadow-color); width: 100%; user-select: none; }
+    .engine-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 16px var(--hover-shadow); }
+    .engine-btn:active { transform: scale(0.96); }
+    .engine-btn.dragging { opacity: 0.4; transform: scale(0.95); box-shadow: none; }
+    .engine-btn img { width: 22px; height: 22px; border-radius: 4px; object-fit: contain; flex-shrink: 0; background: transparent; pointer-events: none;}
+    .engine-btn span { pointer-events: none; }
+    
+    .add-engine-btn { background: transparent; border: 2px dashed var(--nav-border); box-shadow: none; justify-content: center; color: var(--text-sub); opacity: 0; transition: all 0.3s; }
+    .add-engine-btn:hover { opacity: 1 !important; border-color: var(--app-blue); color: var(--app-blue); transform: translateY(-2px); }
+
+    /* 検索画面 */
+    .search-top-bar { padding: 32px 32px 16px; flex-shrink: 0; background-color: var(--bg-color); z-index: 20; }
+    @media (max-width: 768px) { .search-top-bar { padding: 24px 16px 12px; } }
+    .search-input-wrapper { position: relative; width: 100%; max-width: 680px; margin: 0 auto; display: flex; align-items: center; }
+    .search-icon { position: absolute; left: 16px; width: 20px; height: 20px; fill: var(--text-sub); pointer-events: none; }
+    .search-input { width: 100%; padding: 16px 90px 16px 48px; font-size: 17px; border-radius: 16px; border: 1px solid var(--nav-border); background: var(--card-bg); color: var(--text-main); box-shadow: 0 4px 16px var(--shadow-color); outline: none; transition: all 0.2s ease; -webkit-appearance: none; }
+    .search-input::-webkit-search-cancel-button { display: none; }
+    .search-input:focus { border-color: var(--app-blue); box-shadow: 0 4px 20px rgba(0, 122, 255, 0.15); }
+    .search-input::placeholder { color: var(--text-sub); opacity: 0.7; }
+    .search-actions { position: absolute; right: 8px; display: flex; align-items: center; gap: 2px; }
+    .icon-btn { background: transparent; border: none; padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; fill: var(--text-sub); transition: background 0.2s, fill 0.2s; }
+    .icon-btn:hover { background: var(--nav-border); fill: var(--text-main); }
+    .icon-btn svg { width: 18px; height: 18px; }
+    
+    .history-popup { display: none; position: absolute; top: 100%; left: 0; right: 0; margin-top: 12px; background: var(--menu-bg); border: 1px solid var(--menu-border); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15); border-radius: 16px; max-height: 300px; overflow-y: auto; z-index: 100; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
+    .history-item { padding: 14px 20px; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 14px; color: var(--text-main); border-bottom: 1px solid var(--nav-border); transition: background 0.15s; }
+    .history-item:last-child { border-bottom: none; }
+    .history-item:hover { background: var(--menu-hover); }
+    .history-icon { width: 18px; height: 18px; fill: var(--text-sub); flex-shrink: 0; }
+    .history-text { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .history-delete { padding: 6px; fill: var(--text-sub); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: -8px; transition: 0.2s; }
+    .history-delete:hover { background: rgba(255,0,0,0.1); fill: #ff3b30; }
+    .history-empty { padding: 24px; text-align: center; color: var(--text-sub); font-size: 14px; }
+
+    /* 設定画面 */
+    .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 0 4px; }
+    .page-title { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 0; }
+    .settings-close-btn { 
+      background: var(--card-bg); border: 1px solid var(--nav-border); border-radius: 50%;
+      width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; fill: var(--text-sub); transition: all 0.2s ease; box-shadow: 0 2px 8px var(--shadow-color);
+    }
+    .settings-close-btn:hover { background: var(--nav-border); fill: var(--text-main); transform: scale(1.05); }
+    .settings-close-btn svg { width: 20px; height: 20px; }
+
+    .settings-container { padding: 40px 24px; width: 100%; max-width: 800px; margin: 0 auto; padding-bottom: 120px; }
+    .settings-section { margin-bottom: 32px; }
+    .settings-section-title { font-size: 13px; text-transform: uppercase; color: var(--text-sub); margin-bottom: 8px; margin-left: 16px; letter-spacing: 0.5px; }
+    .settings-group { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid var(--nav-border); }
+    .settings-row { padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--nav-border); font-size: 16px; color: var(--text-main); cursor: pointer; transition: background 0.15s; }
+    .settings-row:active { background: var(--menu-hover); }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-row.danger { color: #ff3b30; justify-content: center; font-weight: 600; }
+    .settings-row.blue { color: var(--app-blue); justify-content: center; font-weight: 600; }
+    
+    .custom-select {
+      appearance: none; background-color: transparent; border: none; font-size: 16px; color: var(--text-sub); text-align: right; outline: none; cursor: pointer; padding-right: 20px;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%238e8e93%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+      background-repeat: no-repeat; background-position: right center; background-size: 12px auto;
+    }
+    .custom-select:focus { color: var(--app-blue); }
+
+    .toggle { position: relative; display: inline-block; width: 50px; height: 30px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--nav-border); transition: .3s; border-radius: 30px; }
+    .toggle-slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .toggle input:checked + .toggle-slider { background-color: var(--app-green); }
+    .toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+    /* 🌟 FAB（切り替えボタン）のサイズ設定 */
+    .fab-switch {
+      position: fixed;
+      bottom: calc(56px + env(safe-area-inset-bottom));
+      left: 50%; transform: translateX(-50%);
+      border-radius: 50%;
+      background: var(--card-bg);
+      @supports (backdrop-filter: blur(20px)) {
+        background: color-mix(in srgb, var(--card-bg) 85%, transparent);
+        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      }
+      border: 1px solid var(--nav-border);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 100;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    }
+    .fab-switch:hover { transform: translateX(-50%) scale(1.1); box-shadow: 0 12px 40px rgba(0,0,0,0.16), 0 6px 20px rgba(0,0,0,0.12); }
+    .fab-switch:active { transform: translateX(-50%) scale(0.95); }
+    .fab-switch svg { fill: var(--text-main); position: absolute; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+    .fab-switch .icon-search { opacity: 1; transform: scale(1) rotate(0deg); }
+    .fab-switch .icon-bookmark { opacity: 0; transform: scale(0.5) rotate(-90deg); }
+    .fab-switch.mode-search .icon-search { opacity: 0; transform: scale(0.5) rotate(90deg); }
+    .fab-switch.mode-search .icon-bookmark { opacity: 1; transform: scale(1) rotate(0deg); }
+
+    /* FAB 各サイズのCSS制御 */
+    body.fab-size-small .fab-switch { width: 64px; height: 64px; }
+    body.fab-size-small .fab-switch svg { width: 28px; height: 28px; }
+    body.fab-size-medium .fab-switch { width: 72px; height: 72px; }
+    body.fab-size-medium .fab-switch svg { width: 32px; height: 32px; }
+    body.fab-size-large .fab-switch { width: 80px; height: 80px; }
+    body.fab-size-large .fab-switch svg { width: 36px; height: 36px; }
+
+    /* 🌟 下部ナビゲーション（設定＆編集モード切替） */
+    .bottom-nav { 
+      position: fixed; bottom: 0; right: 0; left: 0;
+      height: 60px; padding-bottom: env(safe-area-inset-bottom); 
+      background-color: transparent; border-top: 1px solid transparent; 
+      display: flex; justify-content: flex-end; gap: 24px; padding-right: 24px; align-items: center; z-index: 90; 
+      transition: all 0.3s ease;
+    }
+    .bottom-nav:hover, .bottom-nav.force-show {
+      background-color: var(--bg-color); 
+      border-top: 1px solid var(--nav-border);
+    }
+    @supports (backdrop-filter: blur(20px)) {
+      .bottom-nav:hover, .bottom-nav.force-show {
+        background-color: color-mix(in srgb, var(--bg-color) 85%, transparent); 
+        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
+      }
+    }
+    .nav-item { 
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; 
+      color: var(--text-sub); cursor: pointer; height: 100%; transition: all 0.2s; 
+      opacity: 0; transform: translateY(10px); pointer-events: none;
+    }
+    .bottom-nav:hover .nav-item, .bottom-nav.force-show .nav-item { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .nav-item:hover { color: var(--text-main); }
+    .nav-item.active { color: var(--app-blue); }
+    .nav-item svg { width: 24px; height: 24px; fill: currentColor; }
+    .nav-label { font-size: 11px; font-weight: 600; }
+
+    /* 🌟 編集モード：オフ（Read Only Mode）の時のUI調整 */
+    body.read-only-mode .add-folder-btn,
+    body.read-only-mode .add-bookmark-btn,
+    body.read-only-mode .add-engine-btn,
+    body.read-only-mode .add-heading-btn {
+      display: none !important;
+    }
+    body.read-only-mode .section-heading,
+    body.read-only-mode .tab {
+      cursor: default;
+    }
+
+    /* 右クリックメニュー */
+    .context-menu { display: none; position: fixed; background: var(--menu-bg); border: 1px solid var(--menu-border); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); border-radius: 10px; padding: 6px 0; z-index: 9999; min-width: 200px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .menu-item { padding: 8px 16px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-main); transition: background 0.1s; }
+    .menu-item:hover { background: var(--menu-hover); }
+    .menu-item svg { width: 16px; height: 16px; fill: var(--text-sub); }
+    .menu-divider { height: 1px; background: var(--menu-border); margin: 6px 0; }
+
+    /* カスタムモーダル */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 10000; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s ease; }
+    .modal-overlay.show { opacity: 1; }
+    .modal-box { background: var(--card-bg); border: 1px solid var(--menu-border); border-radius: 16px; padding: 24px; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .modal-overlay.show .modal-box { transform: scale(1); }
+    .modal-box h3 { margin-bottom: 20px; font-size: 18px; font-weight: 600; color: var(--text-main); text-align: center; }
+    .modal-inputs { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .modal-inputs input { padding: 14px 16px; border-radius: 10px; border: 1px solid var(--nav-border); background: var(--bg-color); color: var(--text-main); font-size: 15px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .modal-inputs input:focus { border-color: var(--app-blue); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15); }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 12px; }
+    .modal-btn { padding: 12px 20px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; border: none; transition: background 0.2s; }
+    .modal-btn.cancel { background: var(--bg-color); color: var(--text-main); }
+    .modal-btn.cancel:hover { background: var(--nav-border); }
+    .modal-btn.save { background: var(--app-blue); color: #fff; }
+    .modal-btn.save:hover { background: #0056b3; }
+  </style>
+</head>
+<body class="heading-space-medium fab-size-medium">
+
+  <!-- 中央に浮かぶ切り替えボタン (FAB) -->
+  <div class="fab-switch" id="modeSwitchBtn" title="切り替え">
+    <svg class="icon-search" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+    <svg class="icon-bookmark" viewBox="0 0 24 24"><path d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/></svg>
+  </div>
+
+  <div class="main-content">
+    <!-- ⭐️ お気に入り画面 -->
+    <div id="view-favorites" class="view active">
+      <header><div class="tabs" id="favTabsContainer"></div></header>
+      <div class="slider" id="favSliderContainer"></div>
+    </div>
+
+    <!-- 🔍 検索画面 -->
+    <div id="view-search" class="view">
+      <div class="search-top-bar">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="ウェブや商品を検索..." autocomplete="off">
+          <div class="search-actions">
+            <button class="icon-btn" id="clearBtn" title="クリア" style="display: none;"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+            <button class="icon-btn" id="historyBtn" title="検索履歴"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></button>
+          </div>
+          <div class="history-popup" id="historyPopup"></div>
+        </div>
+      </div>
+      <header><div class="tabs" id="searchTabsContainer"></div></header>
+      <div class="slider" id="searchSliderContainer"></div>
+    </div>
+
+    <!-- ⚙️ 設定画面 -->
+    <div id="view-settings" class="view scrollable">
+      <div class="settings-container">
+        
+        <!-- 🌟 設定画面のヘッダー＆閉じるボタン -->
+        <div class="settings-header">
+          <h2 class="page-title">設定</h2>
+          <button class="settings-close-btn" id="settingsCloseBtn" title="閉じる">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </button>
+        </div>
+        
+        <div class="settings-section">
+          <div class="settings-section-title">デザイン</div>
+          <div class="settings-group">
+            <div class="settings-row" style="cursor: default;">
+              <span>小見出しの余白</span>
+              <select id="settingHeadingSpace" class="custom-select">
+                <option value="small">狭い</option>
+                <option value="medium" selected>普通</option>
+                <option value="large">広い</option>
+              </select>
+            </div>
+            <div class="settings-row" style="cursor: default;">
+              <span>切替ボタンの大きさ</span>
+              <select id="settingFabSize" class="custom-select">
+                <option value="small">小さい</option>
+                <option value="medium" selected>普通</option>
+                <option value="large">大きい</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">リンクの開き方</div>
+          <div class="settings-group">
+            <div class="settings-row" style="cursor: default;">
+              <span>開き方を指定</span>
+              <select id="settingLinkOpenMode" class="custom-select">
+                <option value="self">現在のタブ</option>
+                <option value="blank" selected>新しいタブ</option>
+                <option value="background">バックグラウンド</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">検索の設定</div>
+          <div class="settings-group">
+            <div class="settings-row"><span>検索履歴を保存する</span><label class="toggle"><input type="checkbox" id="settingSaveHistory" checked><span class="toggle-slider"></span></label></div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">データ管理</div>
+          <div class="settings-group">
+            <div class="settings-row blue" id="exportDataBtn"><span>データをエクスポート (JSON)</span></div>
+            <div class="settings-row blue" id="importDataBtn"><span>データをインポート (JSON)</span></div>
+          </div>
+          <input type="file" id="importFileInput" accept=".json" style="display: none;">
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">システム</div>
+          <div class="settings-group">
+            <div class="settings-row danger" id="initDataBtn"><span>すべてのデータを初期化</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🌟 下部ナビゲーションバー（編集モード切替ボタン追加） -->
+  <nav class="bottom-nav">
+    <div class="nav-item" id="nav-edit-toggle" title="編集モード切り替え">
+      <svg id="icon-edit-on" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+      <svg id="icon-edit-off" viewBox="0 0 24 24" style="display:none;"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+      <span class="nav-label" id="label-edit-toggle">編集：オン</span>
+    </div>
+    <div class="nav-item" id="nav-settings" title="設定">
+      <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+      <span class="nav-label">設定</span>
+    </div>
+  </nav>
+
+  <!-- カスタムモーダル -->
+  <div id="customModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+      <h3 id="modalTitle">Edit</h3>
+      <div class="modal-inputs">
+        <input type="text" id="modalInput1" autocomplete="off">
+        <input type="text" id="modalInput2" autocomplete="off">
+        <input type="text" id="modalInput3" autocomplete="off" placeholder="カスタムアイコンURL (任意)">
+      </div>
+      <div class="modal-actions">
+        <button id="modalCancelBtn" class="modal-btn cancel">キャンセル</button>
+        <button id="modalSaveBtn" class="modal-btn save">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- コンテキストメニュー -->
+  <div id="contextMenu" class="context-menu">
+    <div class="menu-item menu-type-open" id="menuOpen"><svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>新しいタブで開く</div>
+    <div class="menu-divider menu-type-open" id="menuDivider"></div>
+    <div class="menu-item menu-type-edit" id="menuEdit"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>編集</div>
+    <div class="menu-item menu-type-copy" id="menuCopy"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>URLをコピー</div>
+    <div class="menu-item menu-type-edit" id="menuRemove"><svg viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>削除</div>
+    <div class="menu-item menu-type-folder" id="menuRenameFolder"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>名前変更</div>
+    <div class="menu-item menu-type-folder" id="menuRemoveFolder"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.12-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg>削除</div>
+  </div>
+
+  <script>
+    /* =========================================================
+       1. 🌟 各種設定のロード＆適用ロジック
+       ========================================================= */
+    const settingLinkOpenMode = document.getElementById('settingLinkOpenMode');
+    if (localStorage.getItem('link_open_mode')) settingLinkOpenMode.value = localStorage.getItem('link_open_mode');
+    settingLinkOpenMode.addEventListener('change', (e) => localStorage.setItem('link_open_mode', e.target.value));
+
+    // 小見出しの余白
+    const settingHeadingSpace = document.getElementById('settingHeadingSpace');
+    if (localStorage.getItem('heading_space')) settingHeadingSpace.value = localStorage.getItem('heading_space');
+    const applyHeadingSpace = () => {
+      document.body.classList.remove('heading-space-small', 'heading-space-medium', 'heading-space-large');
+      document.body.classList.add(`heading-space-${settingHeadingSpace.value}`);
+    };
+    applyHeadingSpace();
+    settingHeadingSpace.addEventListener('change', (e) => { localStorage.setItem('heading_space', e.target.value); applyHeadingSpace(); });
+
+    // 切替ボタン(FAB)の大きさ
+    const settingFabSize = document.getElementById('settingFabSize');
+    if (localStorage.getItem('fab_size')) settingFabSize.value = localStorage.getItem('fab_size');
+    const applyFabSize = () => {
+      document.body.classList.remove('fab-size-small', 'fab-size-medium', 'fab-size-large');
+      document.body.classList.add(`fab-size-${settingFabSize.value}`);
+    };
+    applyFabSize();
+    settingFabSize.addEventListener('change', (e) => { localStorage.setItem('fab_size', e.target.value); applyFabSize(); });
+
+    // リンクを開く処理
+    function openLink(url) {
+      const mode = settingLinkOpenMode.value;
+      if (mode === 'self') window.location.href = url;
+      else if (mode === 'background') { const newWindow = window.open(url, '_blank', 'noopener,noreferrer'); if (newWindow) newWindow.blur(); window.focus(); } 
+      else window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    /* =========================================================
+       2. 🌟 編集モード管理 (Read Only Toggle)
+       ========================================================= */
+    let isEditMode = localStorage.getItem('edit_mode') !== 'false';
+    const navEditToggle = document.getElementById('nav-edit-toggle');
+    const iconEditOn = document.getElementById('icon-edit-on');
+    const iconEditOff = document.getElementById('icon-edit-off');
+    const labelEditToggle = document.getElementById('label-edit-toggle');
+
+    const updateEditMode = () => {
+      if (isEditMode) {
+        document.body.classList.remove('read-only-mode');
+        iconEditOn.style.display = 'block'; iconEditOff.style.display = 'none';
+        labelEditToggle.textContent = '編集：オン';
+        navEditToggle.classList.add('active');
+      } else {
+        document.body.classList.add('read-only-mode');
+        iconEditOn.style.display = 'none'; iconEditOff.style.display = 'block';
+        labelEditToggle.textContent = '編集：オフ';
+        navEditToggle.classList.remove('active');
+      }
+      localStorage.setItem('edit_mode', isEditMode);
+    };
+    updateEditMode();
+    navEditToggle.addEventListener('click', () => { isEditMode = !isEditMode; updateEditMode(); });
+
+
+    /* =========================================================
+       3. 画面切り替えロジック
+       ========================================================= */
+    const views = { favorites: document.getElementById('view-favorites'), search: document.getElementById('view-search'), settings: document.getElementById('view-settings') };
+    const navSettings = document.getElementById('nav-settings'); const bottomNav = document.querySelector('.bottom-nav'); const modeSwitchBtn = document.getElementById('modeSwitchBtn');
+    let currentMode = 'favorites';
+
+    function switchView(targetName) {
+      Object.values(views).forEach(view => view.classList.remove('active'));
+      if (targetName === 'settings') {
+        views.settings.classList.add('active'); navSettings.classList.add('active'); bottomNav.classList.add('force-show'); 
+      } else {
+        currentMode = targetName; views[targetName].classList.add('active'); navSettings.classList.remove('active'); bottomNav.classList.remove('force-show');
+        if (targetName === 'search') { modeSwitchBtn.classList.add('mode-search'); setTimeout(() => document.getElementById('searchInput').focus(), 100); } 
+        else modeSwitchBtn.classList.remove('mode-search');
+      }
+    }
+    
+    navSettings.addEventListener('click', () => { if (views.settings.classList.contains('active')) switchView(currentMode); else switchView('settings'); });
+    document.getElementById('settingsCloseBtn').addEventListener('click', () => switchView(currentMode));
+    
+    modeSwitchBtn.addEventListener('click', () => { if (currentMode === 'favorites') switchView('search'); else switchView('favorites'); });
+    document.addEventListener('keydown', (e) => { if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); switchView('search'); } });
+
+    /* =========================================================
+       4. 汎用モーダル (入力画面)
+       ========================================================= */
+    let modalCallback = null;
+    const modalOverlay = document.getElementById('customModal'); const modalTitle = document.getElementById('modalTitle');
+    const modalInput1 = document.getElementById('modalInput1'); const modalInput2 = document.getElementById('modalInput2'); const modalInput3 = document.getElementById('modalInput3');
+    const modalSaveBtn = document.getElementById('modalSaveBtn');
+
+    function openModal(title, val1, val2, val3, showUrl, urlPlaceholder, showIconInput, callback) {
+      modalTitle.textContent = title;
+      modalInput1.value = val1; modalInput1.placeholder = (showUrl || title.includes("見出し")) ? "名前を入力" : "フォルダ名を入力";
+      if (showUrl) { modalInput2.value = val2; modalInput2.placeholder = urlPlaceholder; modalInput2.style.display = 'block'; } else { modalInput2.style.display = 'none'; }
+      if (showIconInput) { modalInput3.value = val3 || ""; modalInput3.style.display = 'block'; } else { modalInput3.style.display = 'none'; }
+      modalCallback = callback; modalOverlay.style.display = 'flex';
+      setTimeout(() => modalOverlay.classList.add('show'), 10);
+      modalInput1.focus();
+    }
+    function closeModal() { modalOverlay.classList.remove('show'); setTimeout(() => modalOverlay.style.display = 'none', 200); }
+    document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+    modalSaveBtn.addEventListener('click', () => { if (modalCallback) modalCallback(modalInput1.value, modalInput2.value, modalInput3.value); closeModal(); });
+    const handleEnter = (e) => { if (e.key === 'Enter') { if (e.isComposing) return; e.preventDefault(); modalSaveBtn.click(); } };
+    modalInput1.addEventListener('keydown', handleEnter); modalInput2.addEventListener('keydown', handleEnter); modalInput3.addEventListener('keydown', handleEnter);
+
+    /* =========================================================
+       5. フルデータセットの初期化
+       ========================================================= */
+    const getDomain = (url) => { try { return new URL(url).hostname; } catch(e){ return ""; } };
+    
+    const defaultBookmarkData = [
+      { folderName: "主要", bookmarks: [ { title: "Google", url: "https://www.google.com" }, { title: "Yahoo! JAPAN", url: "https://www.yahoo.co.jp" }, { title: "ChatGPT", url: "https://chat.openai.com" }, { title: "YouTube", url: "https://www.youtube.com" }, { title: "Yahoo!ニュース", url: "https://news.yahoo.co.jp" }, { title: "X (Twitter)", url: "https://twitter.com" }, { title: "Instagram", url: "https://www.instagram.com" }, { title: "Gmail", url: "https://mail.google.com" }, { title: "Google Maps", url: "https://www.google.com/maps" }, { title: "天気", url: "https://weather.yahoo.co.jp/weather/" } ] },
+      { folderName: "ニュース", bookmarks: [ { isHeading: true, title: "ポータル" }, { title: "Yahoo!ニュース", url: "https://news.yahoo.co.jp" }, { title: "日本経済新聞", url: "https://www.nikkei.com" }, { title: "SmartNews", url: "https://www.smartnews.com/ja/" }, { isHeading: true, title: "国際ニュース" }, { title: "BBC Japan", url: "https://www.bbc.com/japanese" }, { title: "CNN.co.jp", url: "https://www.cnn.co.jp" }, { title: "AFPBB News", url: "https://www.afpbb.com" }, { title: "ロイター", url: "https://jp.reuters.com" } ] },
+      { folderName: "AI", bookmarks: [ { title: "ChatGPT", url: "https://chat.openai.com" }, { title: "Gemini", url: "https://gemini.google.com" }, { title: "Claude", url: "https://claude.ai" }, { title: "Perplexity", url: "https://www.perplexity.ai" }, { title: "Copilot", url: "https://copilot.microsoft.com" }, { title: "DeepL翻訳", url: "https://www.deepl.com/translator" } ] },
+      { folderName: "SNS", bookmarks: [ { title: "X (Twitter)", url: "https://twitter.com" }, { title: "Instagram", url: "https://www.instagram.com" }, { title: "Facebook", url: "https://www.facebook.com" }, { title: "TikTok", url: "https://www.tiktok.com" }, { title: "Pinterest", url: "https://www.pinterest.jp" }, { title: "LinkedIn", url: "https://www.linkedin.com" } ] },
+      { folderName: "ショッピング", bookmarks: [ { title: "Amazon", url: "https://www.amazon.co.jp" }, { title: "楽天市場", url: "https://www.rakuten.co.jp" }, { title: "Yahoo!ショッピング", url: "https://shopping.yahoo.co.jp" }, { title: "価格.com", url: "https://kakaku.com" }, { title: "ヨドバシ.com", url: "https://www.yodobashi.com" }, { title: "メルカリ", url: "https://jp.mercari.com" }, { title: "ZOZOTOWN", url: "https://zozo.jp" }, { title: "ニトリ", url: "https://www.nitori-net.jp" }, { title: "無印良品", url: "https://www.muji.com/jp/ja/store" } ] }
+    ];
+    let bookmarkData = JSON.parse(localStorage.getItem('bookmarks_data')) || defaultBookmarkData;
+    function saveBookmarks() { localStorage.setItem('bookmarks_data', JSON.stringify(bookmarkData)); }
+
+    const defaultSearchEnginesData = [
+      { folderName: "ウェブ", engines: [ { name: "Google", url: "https://www.google.com/search?q=", home: "https://www.google.com", domain: "google.com" }, { name: "Yahoo! JAPAN", url: "https://search.yahoo.co.jp/search?p=", home: "https://www.yahoo.co.jp", domain: "yahoo.co.jp" }, { name: "Bing", url: "https://www.bing.com/search?q=", home: "https://www.bing.com", domain: "bing.com" }, { name: "DuckDuckGo", url: "https://duckduckgo.com/?q=", home: "https://duckduckgo.com", domain: "duckduckgo.com" }, { name: "YouTube", url: "https://www.youtube.com/results?search_query=", home: "https://www.youtube.com", domain: "youtube.com" }, { name: "画像検索", url: "https://www.google.com/search?tbm=isch&q=", home: "https://www.google.com/imghp", domain: "google.com" }, { name: "リアルタイム", url: "https://search.yahoo.co.jp/realtime/search?p=", home: "https://search.yahoo.co.jp/realtime", domain: "yahoo.co.jp" }, { name: "X (Twitter)", url: "https://twitter.com/search?q=", home: "https://twitter.com", domain: "twitter.com" }, { name: "Instagram", url: "https://www.instagram.com/explore/tags/", home: "https://www.instagram.com", domain: "instagram.com" }, { name: "Wikipedia", url: "https://ja.wikipedia.org/wiki/Special:Search?search=", home: "https://ja.wikipedia.org", domain: "wikipedia.org" } ] },
+      { folderName: "ショッピング", engines: [ { isHeading: true, name: "総合通販" }, { name: "Amazon", url: "https://www.amazon.co.jp/s?k=", home: "https://www.amazon.co.jp", domain: "amazon.co.jp" }, { name: "楽天市場", url: "https://search.rakuten.co.jp/search/mall/", home: "https://www.rakuten.co.jp", domain: "rakuten.co.jp" }, { name: "Yahoo!ショッピング", url: "https://shopping.yahoo.co.jp/search?p=", home: "https://shopping.yahoo.co.jp", domain: "shopping.yahoo.co.jp" }, { isHeading: true, name: "家電・価格比較" }, { name: "ヨドバシ", url: "https://www.yodobashi.com/?word=", home: "https://www.yodobashi.com", domain: "yodobashi.com" }, { name: "ビックカメラ", url: "https://www.biccamera.com/bc/category/?q=", home: "https://www.biccamera.com", domain: "biccamera.com" }, { name: "価格.com", url: "https://kakaku.com/search_results/?query=", home: "https://kakaku.com", domain: "kakaku.com" }, { name: "ZOZOTOWN", url: "https://zozo.jp/search/?p_keywd=", home: "https://zozo.jp", domain: "zozo.jp" }, { name: "Qoo10", url: "https://www.qoo10.jp/gmkt.inc/Search/Default.aspx?keyword=", home: "https://www.qoo10.jp", domain: "qoo10.jp" }, { name: "モノタロウ", url: "https://www.monotaro.com/s/q-", home: "https://www.monotaro.com", domain: "monotaro.com" } ] },
+      { folderName: "フリマ・オークション", engines: [ { name: "メルカリ", url: "https://jp.mercari.com/search?keyword=", home: "https://jp.mercari.com", domain: "mercari.com" }, { name: "ヤフオク!", url: "https://auctions.yahoo.co.jp/search/search?p=", home: "https://auctions.yahoo.co.jp", domain: "auctions.yahoo.co.jp" }, { name: "Yahoo!フリマ", url: "https://paypayfleamarket.yahoo.co.jp/search?q=", home: "https://paypayfleamarket.yahoo.co.jp", domain: "paypayfleamarket.yahoo.co.jp" }, { name: "ラクマ", url: "https://fril.jp/search/", home: "https://fril.jp", domain: "fril.jp" }, { name: "ジモティー", url: "https://jmty.jp/all/search?keyword=", home: "https://jmty.jp", domain: "jmty.jp" } ] },
+      { folderName: "地図・地域・グルメ", engines: [ { name: "Google MAP", url: "https://www.google.com/maps/search/", home: "https://www.google.com/maps", domain: "google.com" }, { name: "食べログ", url: "https://tabelog.com/rstLst/?sw=", home: "https://tabelog.com", domain: "tabelog.com" }, { name: "ホットペッパー", url: "https://www.hotpepper.jp/CSP/psh010/doSearch?freeWord=", home: "https://www.hotpepper.jp", domain: "hotpepper.jp" }, { name: "ぐるなび", url: "https://r.gnavi.co.jp/area/jp/rs/?fw=", home: "https://r.gnavi.co.jp", domain: "gnavi.co.jp" }, { name: "トリップアドバイザー", url: "https://www.tripadvisor.jp/Search?q=", home: "https://www.tripadvisor.jp", domain: "tripadvisor.jp" } ] },
+      { folderName: "辞書・翻訳・学術", engines: [ { name: "Weblio辞書", url: "https://www.weblio.jp/content/", home: "https://www.weblio.jp", domain: "weblio.jp" }, { name: "英辞郎", url: "https://eow.alc.co.jp/search?q=", home: "https://eow.alc.co.jp", domain: "alc.co.jp" }, { name: "コトバンク", url: "https://kotobank.jp/word/", home: "https://kotobank.jp", domain: "kotobank.jp" }, { name: "goo辞書", url: "https://dictionary.goo.ne.jp/srch/all/", home: "https://dictionary.goo.ne.jp", domain: "goo.ne.jp" }, { name: "Google Scholar", url: "https://scholar.google.com/scholar?q=", home: "https://scholar.google.com", domain: "scholar.google.com" }, { name: "CiNii", url: "https://cir.nii.ac.jp/all?q=", home: "https://cir.nii.ac.jp", domain: "nii.ac.jp" } ] },
+      { folderName: "エンタメ・生活", engines: [ { name: "クックパッド", url: "https://cookpad.com/search/", home: "https://cookpad.com", domain: "cookpad.com" }, { name: "クラシル", url: "https://www.kurashiru.com/search?query=", home: "https://www.kurashiru.com", domain: "kurashiru.com" }, { name: "映画.com", url: "https://eiga.com/search/", home: "https://eiga.com", domain: "eiga.com" }, { name: "Filmarks", url: "https://filmarks.com/search/movies?q=", home: "https://filmarks.com", domain: "filmarks.com" }, { name: "Prime Video", url: "https://www.amazon.co.jp/s?i=instant-video&k=", home: "https://www.amazon.co.jp/Prime-Video", domain: "amazon.co.jp" }, { name: "Spotify", url: "https://open.spotify.com/search/", home: "https://open.spotify.com", domain: "spotify.com" } ] }
+    ];
+    let searchEnginesData = JSON.parse(localStorage.getItem('search_engines_data')) || defaultSearchEnginesData;
+    function saveSearchEngines() { localStorage.setItem('search_engines_data', JSON.stringify(searchEnginesData)); }
+
+    /* =========================================================
+       6. 検索窓・履歴の処理
+       ========================================================= */
+    const searchInput = document.getElementById('searchInput'); const clearBtn = document.getElementById('clearBtn'); const historyBtn = document.getElementById('historyBtn'); const historyPopup = document.getElementById('historyPopup'); const settingSaveHistory = document.getElementById('settingSaveHistory'); const HISTORY_KEY = 'search_history'; let searchHistory = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+    if (localStorage.getItem('save_history_pref') !== null) settingSaveHistory.checked = localStorage.getItem('save_history_pref') === 'true'; settingSaveHistory.addEventListener('change', (e) => localStorage.setItem('save_history_pref', e.target.checked));
+    const toggleClearBtn = () => clearBtn.style.display = searchInput.value.length > 0 ? 'flex' : 'none'; searchInput.addEventListener('input', toggleClearBtn); clearBtn.addEventListener('click', () => { searchInput.value = ''; toggleClearBtn(); searchInput.focus(); });
+    const renderHistory = () => { historyPopup.innerHTML = ''; if (searchHistory.length === 0) { historyPopup.innerHTML = '<div class="history-empty">検索履歴はありません</div>'; return; } searchHistory.forEach((keyword, index) => { const item = document.createElement('div'); item.className = 'history-item'; item.innerHTML = `<svg class="history-icon" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg><div class="history-text">${keyword}</div><div class="history-delete"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></div>`; item.querySelector('.history-delete').addEventListener('click', (e) => { e.stopPropagation(); searchHistory.splice(index, 1); localStorage.setItem(HISTORY_KEY, JSON.stringify(searchHistory)); renderHistory(); }); item.addEventListener('click', () => { searchInput.value = keyword; toggleClearBtn(); historyPopup.style.display = 'none'; }); historyPopup.appendChild(item); }); };
+    historyBtn.addEventListener('click', (e) => { e.stopPropagation(); if (historyPopup.style.display === 'block') historyPopup.style.display = 'none'; else { renderHistory(); historyPopup.style.display = 'block'; } }); document.addEventListener('click', (e) => { if (!historyPopup.contains(e.target) && e.target !== historyBtn && !historyBtn.contains(e.target)) historyPopup.style.display = 'none'; });
+    
+    const executeSearch = (url, home) => { 
+      const query = searchInput.value.trim(); 
+      if (query) { 
+        if (settingSaveHistory.checked) { searchHistory = searchHistory.filter(k => k !== query); searchHistory.unshift(query); if (searchHistory.length > 20) searchHistory.pop(); localStorage.setItem(HISTORY_KEY, JSON.stringify(searchHistory)); } 
+        openLink(url + encodeURIComponent(query)); 
+      } else { openLink(home); } 
+      searchInput.blur(); historyPopup.style.display = 'none'; 
+    };
+    searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { 
+      const firstEngine = searchEnginesData[0]?.engines.find(eng => !eng.isHeading);
+      if (firstEngine) executeSearch(firstEngine.url, firstEngine.home); 
+    } });
+
+    /* =========================================================
+       7. コンテキストメニュー表示処理 (編集モード対応)
+       ========================================================= */
+    function showContextMenu(e, type, target) {
+      if (!isEditMode) return; // 編集モードオフ時は何もしない
+      
+      window.currentContextTarget = target; window.currentContextType = type;
+      const menu = document.getElementById('contextMenu');
+      document.querySelectorAll('.menu-item, .menu-divider').forEach(el => el.style.display = 'none');
+      
+      if (type === 'bookmark') { document.querySelectorAll('.menu-type-open, .menu-type-edit, .menu-type-copy').forEach(el => el.style.display = 'flex'); document.getElementById('menuDivider').style.display = 'block'; }
+      else if (type === 'search-engine') { document.querySelectorAll('.menu-type-edit, .menu-type-copy').forEach(el => el.style.display = 'flex'); }
+      else if (type === 'folder' || type === 'search-folder') { document.querySelectorAll('.menu-type-folder').forEach(el => el.style.display = 'flex'); }
+      else if (type === 'heading' || type === 'search-heading') { document.querySelectorAll('.menu-type-edit').forEach(el => el.style.display = 'flex'); }
+      
+      menu.style.display = 'block';
+      let x = e.clientX, y = e.clientY;
+      if (x + menu.offsetWidth > window.innerWidth) x -= menu.offsetWidth;
+      if (y + menu.offsetHeight > window.innerHeight) y -= menu.offsetHeight;
+      menu.style.left = `${x}px`; menu.style.top = `${y}px`;
+    }
+    document.addEventListener('click', (e) => { if (e.button !== 2) document.getElementById('contextMenu').style.display = 'none'; });
+
+    /* =========================================================
+       8. お気に入り画面の描画 & D&D
+       ========================================================= */
+    const favTabs = document.getElementById('favTabsContainer'); const favSlider = document.getElementById('favSliderContainer');
+    let draggedFav = null; let draggedFavTab = null;
+    const favObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting && views.favorites.classList.contains('active')) { favTabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); const idx = entry.target.id.split('-')[2]; const activeTab = favTabs.querySelector(`.tab[data-index="${idx}"]`); if (activeTab) { activeTab.classList.add('active'); activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } } }); }, { root: favSlider, rootMargin: '0px', threshold: 0.6 });
+
+    const updateFavData = () => {
+      const allFolders = document.querySelectorAll('#favSliderContainer .folder');
+      allFolders.forEach((fDiv, fIdx) => {
+        const elements = Array.from(fDiv.querySelectorAll('.grid > *:not(.add-bookmark-btn):not(.add-heading-btn)'));
+        bookmarkData[fIdx].bookmarks = elements.map(el => {
+          if (el.classList.contains('section-heading')) return { isHeading: true, title: el.dataset.title };
+          return { title: el.dataset.title, url: el.dataset.url, iconUrl: el.dataset.iconUrl };
+        });
+      });
+      saveBookmarks(); renderFavorites();
+    };
+
+    function renderFavorites() {
+      favTabs.innerHTML = ''; favSlider.innerHTML = ''; favObserver.disconnect();
+      bookmarkData.forEach((folder, index) => {
+        const tab = document.createElement('div'); tab.className = `tab ${index === 0 ? 'active' : ''}`; tab.textContent = folder.folderName; tab.dataset.index = index; tab.setAttribute('draggable', 'true');
+        tab.addEventListener('click', () => { const slider = document.getElementById('favSliderContainer'); slider.scrollLeft = slider.clientWidth * index; });
+        tab.addEventListener('dragstart', (e) => { if(!isEditMode) { e.preventDefault(); return; } draggedFavTab = tab; setTimeout(() => tab.classList.add('dragging'), 0); });
+        tab.addEventListener('dragend', () => { if(!draggedFavTab) return; draggedFavTab.classList.remove('dragging'); const currentTabs = Array.from(favTabs.querySelectorAll('.tab:not(.add-folder-btn)')); bookmarkData = currentTabs.map(t => bookmarkData[parseInt(t.dataset.index)]); saveBookmarks(); renderFavorites(); draggedFavTab = null; });
+        tab.addEventListener('dragover', e => { e.preventDefault(); if (draggedFavTab && draggedFavTab !== tab) { const rect = tab.getBoundingClientRect(); if (e.clientX < rect.left + rect.width / 2) favTabs.insertBefore(draggedFavTab, tab); else favTabs.insertBefore(draggedFavTab, tab.nextSibling); } else if (draggedFav) { tab.classList.add('drag-over'); } });
+        tab.addEventListener('dragleave', () => tab.classList.remove('drag-over'));
+        tab.addEventListener('drop', e => { e.preventDefault(); tab.classList.remove('drag-over'); if (draggedFav) { const targetGrid = document.querySelector(`#fav-folder-${index} .grid`); targetGrid.insertBefore(draggedFav, targetGrid.querySelector('.add-bookmark-btn')); } });
+        tab.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'folder', tab); });
+        favTabs.appendChild(tab);
+
+        const folderDiv = document.createElement('div'); folderDiv.className = 'folder'; folderDiv.id = `fav-folder-${index}`;
+        const gridDiv = document.createElement('div'); gridDiv.className = 'grid';
+        gridDiv.addEventListener('dragover', e => { 
+          e.preventDefault(); 
+          const target = e.target.closest('.card, .section-heading, .add-heading-btn'); 
+          if (target && target !== draggedFav && !draggedFavTab) { 
+            if (target.classList.contains('add-bookmark-btn') || target.classList.contains('add-heading-btn')) {
+              gridDiv.insertBefore(draggedFav, gridDiv.querySelector('.add-bookmark-btn'));
+            } else {
+              const rect = target.getBoundingClientRect(); 
+              if (target.classList.contains('section-heading')) {
+                if (e.clientY < rect.top + rect.height / 2) gridDiv.insertBefore(draggedFav, target); 
+                else gridDiv.insertBefore(draggedFav, target.nextSibling); 
+              } else {
+                if (e.clientX < rect.left + rect.width / 2) gridDiv.insertBefore(draggedFav, target); 
+                else gridDiv.insertBefore(draggedFav, target.nextSibling); 
+              }
+            }
+          } 
+        });
+
+        folder.bookmarks.forEach((bm, bmIndex) => {
+          if (bm.isHeading) {
+            const heading = document.createElement('div'); heading.className = 'section-heading'; heading.textContent = bm.title;
+            heading.dataset.title = bm.title; heading.dataset.folderIndex = index; heading.dataset.itemIndex = bmIndex; heading.setAttribute('draggable', 'true');
+            heading.addEventListener('dragstart', (e) => { if(!isEditMode){ e.preventDefault(); return; } draggedFav = heading; setTimeout(() => heading.classList.add('dragging'), 0); });
+            heading.addEventListener('dragend', () => { if(!draggedFav) return; draggedFav.classList.remove('dragging'); updateFavData(); draggedFav = null; });
+            heading.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'heading', heading); });
+            gridDiv.appendChild(heading);
+          } else {
+            const domain = getDomain(bm.url); const card = document.createElement('a'); card.className = 'card'; card.href = bm.url; card.dataset.url = bm.url; card.dataset.title = bm.title; card.dataset.iconUrl = bm.iconUrl || ""; card.dataset.folderIndex = index; card.dataset.itemIndex = bmIndex; card.setAttribute('draggable', 'true');
+            card.addEventListener('click', (e) => { if (e.metaKey || e.ctrlKey) return; e.preventDefault(); openLink(bm.url); });
+            card.addEventListener('dragstart', (e) => { if(!isEditMode){ e.preventDefault(); return; } draggedFav = card; setTimeout(() => card.classList.add('dragging'), 0); });
+            card.addEventListener('dragend', () => { if(!draggedFav) return; draggedFav.classList.remove('dragging'); updateFavData(); draggedFav = null; });
+            card.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'bookmark', card); });
+            
+            let iconHtml = bm.iconUrl ? `<img src="${bm.iconUrl}" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=${domain}&sz=256';" alt="${bm.title}">` : `<img src="https://logo.clearbit.com/${domain}" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=${domain}&sz=256';" alt="${bm.title}">`;
+            card.innerHTML = `<div class="card-icon">${iconHtml}</div><div class="card-title">${bm.title}</div>`;
+            gridDiv.appendChild(card);
+          }
+        });
+
+        const addCard = document.createElement('a'); addCard.className = 'card add-bookmark-btn';
+        addCard.innerHTML = `<div class="card-icon"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></div><div class="card-title" style="color:var(--text-sub);">追加</div>`;
+        addCard.addEventListener('click', (e) => { e.preventDefault(); openModal("ブックマークを追加", "", "", "", true, "URL (例: https://example.com)", true, (title, url, iconUrl) => { if (!url || !title) return; if (!url.startsWith('http')) url = 'https://' + url; bookmarkData[index].bookmarks.push({ title: title, url: url, iconUrl: iconUrl }); saveBookmarks(); renderFavorites(); }); });
+        gridDiv.appendChild(addCard); 
+
+        const addHeadingBtn = document.createElement('div'); addHeadingBtn.className = 'add-heading-btn';
+        addHeadingBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>小見出しを追加`;
+        addHeadingBtn.addEventListener('click', () => {
+          openModal("小見出しを追加", "", "", "", false, "", false, (title) => {
+            if (title && title.trim()) { bookmarkData[index].bookmarks.push({ isHeading: true, title: title.trim() }); saveBookmarks(); renderFavorites(); }
+          });
+        });
+        gridDiv.appendChild(addHeadingBtn);
+
+        folderDiv.appendChild(gridDiv); favSlider.appendChild(folderDiv); favObserver.observe(folderDiv);
+      });
+      const addFolderBtn = document.createElement('div'); addFolderBtn.className = 'tab add-folder-btn'; addFolderBtn.textContent = '＋ 追加'; addFolderBtn.title = '新しいフォルダを追加';
+      addFolderBtn.addEventListener('click', () => { openModal("フォルダを追加", "", "", "", false, "", false, (name) => { if (name && name.trim()) { bookmarkData.push({ folderName: name.trim(), bookmarks: [] }); saveBookmarks(); renderFavorites(); setTimeout(() => { const slider = document.getElementById('favSliderContainer'); slider.scrollLeft = slider.scrollWidth; }, 100); } }); });
+      favTabs.appendChild(addFolderBtn);
+    }
+    renderFavorites();
+
+    /* =========================================================
+       9. 検索画面の描画 & D&D
+       ========================================================= */
+    const searchTabs = document.getElementById('searchTabsContainer'); const searchSlider = document.getElementById('searchSliderContainer');
+    let draggedSearch = null; let draggedSearchTab = null;
+    const searchObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting && views.search.classList.contains('active')) { searchTabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); const idx = entry.target.id.split('-')[2]; const activeTab = searchTabs.querySelector(`.tab[data-index="${idx}"]`); if (activeTab) { activeTab.classList.add('active'); activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } } }); }, { root: searchSlider, rootMargin: '0px', threshold: 0.6 });
+
+    const updateSearchData = () => {
+      const allFolders = document.querySelectorAll('#searchSliderContainer .folder');
+      allFolders.forEach((fDiv, fIdx) => {
+        const elements = Array.from(fDiv.querySelectorAll('.engine-grid > *:not(.add-engine-btn):not(.add-heading-btn)'));
+        searchEnginesData[fIdx].engines = elements.map(el => {
+          if (el.classList.contains('section-heading')) return { isHeading: true, name: el.dataset.name };
+          return { name: el.dataset.name, url: el.dataset.url, home: el.dataset.home, domain: el.dataset.domain, iconUrl: el.dataset.iconUrl };
+        });
+      });
+      saveSearchEngines(); renderSearchEngines();
+    };
+
+    function renderSearchEngines() {
+      searchTabs.innerHTML = ''; searchSlider.innerHTML = ''; searchObserver.disconnect();
+      searchEnginesData.forEach((folder, index) => {
+        const tab = document.createElement('div'); tab.className = `tab ${index === 0 ? 'active' : ''}`; tab.textContent = folder.folderName; tab.dataset.index = index; tab.setAttribute('draggable', 'true');
+        tab.addEventListener('click', () => { const slider = document.getElementById('searchSliderContainer'); slider.scrollLeft = slider.clientWidth * index; });
+        tab.addEventListener('dragstart', (e) => { if(!isEditMode) { e.preventDefault(); return; } draggedSearchTab = tab; setTimeout(() => tab.classList.add('dragging'), 0); });
+        tab.addEventListener('dragend', () => { if(!draggedSearchTab) return; draggedSearchTab.classList.remove('dragging'); const currentTabs = Array.from(searchTabs.querySelectorAll('.tab:not(.add-folder-btn)')); searchEnginesData = currentTabs.map(t => searchEnginesData[parseInt(t.dataset.index)]); saveSearchEngines(); renderSearchEngines(); draggedSearchTab = null; });
+        tab.addEventListener('dragover', e => { e.preventDefault(); if (draggedSearchTab && draggedSearchTab !== tab) { const rect = tab.getBoundingClientRect(); if (e.clientX < rect.left + rect.width / 2) searchTabs.insertBefore(draggedSearchTab, tab); else searchTabs.insertBefore(draggedSearchTab, tab.nextSibling); } else if (draggedSearch) { tab.classList.add('drag-over'); } });
+        tab.addEventListener('dragleave', () => tab.classList.remove('drag-over'));
+        tab.addEventListener('drop', e => { e.preventDefault(); tab.classList.remove('drag-over'); if (draggedSearch) { const targetGrid = document.querySelector(`#search-folder-${index} .engine-grid`); targetGrid.insertBefore(draggedSearch, targetGrid.querySelector('.add-engine-btn')); } });
+        tab.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'search-folder', tab); });
+        searchTabs.appendChild(tab);
+
+        const folderDiv = document.createElement('div'); folderDiv.className = 'folder'; folderDiv.id = `search-folder-${index}`;
+        const gridDiv = document.createElement('div'); gridDiv.className = 'engine-grid';
+        gridDiv.addEventListener('dragover', e => { 
+          e.preventDefault(); 
+          const target = e.target.closest('.engine-btn, .section-heading, .add-heading-btn'); 
+          if (target && target !== draggedSearch && !draggedSearchTab) { 
+            if (target.classList.contains('add-engine-btn') || target.classList.contains('add-heading-btn')) {
+              gridDiv.insertBefore(draggedSearch, gridDiv.querySelector('.add-engine-btn'));
+            } else {
+              const rect = target.getBoundingClientRect(); 
+              if (target.classList.contains('section-heading')) {
+                if (e.clientY < rect.top + rect.height / 2) gridDiv.insertBefore(draggedSearch, target); 
+                else gridDiv.insertBefore(draggedSearch, target.nextSibling); 
+              } else {
+                if (e.clientX < rect.left + rect.width / 2) gridDiv.insertBefore(draggedSearch, target); 
+                else gridDiv.insertBefore(draggedSearch, target.nextSibling); 
+              }
+            }
+          } 
+        });
+
+        folder.engines.forEach((engine, engIndex) => {
+          if (engine.isHeading) {
+            const heading = document.createElement('div'); heading.className = 'section-heading'; heading.textContent = engine.name;
+            heading.dataset.name = engine.name; heading.dataset.folderIndex = index; heading.dataset.itemIndex = engIndex; heading.setAttribute('draggable', 'true');
+            heading.addEventListener('dragstart', (e) => { if(!isEditMode) { e.preventDefault(); return; } draggedSearch = heading; setTimeout(() => heading.classList.add('dragging'), 0); });
+            heading.addEventListener('dragend', () => { if(!draggedSearch) return; draggedSearch.classList.remove('dragging'); updateSearchData(); draggedSearch = null; });
+            heading.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'search-heading', heading); });
+            gridDiv.appendChild(heading);
+          } else {
+            const btn = document.createElement('div'); btn.className = 'engine-btn'; btn.dataset.name = engine.name; btn.dataset.url = engine.url; btn.dataset.home = engine.home; btn.dataset.domain = engine.domain; btn.dataset.iconUrl = engine.iconUrl || ""; btn.dataset.folderIndex = index; btn.dataset.itemIndex = engIndex; btn.setAttribute('draggable', 'true');
+            btn.addEventListener('click', (e) => { if (e.metaKey || e.ctrlKey) return; executeSearch(engine.url, engine.home); });
+            btn.addEventListener('dragstart', (e) => { if(!isEditMode) { e.preventDefault(); return; } draggedSearch = btn; setTimeout(() => btn.classList.add('dragging'), 0); });
+            btn.addEventListener('dragend', () => { if(!draggedSearch) return; draggedSearch.classList.remove('dragging'); updateSearchData(); draggedSearch = null; });
+            btn.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'search-engine', btn); });
+            
+            let engineIconHtml = engine.iconUrl ? `<img src="${engine.iconUrl}" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=${engine.domain}&sz=128';" alt="${engine.name}">` : `<img src="https://www.google.com/s2/favicons?domain=${engine.domain}&sz=128" alt="${engine.name}">`;
+            btn.innerHTML = `${engineIconHtml} <span>${engine.name}</span>`;
+            gridDiv.appendChild(btn);
+          }
+        });
+
+        const addBtn = document.createElement('div'); addBtn.className = 'engine-btn add-engine-btn'; addBtn.innerHTML = `＋ 追加`;
+        addBtn.addEventListener('click', (e) => { e.preventDefault(); openModal("検索エンジンを追加", "", "", "", true, "検索URL (例: https://google.com/search?q=)", true, (name, url, iconUrl) => { if (!url || !name) return; if (!url.startsWith('http')) url = 'https://' + url; try { const urlObj = new URL(url); searchEnginesData[index].engines.push({ name: name, url: url, home: urlObj.origin, domain: urlObj.hostname, iconUrl: iconUrl }); saveSearchEngines(); renderSearchEngines(); } catch(err) { alert("正しいURLを入力してください"); } }); });
+        gridDiv.appendChild(addBtn); 
+
+        const addHeadingBtn = document.createElement('div'); addHeadingBtn.className = 'add-heading-btn';
+        addHeadingBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>小見出しを追加`;
+        addHeadingBtn.addEventListener('click', () => {
+          openModal("小見出しを追加", "", "", "", false, "", false, (name) => {
+            if (name && name.trim()) { searchEnginesData[index].engines.push({ isHeading: true, name: name.trim() }); saveSearchEngines(); renderSearchEngines(); }
+          });
+        });
+        gridDiv.appendChild(addHeadingBtn);
+
+        folderDiv.appendChild(gridDiv); searchSlider.appendChild(folderDiv); searchObserver.observe(folderDiv);
+      });
+      const addFolderBtn = document.createElement('div'); addFolderBtn.className = 'tab add-folder-btn'; addFolderBtn.textContent = '＋ 追加'; addFolderBtn.title = '新しいフォルダを追加';
+      addFolderBtn.addEventListener('click', () => { openModal("検索フォルダを追加", "", "", "", false, "", false, (name) => { if (name && name.trim()) { searchEnginesData.push({ folderName: name.trim(), engines: [] }); saveSearchEngines(); renderSearchEngines(); setTimeout(() => { const slider = document.getElementById('searchSliderContainer'); slider.scrollLeft = slider.scrollWidth; }, 100); } }); });
+      searchTabs.appendChild(addFolderBtn);
+    }
+    renderSearchEngines();
+
+    /* =========================================================
+       10. コンテキストメニュー 各種アクション
+       ========================================================= */
+    document.getElementById('menuOpen').addEventListener('click', () => { 
+      if (window.currentContextTarget && window.currentContextType === 'bookmark') window.open(window.currentContextTarget.dataset.url, '_blank', 'noopener,noreferrer'); 
+      document.getElementById('contextMenu').style.display = 'none'; 
+    });
+    
+    document.getElementById('menuEdit').addEventListener('click', () => {
+      const target = window.currentContextTarget; const type = window.currentContextType;
+      if (!target) return;
+      if (type === 'bookmark') {
+        const bm = bookmarkData[target.dataset.folderIndex].bookmarks[target.dataset.itemIndex];
+        openModal("ブックマークを編集", bm.title, bm.url, bm.iconUrl || "", true, "URL (例: https://example.com)", true, (newTitle, newUrl, newIconUrl) => {
+          if (newTitle) bm.title = newTitle; 
+          if (newUrl) { if (!newUrl.startsWith('http')) newUrl = 'https://' + newUrl; bm.url = newUrl; }
+          bm.iconUrl = newIconUrl; saveBookmarks(); renderFavorites();
+        });
+      } else if (type === 'search-engine') {
+        const eng = searchEnginesData[target.dataset.folderIndex].engines[target.dataset.itemIndex];
+        openModal("検索エンジンを編集", eng.name, eng.url, eng.iconUrl || "", true, "検索URL (例: https://google.com/search?q=)", true, (newName, newUrl, newIconUrl) => {
+          if (newName) eng.name = newName; 
+          if (newUrl) { if (!newUrl.startsWith('http')) newUrl = 'https://' + newUrl; eng.url = newUrl; try{ const u = new URL(newUrl); eng.home = u.origin; eng.domain = u.hostname; }catch(e){} }
+          eng.iconUrl = newIconUrl; saveSearchEngines(); renderSearchEngines();
+        });
+      } else if (type === 'heading') {
+        const bm = bookmarkData[target.dataset.folderIndex].bookmarks[target.dataset.itemIndex];
+        openModal("小見出しを編集", bm.title, "", "", false, "", false, (newTitle) => { if (newTitle) { bm.title = newTitle; saveBookmarks(); renderFavorites(); } });
+      } else if (type === 'search-heading') {
+        const eng = searchEnginesData[target.dataset.folderIndex].engines[target.dataset.itemIndex];
+        openModal("小見出しを編集", eng.name, "", "", false, "", false, (newName) => { if (newName) { eng.name = newName; saveSearchEngines(); renderSearchEngines(); } });
+      }
+      document.getElementById('contextMenu').style.display = 'none';
+    });
+
+    document.getElementById('menuCopy').addEventListener('click', () => { 
+      if (window.currentContextTarget) { navigator.clipboard.writeText(window.currentContextTarget.dataset.url).then(() => { const btn = document.getElementById('menuCopy'); const orig = btn.innerHTML; btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Copied!`; setTimeout(() => btn.innerHTML = orig, 1500); }); } 
+    });
+    
+    document.getElementById('menuRemove').addEventListener('click', () => {
+      const target = window.currentContextTarget; const type = window.currentContextType;
+      if (target) {
+        target.style.transform = 'scale(0.8)'; target.style.opacity = '0';
+        setTimeout(() => {
+          if (type === 'bookmark' || type === 'heading') { bookmarkData[target.dataset.folderIndex].bookmarks.splice(target.dataset.itemIndex, 1); saveBookmarks(); renderFavorites(); }
+          else if (type === 'search-engine' || type === 'search-heading') { searchEnginesData[target.dataset.folderIndex].engines.splice(target.dataset.itemIndex, 1); saveSearchEngines(); renderSearchEngines(); }
+        }, 200);
+      }
+    });
+
+    document.getElementById('menuRenameFolder').addEventListener('click', () => {
+      const target = window.currentContextTarget; const type = window.currentContextType;
+      if (target) {
+        if (type === 'folder') {
+          const folder = bookmarkData[parseInt(target.dataset.index)];
+          openModal("フォルダ名を変更", folder.folderName, "", "", false, "", false, (newName) => { if (newName && newName.trim()) { folder.folderName = newName.trim(); saveBookmarks(); renderFavorites(); } });
+        } else if (type === 'search-folder') {
+          const folder = searchEnginesData[parseInt(target.dataset.index)];
+          openModal("フォルダ名を変更", folder.folderName, "", "", false, "", false, (newName) => { if (newName && newName.trim()) { folder.folderName = newName.trim(); saveSearchEngines(); renderSearchEngines(); } });
+        }
+      }
+      document.getElementById('contextMenu').style.display = 'none';
+    });
+
+    document.getElementById('menuRemoveFolder').addEventListener('click', () => {
+      const target = window.currentContextTarget; const type = window.currentContextType;
+      if (target) {
+        const dataArr = type === 'folder' ? bookmarkData : searchEnginesData;
+        if (dataArr.length <= 1) { alert("最後のフォルダは削除できません。"); return; }
+        if (confirm("このフォルダと中身をすべて削除しますか？")) {
+          dataArr.splice(parseInt(target.dataset.index), 1);
+          if (type === 'folder') { saveBookmarks(); renderFavorites(); } else { saveSearchEngines(); renderSearchEngines(); }
+        }
+      }
+      document.getElementById('contextMenu').style.display = 'none';
+    });
+
+    /* =========================================================
+       11. インポート・エクスポート・初期化
+       ========================================================= */
+    document.getElementById('initDataBtn').addEventListener('click', () => { 
+      if(confirm("すべてのお気に入り・検索エンジン設定・検索履歴を初期化し、デフォルトに戻します。\nよろしいですか？")) { 
+        localStorage.removeItem('bookmarks_data'); localStorage.removeItem('search_engines_data'); localStorage.removeItem('search_history'); localStorage.removeItem('save_history_pref'); localStorage.removeItem('link_open_mode'); localStorage.removeItem('heading_space'); localStorage.removeItem('fab_size'); localStorage.removeItem('edit_mode'); location.reload(); 
+      } 
+    });
+
+    document.getElementById('exportDataBtn').addEventListener('click', () => {
+      const exportObj = { bookmarks_data: bookmarkData, search_engines_data: searchEnginesData, search_history: searchHistory, save_history_pref: settingSaveHistory.checked, link_open_mode: settingLinkOpenMode.value, heading_space: settingHeadingSpace.value, fab_size: settingFabSize.value };
+      const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = "launch_backup.json"; a.click(); URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('importDataBtn').addEventListener('click', () => { document.getElementById('importFileInput').click(); });
+    document.getElementById('importFileInput').addEventListener('change', (e) => {
+      const file = e.target.files[0]; if (!file) return; const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const importedData = JSON.parse(event.target.result);
+          if (importedData.bookmarks_data) localStorage.setItem('bookmarks_data', JSON.stringify(importedData.bookmarks_data));
+          if (importedData.search_engines_data) localStorage.setItem('search_engines_data', JSON.stringify(importedData.search_engines_data));
+          if (importedData.search_history) localStorage.setItem('search_history', JSON.stringify(importedData.search_history));
+          if (importedData.save_history_pref !== undefined) localStorage.setItem('save_history_pref', importedData.save_history_pref);
+          if (importedData.link_open_mode !== undefined) localStorage.setItem('link_open_mode', importedData.link_open_mode);
+          if (importedData.heading_space !== undefined) localStorage.setItem('heading_space', importedData.heading_space);
+          if (importedData.fab_size !== undefined) localStorage.setItem('fab_size', importedData.fab_size);
+          alert("データのインポートが完了しました。ページを再読み込みします。"); location.reload();
+        } catch (err) { alert("無効なJSONファイルです。"); }
+      }; reader.readAsText(file);
+    });
+  </script>
+</body>
+</html>
