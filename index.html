@@ -91,12 +91,17 @@
     }
 
     /* お気に入り＆検索のグリッドと小見出し */
-    .grid, .engine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 24px; max-width: 1400px; margin: 0 auto; align-content: start; padding-bottom: 120px; min-height: 100%;}
+    .grid, .engine-grid { display: grid; gap: 12px; max-width: 1400px; margin: 0 auto; align-content: start; padding-bottom: 120px; min-height: 100%;}
+    
+    /* 🖥️ PC時のアイコンサイズ設定（設定から変更可能） */
+    body.grid-size-120 .grid, body.grid-size-120 .engine-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    body.grid-size-140 .grid, body.grid-size-140 .engine-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    body.grid-size-160 .grid, body.grid-size-160 .engine-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
     
     /* 📱 スマホ時のグリッド表示設定（3列に変更し余白を詰める） */
     @media (max-width: 768px) { 
-      .grid { grid-template-columns: repeat(3, 1fr); gap: 10px; padding-bottom: 100px; }
-      .engine-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; padding-bottom: 100px; }
+      .grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px; padding-bottom: 100px; }
+      .engine-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px; padding-bottom: 100px; }
     }
     
     /* 🌟 小見出し */
@@ -118,14 +123,16 @@
     .section-heading.dragging { opacity: 0.4; }
     
     /* 小見出しのスペース設定 */
-    body.heading-space-small .section-heading { margin-top: 0px; margin-bottom: -16px; }
-    body.heading-space-medium .section-heading { margin-top: 16px; margin-bottom: -12px; }
-    body.heading-space-large .section-heading { margin-top: 32px; margin-bottom: 0px; }
-    .section-heading:first-child { margin-top: -16px !important; }
+    body.heading-space-small .section-heading { margin-top: 8px; margin-bottom: -4px; }
+    body.heading-space-medium .section-heading { margin-top: 24px; margin-bottom: 4px; }
+    body.heading-space-large .section-heading { margin-top: 40px; margin-bottom: 12px; }
+    .section-heading:first-child { margin-top: 0px !important; }
 
     @media (max-width: 768px) {
-      body.heading-space-small .section-heading { margin-bottom: -8px; }
-      body.heading-space-medium .section-heading { margin-bottom: -4px; }
+      body.heading-space-small .section-heading { margin-top: 4px; margin-bottom: -2px; }
+      body.heading-space-medium .section-heading { margin-top: 16px; margin-bottom: 2px; }
+      body.heading-space-large .section-heading { margin-top: 28px; margin-bottom: 8px; }
+      .section-heading:first-child { margin-top: 0px !important; }
     }
 
     /* 🌟 小見出し追加ボタン */
@@ -151,7 +158,7 @@
     .add-heading-btn:hover { background: var(--menu-hover); color: var(--app-blue); border-color: var(--app-blue); transform: translateY(-2px); opacity: 1 !important; }
     .add-heading-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
-    /* カード（お気に入り）のスタイル */
+    /* カード（お気に入り・検索モード共通）のスタイル */
     .card { background: var(--card-bg); border-radius: 12px; text-decoration: none; color: var(--text-main); display: flex; flex-direction: column; align-items: center; justify-content: space-between; aspect-ratio: 4 / 3; padding: 16px 12px 12px; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 2px 8px var(--shadow-color), 0 1px 2px var(--shadow-color); border: 1px solid rgba(128, 128, 128, 0.05); cursor: pointer; user-select: none; width: 100%; min-width: 0; }
     .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px var(--hover-shadow), 0 4px 8px var(--shadow-color); }
     .card.dragging { opacity: 0.4; transform: scale(0.95); box-shadow: none; }
@@ -159,35 +166,19 @@
     .card-icon img { max-width: 56px; max-height: 56px; width: 100%; height: 100%; object-fit: contain; border-radius: 8px; background: transparent; }
     .card-title { font-size: 13px; font-weight: 600; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-sub); pointer-events: none; }
     
-    /* 📱 スマホ時のお気に入りカード調整 */
+    /* 📱 スマホ時のカード調整 */
     @media (max-width: 768px) {
       .card { padding: 12px 8px 8px; border-radius: 10px; aspect-ratio: 1 / 1; }
       .card-title { font-size: 11px; }
     }
 
-    .add-bookmark-btn { background: transparent; border: 2px dashed var(--nav-border); box-shadow: none; opacity: 0; transition: opacity 0.3s, background 0.2s; justify-content: center;}
-    .add-bookmark-btn:hover { opacity: 1 !important; background: var(--menu-hover); border-color: var(--app-blue); transform: translateY(-2px); box-shadow: none;}
-    .add-bookmark-btn .card-icon svg { width: 32px; height: 32px; fill: var(--text-sub); transition: fill 0.2s; }
-    .add-bookmark-btn:hover .card-icon svg { fill: var(--app-blue); }
+    /* 追加ボタン（お気に入り・検索モード共通） */
+    .add-bookmark-btn, .add-engine-btn { background: transparent; border: 2px dashed var(--nav-border); box-shadow: none; opacity: 0; transition: opacity 0.3s, background 0.2s; justify-content: center;}
+    .add-bookmark-btn:hover, .add-engine-btn:hover { opacity: 1 !important; background: var(--menu-hover); border-color: var(--app-blue); transform: translateY(-2px); box-shadow: none;}
+    .add-bookmark-btn .card-icon svg, .add-engine-btn .card-icon svg { width: 32px; height: 32px; fill: var(--text-sub); transition: fill 0.2s; }
+    .add-bookmark-btn:hover .card-icon svg, .add-engine-btn:hover .card-icon svg { fill: var(--app-blue); }
 
-    /* エンジン（検索モード）のスタイル */
-    .engine-btn { display: flex; align-items: center; justify-content: flex-start; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--nav-border); color: var(--text-main); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 8px var(--shadow-color); width: 100%; min-width: 0; user-select: none; overflow: hidden; }
-    .engine-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 16px var(--hover-shadow); }
-    .engine-btn:active { transform: scale(0.96); }
-    .engine-btn.dragging { opacity: 0.4; transform: scale(0.95); box-shadow: none; }
-    .engine-btn img { width: 22px; height: 22px; border-radius: 4px; object-fit: contain; flex-shrink: 0; background: transparent; pointer-events: none;}
-    .engine-btn span { pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: left; }
-    
-    /* 📱 スマホ時の検索ボタン調整 */
-    @media (max-width: 768px) {
-      .engine-btn { padding: 10px 8px; gap: 6px; font-size: 11px; border-radius: 10px; }
-      .engine-btn img { width: 18px; height: 18px; }
-    }
-
-    .add-engine-btn { background: transparent; border: 2px dashed var(--nav-border); box-shadow: none; justify-content: center; color: var(--text-sub); opacity: 0; transition: all 0.3s; }
-    .add-engine-btn:hover { opacity: 1 !important; border-color: var(--app-blue); color: var(--app-blue); transform: translateY(-2px); }
-
-    /* 検索画面 */
+    /* 検索画面トップバー */
     .search-top-bar { padding: 32px 32px 16px; flex-shrink: 0; background-color: var(--bg-color); z-index: 20; }
     @media (max-width: 768px) { .search-top-bar { padding: 24px 16px 12px; } }
     .search-input-wrapper { position: relative; width: 100%; max-width: 680px; margin: 0 auto; display: flex; align-items: center; }
@@ -344,7 +335,7 @@
     .modal-btn.save:hover { background: #0056b3; }
   </style>
 </head>
-<body class="heading-space-small fab-size-medium">
+<body class="heading-space-small fab-size-medium grid-size-140">
 
   <!-- 中央に浮かぶ切り替えボタン (FAB) -->
   <div class="fab-switch" id="modeSwitchBtn" title="切り替え">
@@ -405,6 +396,14 @@
                 <option value="small">小さい</option>
                 <option value="medium" selected>普通</option>
                 <option value="large">大きい</option>
+              </select>
+            </div>
+            <div class="settings-row" style="cursor: default;">
+              <span>アイコンの大きさ</span>
+              <select id="settingGridSize" class="custom-select">
+                <option value="120">小さい (120px)</option>
+                <option value="140" selected>普通 (140px)</option>
+                <option value="160">大きい (160px)</option>
               </select>
             </div>
           </div>
@@ -517,6 +516,16 @@
     };
     applyFabSize();
     settingFabSize.addEventListener('change', (e) => { localStorage.setItem('fab_size', e.target.value); applyFabSize(); });
+
+    // アイコンの大きさ（グリッド幅）
+    const settingGridSize = document.getElementById('settingGridSize');
+    if (localStorage.getItem('grid_size')) settingGridSize.value = localStorage.getItem('grid_size');
+    const applyGridSize = () => {
+      document.body.classList.remove('grid-size-120', 'grid-size-140', 'grid-size-160');
+      document.body.classList.add(`grid-size-${settingGridSize.value}`);
+    };
+    applyGridSize();
+    settingGridSize.addEventListener('change', (e) => { localStorage.setItem('grid_size', e.target.value); applyGridSize(); });
 
     // リンクを開く処理
     function openLink(url) {
@@ -807,7 +816,7 @@
         const gridDiv = document.createElement('div'); gridDiv.className = 'engine-grid';
         gridDiv.addEventListener('dragover', e => { 
           e.preventDefault(); 
-          const target = e.target.closest('.engine-btn, .section-heading, .add-heading-btn'); 
+          const target = e.target.closest('.card, .section-heading, .add-heading-btn'); 
           if (target && target !== draggedSearch && !draggedSearchTab) { 
             if (target.classList.contains('add-engine-btn') || target.classList.contains('add-heading-btn')) {
               gridDiv.insertBefore(draggedSearch, gridDiv.querySelector('.add-engine-btn'));
@@ -833,19 +842,20 @@
             heading.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'search-heading', heading); });
             gridDiv.appendChild(heading);
           } else {
-            const btn = document.createElement('div'); btn.className = 'engine-btn'; btn.dataset.name = engine.name; btn.dataset.url = engine.url; btn.dataset.home = engine.home; btn.dataset.domain = engine.domain; btn.dataset.iconUrl = engine.iconUrl || ""; btn.dataset.folderIndex = index; btn.dataset.itemIndex = engIndex; btn.setAttribute('draggable', 'true');
+            const btn = document.createElement('div'); btn.className = 'card'; btn.dataset.name = engine.name; btn.dataset.url = engine.url; btn.dataset.home = engine.home; btn.dataset.domain = engine.domain; btn.dataset.iconUrl = engine.iconUrl || ""; btn.dataset.folderIndex = index; btn.dataset.itemIndex = engIndex; btn.setAttribute('draggable', 'true');
             btn.addEventListener('click', (e) => { if (e.metaKey || e.ctrlKey) return; executeSearch(engine.url, engine.home); });
             btn.addEventListener('dragstart', (e) => { if(!isEditMode) { e.preventDefault(); return; } draggedSearch = btn; setTimeout(() => btn.classList.add('dragging'), 0); });
             btn.addEventListener('dragend', () => { if(!draggedSearch) return; draggedSearch.classList.remove('dragging'); updateSearchData(); draggedSearch = null; });
             btn.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'search-engine', btn); });
             
             let engineIconHtml = engine.iconUrl ? `<img src="${engine.iconUrl}" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=${engine.domain}&sz=128';" alt="${engine.name}">` : `<img src="https://www.google.com/s2/favicons?domain=${engine.domain}&sz=128" alt="${engine.name}">`;
-            btn.innerHTML = `${engineIconHtml} <span>${engine.name}</span>`;
+            btn.innerHTML = `<div class="card-icon">${engineIconHtml}</div><div class="card-title">${engine.name}</div>`;
             gridDiv.appendChild(btn);
           }
         });
 
-        const addBtn = document.createElement('div'); addBtn.className = 'engine-btn add-engine-btn'; addBtn.innerHTML = `＋ 追加`;
+        const addBtn = document.createElement('div'); addBtn.className = 'card add-engine-btn'; 
+        addBtn.innerHTML = `<div class="card-icon"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></div><div class="card-title" style="color:var(--text-sub);">追加</div>`;
         addBtn.addEventListener('click', (e) => { e.preventDefault(); openModal("検索エンジンを追加", "", "", "", true, "検索URL (例: https://google.com/search?q=)", true, (name, url, iconUrl) => { if (!url || !name) return; if (!url.startsWith('http')) url = 'https://' + url; try { const urlObj = new URL(url); searchEnginesData[index].engines.push({ name: name, url: url, home: urlObj.origin, domain: urlObj.hostname, iconUrl: iconUrl }); saveSearchEngines(); renderSearchEngines(); } catch(err) { alert("正しいURLを入力してください"); } }); });
         gridDiv.appendChild(addBtn); 
 
@@ -948,12 +958,12 @@
        ========================================================= */
     document.getElementById('initDataBtn').addEventListener('click', () => { 
       if(confirm("すべてのお気に入り・検索エンジン設定・検索履歴を初期化し、デフォルトに戻します。\nよろしいですか？")) { 
-        localStorage.removeItem('bookmarks_data'); localStorage.removeItem('search_engines_data'); localStorage.removeItem('search_history'); localStorage.removeItem('save_history_pref'); localStorage.removeItem('link_open_mode'); localStorage.removeItem('heading_space'); localStorage.removeItem('fab_size'); localStorage.removeItem('edit_mode'); location.reload(); 
+        localStorage.removeItem('bookmarks_data'); localStorage.removeItem('search_engines_data'); localStorage.removeItem('search_history'); localStorage.removeItem('save_history_pref'); localStorage.removeItem('link_open_mode'); localStorage.removeItem('heading_space'); localStorage.removeItem('fab_size'); localStorage.removeItem('grid_size'); localStorage.removeItem('edit_mode'); location.reload(); 
       } 
     });
 
     document.getElementById('exportDataBtn').addEventListener('click', () => {
-      const exportObj = { bookmarks_data: bookmarkData, search_engines_data: searchEnginesData, search_history: searchHistory, save_history_pref: settingSaveHistory.checked, link_open_mode: settingLinkOpenMode.value, heading_space: settingHeadingSpace.value, fab_size: settingFabSize.value };
+      const exportObj = { bookmarks_data: bookmarkData, search_engines_data: searchEnginesData, search_history: searchHistory, save_history_pref: settingSaveHistory.checked, link_open_mode: settingLinkOpenMode.value, heading_space: settingHeadingSpace.value, fab_size: settingFabSize.value, grid_size: settingGridSize.value };
       const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url; a.download = "launch_backup.json"; a.click(); URL.revokeObjectURL(url);
@@ -972,6 +982,7 @@
           if (importedData.link_open_mode !== undefined) localStorage.setItem('link_open_mode', importedData.link_open_mode);
           if (importedData.heading_space !== undefined) localStorage.setItem('heading_space', importedData.heading_space);
           if (importedData.fab_size !== undefined) localStorage.setItem('fab_size', importedData.fab_size);
+          if (importedData.grid_size !== undefined) localStorage.setItem('grid_size', importedData.grid_size);
           alert("データのインポートが完了しました。ページを再読み込みします。"); location.reload();
         } catch (err) { alert("無効なJSONファイルです。"); }
       }; reader.readAsText(file);
