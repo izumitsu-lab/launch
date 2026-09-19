@@ -37,6 +37,17 @@ if (localStorage.getItem('link_open_mode')) {
 }
 settingLinkOpenMode.addEventListener('change', (e) => localStorage.setItem('link_open_mode', e.target.value));
 
+// ▼ デフォルト検索エンジンの設定 ▼
+const settingDefaultSearchEngine = document.getElementById('settingDefaultSearchEngine');
+if (localStorage.getItem('default_search_engine')) {
+  settingDefaultSearchEngine.value = localStorage.getItem('default_search_engine');
+} else {
+  settingDefaultSearchEngine.value = 'google'; // 初期値
+  localStorage.setItem('default_search_engine', 'google');
+}
+settingDefaultSearchEngine.addEventListener('change', (e) => localStorage.setItem('default_search_engine', e.target.value));
+
+
 function openLink(url) {
   if(!url) return;
   const mode = settingLinkOpenMode.value;
@@ -112,7 +123,7 @@ modeSwitchBtn.addEventListener('click', () => {
   else { document.body.classList.remove('has-query'); searchInput.blur(); }
 });
 
-// 🌟 アイテム追加・編集モーダル関数 (onPresetClick 引数を追加)
+// 🌟 アイテム追加・編集モーダル関数
 let modalCallback = null;
 const customModal = document.getElementById('customModal');
 function openEditModal(title, v1, v2, v3, v4, enc, modeType, callback, onPresetClick) {
@@ -135,7 +146,6 @@ function openEditModal(title, v1, v2, v3, v4, enc, modeType, callback, onPresetC
     document.getElementById('modalInputEncoding').style.display = 'none'; document.getElementById('modalInput4').style.display = 'none';
   }
 
-  // プリセットから選ぶボタンの制御
   const presetBtn = document.getElementById('modalPresetBtn');
   if (onPresetClick) {
     presetBtn.style.display = 'block';
@@ -383,14 +393,14 @@ function renderProfilesList() {
       <span class="profile-name">${p.name}</span>
     `;
     
-    // ★ 修正箇所：プロファイル切り替え時、確実にスクロールをリセットする
+    // プロファイル切り替え時に確実にスクロールをリセットする
     card.onclick = () => {
       if(!isActive) {
         currentProfileId = p.id; localStorage.setItem('launch_current_profile_id', currentProfileId);
         appData = profiles.find(x => x.id === currentProfileId).data; 
         currentTabIndex = 0; 
         const slider = document.getElementById('sliderContainer');
-        if (slider) slider.scrollLeft = 0; // スクロール位置を一番左に戻す
+        if (slider) slider.scrollLeft = 0;
         renderApp(); 
         renderProfilesList();
       }
@@ -481,7 +491,7 @@ document.getElementById('importFileInput').addEventListener('change', (e) => {
 
 // 🌟 全プロファイル一括エクスポート
 document.getElementById('exportAllProfilesBtn').addEventListener('click', () => {
-  const dateStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  const dateStr = new Date().toISOString().split('T')[0];
   profiles.forEach((p, index) => {
     setTimeout(() => {
       const exportObj = { type: 'launch_profile_v1', name: p.name, app_data: p.data };
@@ -526,10 +536,25 @@ const executeSearch = (engineUrl, engineHome, encoding = 'UTF-8') => {
   searchInput.blur();
 };
 
+// ▼ 変更箇所：Enterキーでの検索は、必ず設定したデフォルトエンジンを使う ▼
 searchInput.addEventListener('keypress', (e) => { 
   if (e.key === 'Enter') { 
-    const firstEngine = appData[currentTabIndex].engines.find(eng => !eng.isHeading && eng.url);
-    if (firstEngine) executeSearch(firstEngine.url, firstEngine.home, firstEngine.encoding); 
+    const engine = localStorage.getItem('default_search_engine') || 'google';
+    let searchUrl = "https://www.google.com/search?q=";
+    let homeUrl = "https://www.google.com";
+
+    if (engine === 'yahoo') {
+      searchUrl = "https://search.yahoo.co.jp/search?p=";
+      homeUrl = "https://www.yahoo.co.jp";
+    } else if (engine === 'bing') {
+      searchUrl = "https://www.bing.com/search?q=";
+      homeUrl = "https://www.bing.com";
+    } else if (engine === 'duckduckgo') {
+      searchUrl = "https://duckduckgo.com/?q=";
+      homeUrl = "https://duckduckgo.com";
+    }
+
+    executeSearch(searchUrl, homeUrl, 'UTF-8');
   } 
 });
 
@@ -553,7 +578,7 @@ const tabsContainer = document.getElementById('tabsContainer');
 const sliderContainer = document.getElementById('sliderContainer');
 let draggedItem = null; let draggedTab = null;
 
-// ★ 修正箇所：無関係な要素（古い画面）のコールバックを無視する
+// 無関係な要素（古い画面）のコールバックを無視する
 const tabObserver = new IntersectionObserver((entries) => { 
   entries.forEach(entry => { 
     if (entry.isIntersecting && sliderContainer.contains(entry.target)) { 
@@ -682,7 +707,7 @@ async function openJsonSelectModal(targetFolderIndex) {
 function renderApp() {
   tabsContainer.innerHTML = ''; sliderContainer.innerHTML = ''; tabObserver.disconnect();
   
-  const folderDivsToObserve = []; // ★追加：監視対象を一時保存
+  const folderDivsToObserve = [];
 
   appData.forEach((folder, index) => {
     const tab = document.createElement('div'); tab.className = `tab ${index === currentTabIndex ? 'active' : ''}`; tab.textContent = folder.folderName; tab.dataset.index = index; tab.setAttribute('draggable', 'true');
@@ -814,7 +839,6 @@ function renderApp() {
     folderDiv.appendChild(folderInner); 
     sliderContainer.appendChild(folderDiv); 
     
-    // ★修正箇所：このタイミングではまだ監視を開始せず、配列にストックしておく
     folderDivsToObserve.push(folderDiv); 
   });
 
@@ -822,7 +846,7 @@ function renderApp() {
   addFolderBtn.addEventListener('click', () => { openEditModal("フォルダを追加", "", "", "", "", "", 'folder', (name) => { if (name && name.trim()) { appData.push({ folderName: name.trim(), engines: [] }); saveAppData(); renderApp(); setTimeout(() => { sliderContainer.scrollLeft = sliderContainer.scrollWidth; }, 100); } }); });
   tabsContainer.appendChild(addFolderBtn);
 
-  // ★修正箇所：スクロール位置を確実に確定させてから、タブの監視をスタートする
+  // スクロール位置を確実に確定させてから監視をスタート
   setTimeout(() => { 
     if(sliderContainer.children.length > currentTabIndex) {
       sliderContainer.scrollLeft = sliderContainer.clientWidth * currentTabIndex; 

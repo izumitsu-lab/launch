@@ -10,6 +10,7 @@
   <link rel="icon" type="image/png" href="favicon-32.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/encoding-japanese/2.0.0/encoding.min.js"></script>
+  <!-- ▼ CSSを外部ファイル化 ▼ -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="fab-size-medium grid-size-140 layout-single">
@@ -27,7 +28,8 @@
       <div class="search-top-bar">
         <div class="search-input-wrapper">
           <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-          <input type="text" id="searchInput" class="search-input" placeholder="ウェブや商品を検索..." autocomplete="off">
+          <!-- ▼ プレースホルダーの文字を削除 ▼ -->
+          <input type="text" id="searchInput" class="search-input" placeholder="" autocomplete="off">
           <div class="search-actions">
             <button class="icon-btn" id="historyBtn" title="検索履歴"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></button>
             <button class="icon-btn" id="clearBtn" title="クリア" style="display: none;"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
@@ -90,6 +92,22 @@
         <button class="glass-modal-close" onclick="closeModalUi('settingsModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
       </div>
       <div class="glass-modal-body">
+        
+        <!-- ▼ デフォルト検索エンジンの設定を追加 ▼ -->
+        <div class="settings-section">
+          <div class="settings-section-title">検索</div>
+          <div class="settings-group">
+            <div class="settings-row"><span>Enterキーでの検索エンジン</span>
+              <select id="settingDefaultSearchEngine" class="custom-select">
+                <option value="google">Google</option>
+                <option value="yahoo">Yahoo! JAPAN</option>
+                <option value="bing">Bing</option>
+                <option value="duckduckgo">DuckDuckGo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         <div class="settings-section">
           <div class="settings-section-title">デザイン</div>
           <div class="settings-group">
@@ -190,6 +208,7 @@
     <div class="menu-item menu-type-folder" id="menuRemoveFolder"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.12-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg>削除</div>
   </div>
 
+  <!-- ▼ JavaScriptを外部ファイル化 ▼ -->
   <script src="script.js"></script>
 </body>
 </html>
