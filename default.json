@@ -1,0 +1,5520 @@
+{
+  "type": "launch_profile_v1",
+  "name": "デフォルト",
+  "app_data": [
+    {
+      "folderName": "ウェブ",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "ポータル"
+        },
+        {
+          "name": "Google",
+          "url": "https://www.google.com/search?q=",
+          "home": "https://www.google.com",
+          "domain": "google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Yahoo! JAPAN",
+          "url": "https://search.yahoo.co.jp/search?p=",
+          "home": "https://www.yahoo.co.jp",
+          "domain": "yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "DuckDuckGo",
+          "url": "https://duckduckgo.com/?q=",
+          "home": "https://duckduckgo.com",
+          "domain": "duckduckgo.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "メール／カレンダー／コミュニケーション"
+        },
+        {
+          "name": "Calendar",
+          "url": "https://calendar.google.com/calendar/u/0/r/search?q=",
+          "home": "https://calendar.google.com/calendar/",
+          "domain": "calendar.google.com",
+          "iconUrl": "https://play-lh.googleusercontent.com/vEoqLbT_QkYcEaawWBRc22N6i98OUtOUpM1LmKdVs_xx7lCsUyFfV0ZiqoUXjMijUteiBhhN4K5MpoF96FRNOg=w480-h960-rw",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "outlook",
+          "url": "",
+          "home": "https://outlook.office.com/mail/",
+          "domain": "outlook.office.com",
+          "iconUrl": "https://img.utdstc.com/icon/f00/db2/f00db21aa992c5b8de82d2862b72fa6fe477319ff7051483a1e3e636ebb7d59d:200",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "gmail",
+          "url": "https://mail.google.com/mail/u/0/#search/",
+          "home": "https://mail.google.com/mail/u/0/#inbox",
+          "domain": "mail.google.com",
+          "iconUrl": "https://play-lh.googleusercontent.com/c6KD_8-GvnGRJA4lRQ4y5YnUa3-LOeYAS7ubw1jWyB9bmr6Kj6zzRvh2A5WBB-Vd3e6zhElmhDv07fCJx2Fc=w480-h960-rw",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "slack",
+          "url": "",
+          "home": "https://app.slack.com/client/",
+          "domain": "app.slack.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "teams",
+          "url": "",
+          "home": "https://teams.microsoft.com/v2/",
+          "domain": "teams.microsoft.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "動画／画像"
+        },
+        {
+          "name": "YouTube",
+          "url": "https://www.youtube.com/results?search_query=",
+          "home": "https://www.youtube.com",
+          "domain": "youtube.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "画像検索",
+          "url": "https://www.google.com/search?tbm=isch&q=",
+          "home": "https://www.google.com/imghp",
+          "domain": "google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "リアルタイム",
+          "url": "https://search.yahoo.co.jp/realtime/search?p=",
+          "home": "https://search.yahoo.co.jp/realtime",
+          "domain": "search.yahoo.co.jp",
+          "iconUrl": "https://play-lh.googleusercontent.com/R3K6pxTPN6gGj91GOpikk30D6kWiPH59OpY4SqF4ZJGrX_vCFQEbBUT8aAOCLIzyKbHj2xcn5JspJw-icaK3tRw=w480-h960-rw",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "ツール"
+        },
+        {
+          "name": "notion",
+          "url": "",
+          "home": "https://www.notion.so",
+          "domain": "www.notion.so",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "todoint",
+          "url": "https://app.todoist.com/app/search/aaa",
+          "home": "https://app.todoist.com/",
+          "domain": "app.todoist.com",
+          "iconUrl": "https://play-lh.googleusercontent.com/03uYCmB2qWmmr-rIL8X_gj20wdIxLPW3bmqf1ZSNlwf_ZjuQYGnNnOB-8ig2CBzwqyf5meCgOgUEzxvC1QY6rg=s96-rw",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "raindrop",
+          "url": "https://app.raindrop.io/my/0/",
+          "home": "https://app.raindrop.io/my/0",
+          "domain": "app.raindrop.io",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "simplenote",
+          "url": "",
+          "home": "https://app.simplenote.com/",
+          "domain": "app.simplenote.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "検索エンジン（追加）"
+        },
+        {
+          "name": "Bing",
+          "url": "https://www.bing.com/search?q=",
+          "home": "https://www.bing.com",
+          "domain": "www.bing.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Brave Search",
+          "url": "https://search.brave.com/search?q=",
+          "home": "https://search.brave.com",
+          "domain": "search.brave.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Ecosia",
+          "url": "https://www.ecosia.org/search?q=",
+          "home": "https://www.ecosia.org",
+          "domain": "www.ecosia.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Startpage",
+          "url": "https://www.startpage.com/sp/search?query=",
+          "home": "https://www.startpage.com",
+          "domain": "www.startpage.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Qwant",
+          "url": "https://www.qwant.com/?q=",
+          "home": "https://www.qwant.com",
+          "domain": "www.qwant.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Kagi",
+          "url": "https://kagi.com/search?q=",
+          "home": "https://kagi.com",
+          "domain": "kagi.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "Google 検索の絞り込み"
+        },
+        {
+          "name": "Google 日本語ページのみ",
+          "url": "https://www.google.com/search?lr=lang_ja&q=",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google 英語ページのみ",
+          "url": "https://www.google.com/search?lr=lang_en&q=",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google PDFのみ",
+          "url": "https://www.google.com/search?q=filetype%3Apdf+",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google 直近24時間",
+          "url": "https://www.google.com/search?tbs=qdr:d&q=",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google 直近1週間",
+          "url": "https://www.google.com/search?tbs=qdr:w&q=",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google 直近1か月",
+          "url": "https://www.google.com/search?tbs=qdr:m&q=",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google 直近1年",
+          "url": "https://www.google.com/search?tbs=qdr:y&q=",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google 動画",
+          "url": "https://www.google.com/search?tbm=vid&q=",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google ショッピング",
+          "url": "https://www.google.com/search?tbm=shop&q=",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google 官公庁サイト内（go.jp）",
+          "url": "https://www.google.com/search?q=site%3Ago.jp+",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google 大学・学術サイト内（ac.jp）",
+          "url": "https://www.google.com/search?q=site%3Aac.jp+",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google Reddit内",
+          "url": "https://www.google.com/search?q=site%3Areddit.com+",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google X内",
+          "url": "https://www.google.com/search?q=site%3Ax.com+",
+          "home": "https://www.google.com",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "Q&A／掲示板／まとめ"
+        },
+        {
+          "name": "Yahoo!知恵袋",
+          "url": "https://chiebukuro.yahoo.co.jp/search?p=",
+          "home": "https://chiebukuro.yahoo.co.jp",
+          "domain": "chiebukuro.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "5ch検索",
+          "url": "https://find.5ch.net/search?q=",
+          "home": "https://find.5ch.net",
+          "domain": "find.5ch.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Quora",
+          "url": "https://www.quora.com/search?q=",
+          "home": "https://www.quora.com",
+          "domain": "www.quora.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Togetter",
+          "url": "https://togetter.com/search?q=",
+          "home": "https://togetter.com",
+          "domain": "togetter.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "教えて!goo",
+          "url": "",
+          "home": "https://oshiete.goo.ne.jp/",
+          "domain": "oshiete.goo.ne.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "発言小町",
+          "url": "",
+          "home": "https://komachi.yomiuri.co.jp/",
+          "domain": "komachi.yomiuri.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "AI",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "AI"
+        },
+        {
+          "name": "chatGPT",
+          "url": "",
+          "home": "https://chatgpt.com/",
+          "domain": "chatgpt.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "claude",
+          "url": "",
+          "home": "https://claude.ai/chat/",
+          "domain": "claude.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "gemini",
+          "url": "",
+          "home": "https://gemini.google.com/",
+          "domain": "gemini.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "deepseek",
+          "url": "",
+          "home": "https://chat.deepseek.com/",
+          "domain": "chat.deepseek.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "perplexity",
+          "url": "https://www.perplexity.ai/search?q=",
+          "home": "https://www.perplexity.ai/",
+          "domain": "www.perplexity.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Gemini Notebook",
+          "url": "",
+          "home": "https://notebook.google.com/",
+          "domain": "notebook.google.com",
+          "iconUrl": "https://play-lh.googleusercontent.com/gQAp2_D_utKEdDI4Nr6_We5DAl2y7kPzoBKo8IE36rSDZyM_R5emL_t9zG4wHop8iMbFHzDVMlYKNTNSnzPCVw=w480-h960-rw",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Microsoft Copilot",
+          "url": "",
+          "home": "https://copilot.microsoft.com/",
+          "domain": "copilot.microsoft.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Grok",
+          "url": "",
+          "home": "https://grok.com/",
+          "domain": "grok.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Meta AI",
+          "url": "",
+          "home": "https://www.meta.ai/",
+          "domain": "www.meta.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Mistral Le Chat",
+          "url": "",
+          "home": "https://chat.mistral.ai/chat",
+          "domain": "chat.mistral.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Kimi",
+          "url": "",
+          "home": "https://www.kimi.com/",
+          "domain": "www.kimi.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Qwen",
+          "url": "",
+          "home": "https://chat.qwen.ai/",
+          "domain": "chat.qwen.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Poe",
+          "url": "",
+          "home": "https://poe.com/",
+          "domain": "poe.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google AI Studio",
+          "url": "",
+          "home": "https://aistudio.google.com/",
+          "domain": "aistudio.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "LMArena",
+          "url": "",
+          "home": "https://lmarena.ai/",
+          "domain": "lmarena.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "AI検索／リサーチ"
+        },
+        {
+          "name": "Genspark",
+          "url": "https://www.genspark.ai/search?query=",
+          "home": "https://www.genspark.ai/",
+          "domain": "www.genspark.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "You.com",
+          "url": "https://you.com/search?q=",
+          "home": "https://you.com",
+          "domain": "you.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Phind",
+          "url": "https://www.phind.com/search?q=",
+          "home": "https://www.phind.com",
+          "domain": "www.phind.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Felo",
+          "url": "",
+          "home": "https://felo.ai/",
+          "domain": "felo.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Consensus（論文AI検索）",
+          "url": "",
+          "home": "https://consensus.app/",
+          "domain": "consensus.app",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Elicit（論文AI）",
+          "url": "",
+          "home": "https://elicit.com/",
+          "domain": "elicit.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "資料・文章づくりAI"
+        },
+        {
+          "name": "Gamma（スライド生成）",
+          "url": "",
+          "home": "https://gamma.app/",
+          "domain": "gamma.app",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Napkin AI（図解生成）",
+          "url": "",
+          "home": "https://www.napkin.ai/",
+          "domain": "www.napkin.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Notta（文字起こし）",
+          "url": "",
+          "home": "https://www.notta.ai/",
+          "domain": "www.notta.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "画像・動画・音声生成"
+        },
+        {
+          "name": "Midjourney",
+          "url": "",
+          "home": "https://www.midjourney.com/",
+          "domain": "www.midjourney.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Adobe Firefly",
+          "url": "",
+          "home": "https://firefly.adobe.com/",
+          "domain": "firefly.adobe.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Leonardo.Ai",
+          "url": "",
+          "home": "https://leonardo.ai/",
+          "domain": "leonardo.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Ideogram",
+          "url": "",
+          "home": "https://ideogram.ai/",
+          "domain": "ideogram.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Sora",
+          "url": "",
+          "home": "https://sora.chatgpt.com/",
+          "domain": "sora.chatgpt.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Runway",
+          "url": "",
+          "home": "https://runwayml.com/",
+          "domain": "runwayml.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Suno（音楽生成）",
+          "url": "",
+          "home": "https://suno.com/",
+          "domain": "suno.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ElevenLabs（音声生成）",
+          "url": "",
+          "home": "https://elevenlabs.io/",
+          "domain": "elevenlabs.io",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "モデル／開発者向けAI"
+        },
+        {
+          "name": "Hugging Face",
+          "url": "https://huggingface.co/models?search=",
+          "home": "https://huggingface.co",
+          "domain": "huggingface.co",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "OpenRouter",
+          "url": "https://openrouter.ai/models?q=",
+          "home": "https://openrouter.ai/",
+          "domain": "openrouter.ai",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Ollama",
+          "url": "https://ollama.com/search?q=",
+          "home": "https://ollama.com/",
+          "domain": "ollama.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "OpenAI Platform",
+          "url": "",
+          "home": "https://platform.openai.com/",
+          "domain": "platform.openai.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Anthropic Console",
+          "url": "",
+          "home": "https://console.anthropic.com/",
+          "domain": "console.anthropic.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "ニュース",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "ポータル"
+        },
+        {
+          "name": "Yahooニュース",
+          "url": "https://news.yahoo.co.jp/search?p=",
+          "home": "https://news.yahoo.co.jp",
+          "domain": "news.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Googleニュース",
+          "url": "https://news.google.com/search?q=",
+          "home": "https://news.google.com/home?hl=ja&gl=JP",
+          "domain": "news.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "47news",
+          "url": "https://www.47news.jp/search?q=",
+          "home": "https://www.47news.jp/",
+          "domain": "www.47news.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "日経",
+          "url": "https://www.nikkei.com/search?keyword=",
+          "home": "https://www.nikkei.com",
+          "domain": "www.nikkei.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "国際ニュース"
+        },
+        {
+          "name": "ロイター",
+          "url": "https://www.reuters.com/jp/site-search/?query=",
+          "home": "https://jp.reuters.com",
+          "domain": "jp.reuters.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "CNN",
+          "url": "",
+          "home": "https://www.cnn.co.jp",
+          "domain": "www.cnn.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "BBC",
+          "url": "",
+          "home": "https://www.bbc.com/japanese",
+          "domain": "www.bbc.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "afpbb",
+          "url": "https://www.afpbb.com/search?fulltext=",
+          "home": "https://www.afpbb.com/",
+          "domain": "www.afpbb.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "記事"
+        },
+        {
+          "name": "はてな",
+          "url": "https://b.hatena.ne.jp/q/",
+          "home": "https://b.hatena.ne.jp/hotentry/all",
+          "domain": "b.hatena.ne.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "note",
+          "url": "https://note.com/search?q=",
+          "home": "https://note.com",
+          "domain": "note.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "新聞・通信社"
+        },
+        {
+          "name": "NHK NEWS WEB",
+          "url": "",
+          "home": "https://www3.nhk.or.jp/news/",
+          "domain": "www3.nhk.or.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "朝日新聞",
+          "url": "",
+          "home": "https://www.asahi.com/",
+          "domain": "www.asahi.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "毎日新聞",
+          "url": "https://mainichi.jp/search?q=",
+          "home": "https://mainichi.jp/",
+          "domain": "mainichi.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "読売新聞オンライン",
+          "url": "",
+          "home": "https://www.yomiuri.co.jp/",
+          "domain": "www.yomiuri.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "産経ニュース",
+          "url": "",
+          "home": "https://www.sankei.com/",
+          "domain": "www.sankei.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "東京新聞",
+          "url": "",
+          "home": "https://www.tokyo-np.co.jp/",
+          "domain": "www.tokyo-np.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "時事ドットコム",
+          "url": "",
+          "home": "https://www.jiji.com/",
+          "domain": "www.jiji.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "経済・ビジネス誌"
+        },
+        {
+          "name": "東洋経済オンライン",
+          "url": "",
+          "home": "https://toyokeizai.net/",
+          "domain": "toyokeizai.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ダイヤモンド・オンライン",
+          "url": "",
+          "home": "https://diamond.jp/",
+          "domain": "diamond.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "日経ビジネス",
+          "url": "",
+          "home": "https://business.nikkei.com/",
+          "domain": "business.nikkei.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "PRESIDENT Online",
+          "url": "",
+          "home": "https://president.jp/",
+          "domain": "president.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "文春オンライン",
+          "url": "",
+          "home": "https://bunshun.jp/",
+          "domain": "bunshun.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "海外メディア（英語）"
+        },
+        {
+          "name": "BBC News",
+          "url": "https://www.bbc.co.uk/search?q=",
+          "home": "https://www.bbc.com/news",
+          "domain": "www.bbc.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "CNN (English)",
+          "url": "https://edition.cnn.com/search?q=",
+          "home": "https://edition.cnn.com",
+          "domain": "edition.cnn.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "AP News",
+          "url": "https://apnews.com/search?q=",
+          "home": "https://apnews.com",
+          "domain": "apnews.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "The New York Times",
+          "url": "https://www.nytimes.com/search?query=",
+          "home": "https://www.nytimes.com",
+          "domain": "www.nytimes.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "The Guardian",
+          "url": "https://www.theguardian.com/search?q=",
+          "home": "https://www.theguardian.com",
+          "domain": "www.theguardian.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "The Washington Post",
+          "url": "https://www.washingtonpost.com/search/?query=",
+          "home": "https://www.washingtonpost.com",
+          "domain": "www.washingtonpost.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "The Wall Street Journal",
+          "url": "https://www.wsj.com/search?query=",
+          "home": "https://www.wsj.com",
+          "domain": "www.wsj.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Bloomberg",
+          "url": "https://www.bloomberg.com/search?query=",
+          "home": "https://www.bloomberg.com",
+          "domain": "www.bloomberg.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Financial Times",
+          "url": "https://www.ft.com/search?q=",
+          "home": "https://www.ft.com",
+          "domain": "www.ft.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "The Economist",
+          "url": "https://www.economist.com/search?q=",
+          "home": "https://www.economist.com",
+          "domain": "www.economist.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.aljazeera.com/search/",
+          "home": "https://www.aljazeera.com",
+          "domain": "www.aljazeera.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Nikkei Asia",
+          "url": "https://asia.nikkei.com/search?query=",
+          "home": "https://asia.nikkei.com",
+          "domain": "asia.nikkei.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "The Japan Times",
+          "url": "",
+          "home": "https://www.japantimes.co.jp/",
+          "domain": "www.japantimes.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "NHK WORLD-JAPAN",
+          "url": "",
+          "home": "https://www3.nhk.or.jp/nhkworld/",
+          "domain": "www3.nhk.or.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "テック／IT"
+        },
+        {
+          "name": "GIGAZINE",
+          "url": "https://gigazine.net/gsc_news_search/?q=",
+          "home": "https://gigazine.net/",
+          "domain": "gigazine.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ITmedia",
+          "url": "",
+          "home": "https://www.itmedia.co.jp/",
+          "domain": "www.itmedia.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Engadget 日本版",
+          "url": "",
+          "home": "https://japanese.engadget.com/",
+          "domain": "japanese.engadget.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "GIZMODO JAPAN",
+          "url": "",
+          "home": "https://www.gizmodo.jp/",
+          "domain": "www.gizmodo.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ASCII.jp",
+          "url": "",
+          "home": "https://ascii.jp/",
+          "domain": "ascii.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Hacker News",
+          "url": "https://hn.algolia.com/?q=",
+          "home": "https://news.ycombinator.com/",
+          "domain": "news.ycombinator.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "TechCrunch",
+          "url": "https://techcrunch.com/search/",
+          "home": "https://techcrunch.com/",
+          "domain": "techcrunch.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "The Verge",
+          "url": "https://www.theverge.com/search?q=",
+          "home": "https://www.theverge.com",
+          "domain": "www.theverge.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Ars Technica",
+          "url": "https://arstechnica.com/search/?query=",
+          "home": "https://arstechnica.com",
+          "domain": "arstechnica.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "エンタメ",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "動画"
+        },
+        {
+          "name": "Youtube",
+          "url": "https://www.youtube.com/results?search_query=",
+          "home": "https://www.youtube.com",
+          "domain": "www.youtube.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Netflix",
+          "url": "https://www.netflix.com/search?q=",
+          "home": "https://www.netflix.com",
+          "domain": "www.netflix.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Prime Video",
+          "url": "https://www.amazon.co.jp/s?i=instant-video&k=",
+          "home": "https://www.amazon.co.jp/Prime-Video",
+          "domain": "amazon.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "TVer",
+          "url": "https://tver.jp/search/",
+          "home": "https://tver.jp",
+          "domain": "tver.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "abema",
+          "url": "https://abema.tv/search?q=",
+          "home": "https://abema.tv/",
+          "domain": "abema.tv",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "SNS"
+        },
+        {
+          "name": "X",
+          "url": "https://twitter.com/search?q=",
+          "home": "https://x.com/",
+          "domain": "x.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Instagram",
+          "url": "https://www.instagram.com/explore/tags/",
+          "home": "https://www.instagram.com",
+          "domain": "instagram.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "tiktok",
+          "url": "https://www.tiktok.com/search?q=",
+          "home": "https://www.tiktok.com/",
+          "domain": "www.tiktok.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "音楽"
+        },
+        {
+          "name": "Spotify",
+          "url": "https://open.spotify.com/search/",
+          "home": "https://open.spotify.com/",
+          "domain": "open.spotify.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Apple Music",
+          "url": "https://music.apple.com/jp/search?term=",
+          "home": "https://music.apple.com/jp/",
+          "domain": "music.apple.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "YouTube Music",
+          "url": "https://music.youtube.com/search?q=",
+          "home": "https://music.youtube.com",
+          "domain": "music.youtube.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Amazon Music",
+          "url": "https://music.amazon.co.jp/search/",
+          "home": "https://music.amazon.co.jp/",
+          "domain": "music.amazon.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "LINE MUSIC",
+          "url": "",
+          "home": "https://music.line.me/",
+          "domain": "music.line.me",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "AWA",
+          "url": "",
+          "home": "https://awa.fm/",
+          "domain": "awa.fm",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "SoundCloud",
+          "url": "https://soundcloud.com/search?q=",
+          "home": "https://soundcloud.com",
+          "domain": "soundcloud.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Bandcamp",
+          "url": "https://bandcamp.com/search?q=",
+          "home": "https://bandcamp.com",
+          "domain": "bandcamp.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Apple Podcasts",
+          "url": "https://podcasts.apple.com/jp/search?term=",
+          "home": "https://podcasts.apple.com/jp/",
+          "domain": "podcasts.apple.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "radiko",
+          "url": "",
+          "home": "https://radiko.jp/",
+          "domain": "radiko.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Genius（歌詞）",
+          "url": "https://genius.com/search?q=",
+          "home": "https://genius.com",
+          "domain": "genius.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "歌ネット（歌詞・曲名）",
+          "url": "https://www.uta-net.com/search/?Aselect=2&Keyword=",
+          "home": "https://www.uta-net.com",
+          "domain": "www.uta-net.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Last.fm",
+          "url": "https://www.last.fm/search?q=",
+          "home": "https://www.last.fm",
+          "domain": "www.last.fm",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Discogs",
+          "url": "https://www.discogs.com/search/?q=",
+          "home": "https://www.discogs.com",
+          "domain": "www.discogs.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "動画（追加）"
+        },
+        {
+          "name": "U-NEXT",
+          "url": "https://video.unext.jp/freeword?query=",
+          "home": "https://video.unext.jp",
+          "domain": "video.unext.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Disney+",
+          "url": "",
+          "home": "https://www.disneyplus.com/ja-jp",
+          "domain": "www.disneyplus.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Hulu",
+          "url": "",
+          "home": "https://www.hulu.jp/",
+          "domain": "www.hulu.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Lemino",
+          "url": "",
+          "home": "https://lemino.docomo.ne.jp/",
+          "domain": "lemino.docomo.ne.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "dアニメストア",
+          "url": "",
+          "home": "https://animestore.docomo.ne.jp/",
+          "domain": "animestore.docomo.ne.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "NHKプラス",
+          "url": "",
+          "home": "https://plus.nhk.jp/",
+          "domain": "plus.nhk.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ニコニコ動画",
+          "url": "https://www.nicovideo.jp/search/",
+          "home": "https://www.nicovideo.jp",
+          "domain": "www.nicovideo.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Twitch",
+          "url": "https://www.twitch.tv/search?term=",
+          "home": "https://www.twitch.tv",
+          "domain": "www.twitch.tv",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Vimeo",
+          "url": "https://vimeo.com/search?q=",
+          "home": "https://vimeo.com",
+          "domain": "vimeo.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "SNS・コミュニティ（追加）"
+        },
+        {
+          "name": "X（最新順）",
+          "url": "https://x.com/search?f=live&q=",
+          "home": "https://x.com/",
+          "domain": "x.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Threads",
+          "url": "https://www.threads.net/search?q=",
+          "home": "https://www.threads.net/",
+          "domain": "www.threads.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Bluesky",
+          "url": "https://bsky.app/search?q=",
+          "home": "https://bsky.app",
+          "domain": "bsky.app",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Facebook",
+          "url": "https://www.facebook.com/search/top?q=",
+          "home": "https://www.facebook.com",
+          "domain": "www.facebook.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "LinkedIn",
+          "url": "https://www.linkedin.com/search/results/all/?keywords=",
+          "home": "https://www.linkedin.com",
+          "domain": "www.linkedin.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Pinterest",
+          "url": "https://www.pinterest.com/search/pins/?q=",
+          "home": "https://www.pinterest.com",
+          "domain": "www.pinterest.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Reddit",
+          "url": "https://www.reddit.com/search/?q=",
+          "home": "https://www.reddit.com",
+          "domain": "www.reddit.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Discord",
+          "url": "",
+          "home": "https://discord.com/app",
+          "domain": "discord.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "pixiv",
+          "url": "https://www.pixiv.net/tags/",
+          "home": "https://www.pixiv.net",
+          "domain": "www.pixiv.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "ショッピング",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "総合通販"
+        },
+        {
+          "name": "Amazon",
+          "url": "https://www.amazon.co.jp/s?k=",
+          "home": "https://www.amazon.co.jp",
+          "domain": "amazon.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "楽天市場",
+          "url": "https://search.rakuten.co.jp/search/mall/",
+          "home": "https://www.rakuten.co.jp",
+          "domain": "rakuten.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Y!ショッピング",
+          "url": "https://shopping.yahoo.co.jp/search?p=",
+          "home": "https://shopping.yahoo.co.jp",
+          "domain": "shopping.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ヨドバシ",
+          "url": "https://www.yodobashi.com/?word=",
+          "home": "https://www.yodobashi.com",
+          "domain": "www.yodobashi.com",
+          "iconUrl": "https://play-lh.googleusercontent.com/AHhokkIYtJ2I-7OVd_a5IUD_xlYr_I3i580VXak9U9a5wdGWui7fBA96Ae-W_Zt6GM3Y0v-ntYpMpnSIgD3mMg=w480-h960-rw",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "フリマ／オークション"
+        },
+        {
+          "name": "メルカリ",
+          "url": "https://jp.mercari.com/search?keyword=",
+          "home": "https://jp.mercari.com",
+          "domain": "mercari.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ヤフオク!",
+          "url": "https://auctions.yahoo.co.jp/search/search?p=",
+          "home": "https://auctions.yahoo.co.jp",
+          "domain": "auctions.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Yahooフリマ",
+          "url": "https://paypayfleamarket.yahoo.co.jp/search/",
+          "home": "https://paypayfleamarket.yahoo.co.jp/",
+          "domain": "paypayfleamarket.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "minne",
+          "url": "https://minne.com/category/saleonly?input_method=typing&q=",
+          "home": "https://minne.com/",
+          "domain": "minne.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "海外"
+        },
+        {
+          "name": "temu",
+          "url": "https://www.temu.com/search_result.html?search_key=",
+          "home": "https://www.temu.com/jp",
+          "domain": "www.temu.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Qoo10",
+          "url": "https://www.qoo10.jp/gmkt.inc/Search/Default.aspx?keyword=",
+          "home": "https://www.qoo10.jp",
+          "domain": "qoo10.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "価格"
+        },
+        {
+          "name": "価格.com",
+          "url": "https://kakaku.com/search_results/?query=",
+          "home": "https://kakaku.com",
+          "domain": "kakaku.com",
+          "iconUrl": "",
+          "encoding": "SJIS"
+        },
+        {
+          "name": "keepa",
+          "url": "https://keepa.com/#!search/5-",
+          "home": "https://keepa.com/",
+          "domain": "keepa.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "CamelCamelCamel（Amazon.com価格推移）",
+          "url": "https://camelcamelcamel.com/search?sq=",
+          "home": "https://camelcamelcamel.com",
+          "domain": "camelcamelcamel.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "家電・PC"
+        },
+        {
+          "name": "ビックカメラ",
+          "url": "https://www.biccamera.com/bc/category/?q=",
+          "home": "https://www.biccamera.com",
+          "domain": "www.biccamera.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Apple（日本）",
+          "url": "https://www.apple.com/jp/search/",
+          "home": "https://www.apple.com/jp/",
+          "domain": "www.apple.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ヤマダウェブコム",
+          "url": "",
+          "home": "https://www.yamada-denki.jp/",
+          "domain": "www.yamada-denki.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ケーズデンキ",
+          "url": "",
+          "home": "https://www.ksdenki.com/",
+          "domain": "www.ksdenki.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ジョーシン",
+          "url": "",
+          "home": "https://joshinweb.jp/",
+          "domain": "joshinweb.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ソフマップ",
+          "url": "",
+          "home": "https://www.sofmap.com/",
+          "domain": "www.sofmap.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ドスパラ",
+          "url": "",
+          "home": "https://www.dospara.co.jp/",
+          "domain": "www.dospara.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "パソコン工房",
+          "url": "",
+          "home": "https://www.pc-koubou.jp/",
+          "domain": "www.pc-koubou.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "総合通販（追加）"
+        },
+        {
+          "name": "楽天ブックス",
+          "url": "https://books.rakuten.co.jp/search?sitem=",
+          "home": "https://books.rakuten.co.jp",
+          "domain": "books.rakuten.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "LOHACO",
+          "url": "",
+          "home": "https://lohaco.yahoo.co.jp/",
+          "domain": "lohaco.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "au PAY マーケット",
+          "url": "",
+          "home": "https://wowma.jp/",
+          "domain": "wowma.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Amazon.com（米国）",
+          "url": "https://www.amazon.com/s?k=",
+          "home": "https://www.amazon.com",
+          "domain": "www.amazon.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "紀伊國屋書店",
+          "url": "",
+          "home": "https://www.kinokuniya.co.jp/",
+          "domain": "www.kinokuniya.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "丸善ジュンク堂",
+          "url": "",
+          "home": "https://www.maruzenjunkudo.co.jp/",
+          "domain": "www.maruzenjunkudo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "中古・リユース・ハンドメイド"
+        },
+        {
+          "name": "ラクマ",
+          "url": "https://fril.jp/s?query=",
+          "home": "https://fril.jp",
+          "domain": "fril.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ブックオフ",
+          "url": "https://shopping.bookoff.co.jp/search/keyword/",
+          "home": "https://shopping.bookoff.co.jp/",
+          "domain": "shopping.bookoff.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "駿河屋",
+          "url": "https://www.suruga-ya.jp/search?category=&search_word=",
+          "home": "https://www.suruga-ya.jp/",
+          "domain": "www.suruga-ya.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "セカンドストリート",
+          "url": "",
+          "home": "https://www.2ndstreet.jp/",
+          "domain": "www.2ndstreet.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ハードオフ ネットモール",
+          "url": "",
+          "home": "https://netmall.hardoff.co.jp/",
+          "domain": "netmall.hardoff.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ジモティー",
+          "url": "",
+          "home": "https://jmty.jp/",
+          "domain": "jmty.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Creema",
+          "url": "https://www.creema.jp/listing?q=",
+          "home": "https://www.creema.jp",
+          "domain": "www.creema.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "海外通販（追加）"
+        },
+        {
+          "name": "AliExpress",
+          "url": "https://ja.aliexpress.com/wholesale?SearchText=",
+          "home": "https://ja.aliexpress.com",
+          "domain": "ja.aliexpress.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "eBay",
+          "url": "https://www.ebay.com/sch/i.html?_nkw=",
+          "home": "https://www.ebay.com",
+          "domain": "www.ebay.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Etsy",
+          "url": "https://www.etsy.com/jp/search?q=",
+          "home": "https://www.etsy.com/jp/",
+          "domain": "www.etsy.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "SHEIN",
+          "url": "https://jp.shein.com/pdsearch/",
+          "home": "https://jp.shein.com",
+          "domain": "jp.shein.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "iHerb",
+          "url": "https://jp.iherb.com/search?kw=",
+          "home": "https://jp.iherb.com",
+          "domain": "jp.iherb.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Buyee",
+          "url": "",
+          "home": "https://buyee.jp/",
+          "domain": "buyee.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "お店",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "雑貨"
+        },
+        {
+          "name": "無印良品",
+          "url": "https://www.muji.com/jp/ja/store/search/cmdty/",
+          "home": "https://www.muji.com/jp/ja/store",
+          "domain": "www.muji.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ニトリ",
+          "url": "https://www.nitori-net.jp/ec/search/?q=",
+          "home": "https://www.nitori-net.jp",
+          "domain": "www.nitori-net.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ダイソー",
+          "url": "https://jp.daisonet.com/search?type=product&q=",
+          "home": "https://jp.daisonet.com/",
+          "domain": "jp.daisonet.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "ファッション"
+        },
+        {
+          "name": "ユニクロ",
+          "url": "https://www.uniqlo.com/jp/ja/search?q=",
+          "home": "https://www.uniqlo.com/jp/ja/",
+          "domain": "www.uniqlo.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "zozotown",
+          "url": "https://zozo.jp/search/?p_keyv=",
+          "home": "https://zozo.jp",
+          "domain": "zozo.jp",
+          "iconUrl": "",
+          "encoding": "SJIS"
+        },
+        {
+          "name": "GU",
+          "url": "https://www.gu-global.com/jp/ja/search?q=",
+          "home": "https://www.gu-global.com/jp/ja/",
+          "domain": "www.gu-global.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ナイキ",
+          "url": "https://www.nike.com/jp/w?q=",
+          "home": "https://www.nike.com/jp/",
+          "domain": "www.nike.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "アディダス",
+          "url": "https://www.adidas.jp/search?q=",
+          "home": "https://www.adidas.jp/",
+          "domain": "www.adidas.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "H&M",
+          "url": "https://www2.hm.com/ja_jp/search-results.html?q=",
+          "home": "https://www2.hm.com/ja_jp/index.html",
+          "domain": "www2.hm.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ZARA",
+          "url": "https://www.zara.com/jp/ja/search?searchTerm=",
+          "home": "https://www.zara.com/jp/",
+          "domain": "www.zara.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "しまむら",
+          "url": "",
+          "home": "https://www.shimamura.gr.jp/",
+          "domain": "www.shimamura.gr.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ワークマン",
+          "url": "",
+          "home": "https://workman.jp/",
+          "domain": "workman.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ABC-MART",
+          "url": "",
+          "home": "https://www.abc-mart.net/",
+          "domain": "www.abc-mart.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "BEAMS",
+          "url": "",
+          "home": "https://www.beams.co.jp/",
+          "domain": "www.beams.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ユナイテッドアローズ",
+          "url": "",
+          "home": "https://store.united-arrows.co.jp/",
+          "domain": "store.united-arrows.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "インテリア／雑貨（追加）"
+        },
+        {
+          "name": "IKEA",
+          "url": "https://www.ikea.com/jp/ja/search/?q=",
+          "home": "https://www.ikea.com/jp/ja/",
+          "domain": "www.ikea.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Francfranc",
+          "url": "",
+          "home": "https://francfranc.com/",
+          "domain": "francfranc.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ロフト",
+          "url": "",
+          "home": "https://www.loft.co.jp/",
+          "domain": "www.loft.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ハンズ",
+          "url": "",
+          "home": "https://hands.net/",
+          "domain": "hands.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "3COINS",
+          "url": "",
+          "home": "https://www.3coins.jp/",
+          "domain": "www.3coins.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "セリア",
+          "url": "",
+          "home": "https://www.seria-group.com/",
+          "domain": "www.seria-group.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "キャンドゥ",
+          "url": "",
+          "home": "https://www.cando-web.co.jp/",
+          "domain": "www.cando-web.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "ホームセンター"
+        },
+        {
+          "name": "カインズ",
+          "url": "",
+          "home": "https://www.cainz.com/",
+          "domain": "www.cainz.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "コーナン",
+          "url": "",
+          "home": "https://www.hc-kohnan.com/",
+          "domain": "www.hc-kohnan.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "ドラッグ／スーパー／コンビニ"
+        },
+        {
+          "name": "マツモトキヨシ",
+          "url": "",
+          "home": "https://www.matsukiyococokara-online.com/",
+          "domain": "www.matsukiyococokara-online.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ウエルシア",
+          "url": "",
+          "home": "https://www.welcia.co.jp/",
+          "domain": "www.welcia.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "イオン",
+          "url": "",
+          "home": "https://www.aeon.jp/",
+          "domain": "www.aeon.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "イトーヨーカドー",
+          "url": "",
+          "home": "https://www.itoyokado.co.jp/",
+          "domain": "www.itoyokado.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "コストコ",
+          "url": "",
+          "home": "https://www.costco.co.jp/",
+          "domain": "www.costco.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "セブン-イレブン",
+          "url": "",
+          "home": "https://www.sej.co.jp/",
+          "domain": "www.sej.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ローソン",
+          "url": "",
+          "home": "https://www.lawson.co.jp/",
+          "domain": "www.lawson.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ファミリーマート",
+          "url": "",
+          "home": "https://www.family.co.jp/",
+          "domain": "www.family.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "辞書",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "辞書"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://ja.wikipedia.org/wiki/Special:Search?search=",
+          "home": "https://ja.wikipedia.org",
+          "domain": "wikipedia.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Weblio辞書",
+          "url": "https://www.weblio.jp/content/",
+          "home": "https://www.weblio.jp",
+          "domain": "www.weblio.jp",
+          "iconUrl": "https://play-lh.googleusercontent.com/mgzo238CIcMk1PrQzyqxY_YKgQEF_9hO9H8eRi_yB9OVhirE5NDRMd9bi6WJdXDc7s5RIfLO_o6Jky4B4qDx2Bw=s96-rw",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "コトバンク",
+          "url": "https://kotobank.jp/word/",
+          "home": "https://kotobank.jp",
+          "domain": "kotobank.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "英辞郎",
+          "url": "https://eow.alc.co.jp/search?q=",
+          "home": "https://eow.alc.co.jp",
+          "domain": "alc.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "翻訳"
+        },
+        {
+          "name": "英→和（DeepL）",
+          "url": "https://www.deepl.com/translator?#en/ja/",
+          "home": "https://www.deepl.com/translator?#en/ja/",
+          "domain": "www.deepl.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "和→英（DeepL）",
+          "url": "https://www.deepl.com/translator?#ja/en/",
+          "home": "https://www.deepl.com/translator?#ja/en/",
+          "domain": "www.deepl.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "英→和（Google翻訳）",
+          "url": "https://translate.google.com/?sl=en&tl=ja&op=translate&text=",
+          "home": "https://translate.google.com/?sl=en&tl=ja",
+          "domain": "translate.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "和→英（Google翻訳）",
+          "url": "https://translate.google.com/?sl=ja&tl=en&op=translate&text=",
+          "home": "https://translate.google.com/?sl=ja&tl=en",
+          "domain": "translate.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Linguee（用例つき翻訳）",
+          "url": "https://www.linguee.jp/%E6%97%A5%E6%9C%AC%E8%AA%9E-%E8%8B%B1%E8%AA%9E/search?source=auto&query=",
+          "home": "https://www.linguee.jp/",
+          "domain": "www.linguee.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "DeepL Write（英文校正）",
+          "url": "",
+          "home": "https://www.deepl.com/write",
+          "domain": "www.deepl.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "辞書（追加）"
+        },
+        {
+          "name": "Weblio英和・和英",
+          "url": "https://ejje.weblio.jp/content/",
+          "home": "https://ejje.weblio.jp/",
+          "domain": "ejje.weblio.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Weblio類語",
+          "url": "https://thesaurus.weblio.jp/content/",
+          "home": "https://thesaurus.weblio.jp/",
+          "domain": "thesaurus.weblio.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "goo辞書",
+          "url": "",
+          "home": "https://dictionary.goo.ne.jp/",
+          "domain": "dictionary.goo.ne.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Wiktionary（日本語版）",
+          "url": "https://ja.wiktionary.org/wiki/Special:Search?search=",
+          "home": "https://ja.wiktionary.org",
+          "domain": "ja.wiktionary.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Jisho.org（和英）",
+          "url": "https://jisho.org/search/",
+          "home": "https://jisho.org/",
+          "domain": "jisho.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Oxford Learner's Dictionaries",
+          "url": "https://www.oxfordlearnersdictionaries.com/search/english/?q=",
+          "home": "https://www.oxfordlearnersdictionaries.com",
+          "domain": "www.oxfordlearnersdictionaries.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Cambridge Dictionary",
+          "url": "https://dictionary.cambridge.org/search/direct/?datasetsearch=english&q=",
+          "home": "https://dictionary.cambridge.org",
+          "domain": "dictionary.cambridge.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Merriam-Webster",
+          "url": "https://www.merriam-webster.com/dictionary/",
+          "home": "https://www.merriam-webster.com",
+          "domain": "www.merriam-webster.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Longman (LDOCE)",
+          "url": "https://www.ldoceonline.com/search/english/direct/?q=",
+          "home": "https://www.ldoceonline.com",
+          "domain": "www.ldoceonline.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Thesaurus.com（英類語）",
+          "url": "https://www.thesaurus.com/browse/",
+          "home": "https://www.thesaurus.com",
+          "domain": "www.thesaurus.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Etymonline（英語語源）",
+          "url": "https://www.etymonline.com/search?q=",
+          "home": "https://www.etymonline.com",
+          "domain": "www.etymonline.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "百科事典"
+        },
+        {
+          "name": "Wikipedia（英語版）",
+          "url": "https://en.wikipedia.org/wiki/Special:Search?search=",
+          "home": "https://en.wikipedia.org",
+          "domain": "en.wikipedia.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Britannica",
+          "url": "https://www.britannica.com/search?query=",
+          "home": "https://www.britannica.com",
+          "domain": "www.britannica.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "アプリ",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "App Store"
+        },
+        {
+          "name": "App Store (mac)",
+          "url": "https://apps.apple.com/jp/mac/search?term=",
+          "home": "https://apps.apple.com/jp/mac/",
+          "domain": "apps.apple.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Microsoft Apps",
+          "url": "https://apps.microsoft.com/search?query=",
+          "home": "https://apps.microsoft.com",
+          "domain": "apps.microsoft.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google Play",
+          "url": "https://play.google.com/store/search?q=",
+          "home": "https://play.google.com/store/",
+          "domain": "play.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "App Store (iPhone)",
+          "url": "https://apps.apple.com/jp/iphone/search?term=",
+          "home": "https://apps.apple.com/jp/iphone/",
+          "domain": "apps.apple.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "App Store (iPad)",
+          "url": "https://apps.apple.com/jp/ipad/search?term=",
+          "home": "https://apps.apple.com/jp/ipad/",
+          "domain": "apps.apple.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "ブラウザ拡張"
+        },
+        {
+          "name": "Chrome ウェブストア",
+          "url": "https://chromewebstore.google.com/search/",
+          "home": "https://chromewebstore.google.com/",
+          "domain": "chromewebstore.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Firefox アドオン",
+          "url": "https://addons.mozilla.org/ja/firefox/search/?q=",
+          "home": "https://addons.mozilla.org/ja/firefox/",
+          "domain": "addons.mozilla.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Edge アドオン",
+          "url": "https://microsoftedge.microsoft.com/addons/search/",
+          "home": "https://microsoftedge.microsoft.com/addons",
+          "domain": "microsoftedge.microsoft.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "PC・OSソフト"
+        },
+        {
+          "name": "WinGet (winstall)",
+          "url": "https://winstall.app/apps?q=",
+          "home": "https://winstall.app/",
+          "domain": "winstall.app",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Chocolatey",
+          "url": "https://community.chocolatey.org/packages?q=",
+          "home": "https://community.chocolatey.org/",
+          "domain": "community.chocolatey.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Homebrew",
+          "url": "",
+          "home": "https://formulae.brew.sh/",
+          "domain": "formulae.brew.sh",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Flathub",
+          "url": "https://flathub.org/apps/search?q=",
+          "home": "https://flathub.org/",
+          "domain": "flathub.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "F-Droid",
+          "url": "https://f-droid.org/ja/search/?q=",
+          "home": "https://f-droid.org/ja/",
+          "domain": "f-droid.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "窓の杜",
+          "url": "",
+          "home": "https://forest.watch.impress.co.jp/",
+          "domain": "forest.watch.impress.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Vector",
+          "url": "",
+          "home": "https://www.vector.co.jp/",
+          "domain": "www.vector.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "アプリ探し"
+        },
+        {
+          "name": "AlternativeTo",
+          "url": "https://alternativeto.net/browse/search/?q=",
+          "home": "https://alternativeto.net/",
+          "domain": "alternativeto.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Product Hunt",
+          "url": "https://www.producthunt.com/search?q=",
+          "home": "https://www.producthunt.com/",
+          "domain": "www.producthunt.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "素材",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "画像"
+        },
+        {
+          "name": "usnplash",
+          "url": "https://unsplash.com/ja/s/%E5%86%99%E7%9C%9F/",
+          "home": "https://unsplash.com/ja",
+          "domain": "unsplash.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "pixabay",
+          "url": "https://pixabay.com/ja/images/search/",
+          "home": "https://pixabay.com/ja/",
+          "domain": "pixabay.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "サウンド"
+        },
+        {
+          "name": "効果音ラボ",
+          "url": "https://soundeffect-lab.info/sound/search.php?s=",
+          "home": "https://soundeffect-lab.info/sound/anime/",
+          "domain": "soundeffect-lab.info",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "freesound",
+          "url": "https://freesound.org/search/?q=",
+          "home": "https://freesound.org/",
+          "domain": "freesound.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "画像（追加）"
+        },
+        {
+          "name": "Pexels",
+          "url": "https://www.pexels.com/ja-jp/search/",
+          "home": "https://www.pexels.com/ja-jp/",
+          "domain": "www.pexels.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ぱくたそ",
+          "url": "",
+          "home": "https://www.pakutaso.com/",
+          "domain": "www.pakutaso.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "O-DAN",
+          "url": "",
+          "home": "https://o-dan.net/ja/",
+          "domain": "o-dan.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "いらすとや",
+          "url": "https://www.irasutoya.com/search?q=",
+          "home": "https://www.irasutoya.com/",
+          "domain": "www.irasutoya.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "写真AC",
+          "url": "https://www.photo-ac.com/main/search?q=",
+          "home": "https://www.photo-ac.com/",
+          "domain": "www.photo-ac.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "イラストAC",
+          "url": "https://www.ac-illust.com/main/search_result.php?word=",
+          "home": "https://www.ac-illust.com/",
+          "domain": "www.ac-illust.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Freepik",
+          "url": "https://www.freepik.com/search?query=",
+          "home": "https://www.freepik.com/",
+          "domain": "www.freepik.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Openverse",
+          "url": "https://openverse.org/search/?q=",
+          "home": "https://openverse.org/",
+          "domain": "openverse.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Wikimedia Commons",
+          "url": "https://commons.wikimedia.org/w/index.php?search=",
+          "home": "https://commons.wikimedia.org/",
+          "domain": "commons.wikimedia.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "NASA Image Library",
+          "url": "https://images.nasa.gov/search?q=",
+          "home": "https://images.nasa.gov/",
+          "domain": "images.nasa.gov",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Shutterstock",
+          "url": "https://www.shutterstock.com/ja/search/",
+          "home": "https://www.shutterstock.com/ja/",
+          "domain": "www.shutterstock.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Adobe Stock",
+          "url": "https://stock.adobe.com/jp/search?k=",
+          "home": "https://stock.adobe.com/jp/",
+          "domain": "stock.adobe.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "動画素材"
+        },
+        {
+          "name": "Pexels Videos",
+          "url": "https://www.pexels.com/ja-jp/search/videos/",
+          "home": "https://www.pexels.com/ja-jp/videos/",
+          "domain": "www.pexels.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Pixabay Videos",
+          "url": "https://pixabay.com/ja/videos/search/",
+          "home": "https://pixabay.com/ja/videos/",
+          "domain": "pixabay.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Coverr",
+          "url": "https://coverr.co/s?q=",
+          "home": "https://coverr.co/",
+          "domain": "coverr.co",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "サウンド（追加）"
+        },
+        {
+          "name": "Pixabay Music",
+          "url": "https://pixabay.com/ja/music/search/",
+          "home": "https://pixabay.com/ja/music/",
+          "domain": "pixabay.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "DOVA-SYNDROME",
+          "url": "",
+          "home": "https://dova-s.jp/",
+          "domain": "dova-s.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "魔王魂",
+          "url": "",
+          "home": "https://maou.audio/",
+          "domain": "maou.audio",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "OtoLogic",
+          "url": "",
+          "home": "https://otologic.jp/",
+          "domain": "otologic.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ポケットサウンド",
+          "url": "",
+          "home": "https://pocket-se.info/",
+          "domain": "pocket-se.info",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "甘茶の音楽工房",
+          "url": "",
+          "home": "https://amachamusic.chagasi.com/",
+          "domain": "amachamusic.chagasi.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Free Music Archive",
+          "url": "https://freemusicarchive.org/search?quicksearch=",
+          "home": "https://freemusicarchive.org/",
+          "domain": "freemusicarchive.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Zapsplat",
+          "url": "https://www.zapsplat.com/?s=",
+          "home": "https://www.zapsplat.com/",
+          "domain": "www.zapsplat.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "オフィス／クラウド",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "Google Workspace"
+        },
+        {
+          "name": "Google ドライブ",
+          "url": "https://drive.google.com/drive/search?q=",
+          "home": "https://drive.google.com/drive/",
+          "domain": "drive.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google ドキュメント",
+          "url": "",
+          "home": "https://docs.google.com/document/u/0/",
+          "domain": "docs.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google スプレッドシート",
+          "url": "",
+          "home": "https://docs.google.com/spreadsheets/u/0/",
+          "domain": "docs.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google スライド",
+          "url": "",
+          "home": "https://docs.google.com/presentation/u/0/",
+          "domain": "docs.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google フォーム",
+          "url": "",
+          "home": "https://docs.google.com/forms/u/0/",
+          "domain": "docs.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google Meet",
+          "url": "",
+          "home": "https://meet.google.com/",
+          "domain": "meet.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google Chat",
+          "url": "",
+          "home": "https://chat.google.com/",
+          "domain": "chat.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google Keep",
+          "url": "https://keep.google.com/#search/text%3D",
+          "home": "https://keep.google.com/",
+          "domain": "keep.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google フォト",
+          "url": "https://photos.google.com/search/",
+          "home": "https://photos.google.com/",
+          "domain": "photos.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google コンタクト",
+          "url": "",
+          "home": "https://contacts.google.com/",
+          "domain": "contacts.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "Microsoft 365"
+        },
+        {
+          "name": "Microsoft 365",
+          "url": "",
+          "home": "https://www.microsoft365.com/",
+          "domain": "www.microsoft365.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "OneDrive",
+          "url": "",
+          "home": "https://onedrive.live.com/",
+          "domain": "onedrive.live.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Word (Web)",
+          "url": "",
+          "home": "https://www.office.com/launch/word",
+          "domain": "www.office.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Excel (Web)",
+          "url": "",
+          "home": "https://www.office.com/launch/excel",
+          "domain": "www.office.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "PowerPoint (Web)",
+          "url": "",
+          "home": "https://www.office.com/launch/powerpoint",
+          "domain": "www.office.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "OneNote",
+          "url": "",
+          "home": "https://www.onenote.com/notebooks",
+          "domain": "www.onenote.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "ストレージ／ファイル送信"
+        },
+        {
+          "name": "Dropbox",
+          "url": "",
+          "home": "https://www.dropbox.com/home",
+          "domain": "www.dropbox.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "iCloud",
+          "url": "",
+          "home": "https://www.icloud.com/",
+          "domain": "www.icloud.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ギガファイル便",
+          "url": "",
+          "home": "https://gigafile.nu/",
+          "domain": "gigafile.nu",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "WeTransfer",
+          "url": "",
+          "home": "https://wetransfer.com/",
+          "domain": "wetransfer.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "仕事／ツール",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "会議／スケジュール調整"
+        },
+        {
+          "name": "Zoom",
+          "url": "",
+          "home": "https://zoom.us/",
+          "domain": "zoom.us",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Chatwork",
+          "url": "",
+          "home": "https://www.chatwork.com/",
+          "domain": "www.chatwork.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Calendly",
+          "url": "",
+          "home": "https://calendly.com/",
+          "domain": "calendly.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "調整さん",
+          "url": "",
+          "home": "https://chouseisan.com/",
+          "domain": "chouseisan.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "メモ／タスク／プロジェクト"
+        },
+        {
+          "name": "Evernote",
+          "url": "",
+          "home": "https://www.evernote.com/client/web",
+          "domain": "www.evernote.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Trello",
+          "url": "",
+          "home": "https://trello.com/",
+          "domain": "trello.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Asana",
+          "url": "",
+          "home": "https://app.asana.com/",
+          "domain": "app.asana.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Backlog",
+          "url": "",
+          "home": "https://backlog.com/ja/",
+          "domain": "backlog.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Miro",
+          "url": "",
+          "home": "https://miro.com/app/dashboard/",
+          "domain": "miro.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Cosense (Scrapbox)",
+          "url": "",
+          "home": "https://scrapbox.io/",
+          "domain": "scrapbox.io",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "PDF／ファイル変換"
+        },
+        {
+          "name": "iLovePDF",
+          "url": "",
+          "home": "https://www.ilovepdf.com/ja",
+          "domain": "www.ilovepdf.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Smallpdf",
+          "url": "",
+          "home": "https://smallpdf.com/jp",
+          "domain": "smallpdf.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Adobe Acrobat オンライン",
+          "url": "",
+          "home": "https://www.adobe.com/jp/acrobat/online.html",
+          "domain": "www.adobe.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "CloudConvert",
+          "url": "",
+          "home": "https://cloudconvert.com/",
+          "domain": "cloudconvert.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Convertio",
+          "url": "",
+          "home": "https://convertio.co/ja/",
+          "domain": "convertio.co",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "iLoveIMG",
+          "url": "",
+          "home": "https://www.iloveimg.com/ja",
+          "domain": "www.iloveimg.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "TinyPNG",
+          "url": "",
+          "home": "https://tinypng.com/",
+          "domain": "tinypng.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Squoosh",
+          "url": "",
+          "home": "https://squoosh.app/",
+          "domain": "squoosh.app",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "remove.bg",
+          "url": "",
+          "home": "https://www.remove.bg/ja",
+          "domain": "www.remove.bg",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "ユーティリティ"
+        },
+        {
+          "name": "Speedtest",
+          "url": "",
+          "home": "https://www.speedtest.net/ja",
+          "domain": "www.speedtest.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Fast.com",
+          "url": "",
+          "home": "https://fast.com/ja/",
+          "domain": "fast.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Diffchecker（差分比較）",
+          "url": "",
+          "home": "https://www.diffchecker.com/",
+          "domain": "www.diffchecker.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "World Time Buddy（時差）",
+          "url": "",
+          "home": "https://www.worldtimebuddy.com/",
+          "domain": "www.worldtimebuddy.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "VirusTotal",
+          "url": "https://www.virustotal.com/gui/search/",
+          "home": "https://www.virustotal.com/",
+          "domain": "www.virustotal.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Have I Been Pwned",
+          "url": "",
+          "home": "https://haveibeenpwned.com/",
+          "domain": "haveibeenpwned.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "開発",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "コード／Q&A"
+        },
+        {
+          "name": "GitHub",
+          "url": "https://github.com/search?q=",
+          "home": "https://github.com",
+          "domain": "github.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "GitLab",
+          "url": "https://gitlab.com/search?search=",
+          "home": "https://gitlab.com",
+          "domain": "gitlab.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Stack Overflow",
+          "url": "https://stackoverflow.com/search?q=",
+          "home": "https://stackoverflow.com",
+          "domain": "stackoverflow.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Qiita",
+          "url": "https://qiita.com/search?q=",
+          "home": "https://qiita.com",
+          "domain": "qiita.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Zenn",
+          "url": "https://zenn.dev/search?q=",
+          "home": "https://zenn.dev",
+          "domain": "zenn.dev",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "ドキュメント"
+        },
+        {
+          "name": "MDN Web Docs",
+          "url": "https://developer.mozilla.org/ja/search?q=",
+          "home": "https://developer.mozilla.org/ja/",
+          "domain": "developer.mozilla.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Microsoft Learn",
+          "url": "https://learn.microsoft.com/ja-jp/search/?terms=",
+          "home": "https://learn.microsoft.com/ja-jp/",
+          "domain": "learn.microsoft.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Apple Developer",
+          "url": "https://developer.apple.com/search/?q=",
+          "home": "https://developer.apple.com/",
+          "domain": "developer.apple.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Android Developers",
+          "url": "https://developer.android.com/s/results?q=",
+          "home": "https://developer.android.com/",
+          "domain": "developer.android.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Python ドキュメント",
+          "url": "https://docs.python.org/ja/3/search.html?q=",
+          "home": "https://docs.python.org/ja/3/",
+          "domain": "docs.python.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "DevDocs",
+          "url": "https://devdocs.io/#q=",
+          "home": "https://devdocs.io/",
+          "domain": "devdocs.io",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Can I use",
+          "url": "https://caniuse.com/?search=",
+          "home": "https://caniuse.com/",
+          "domain": "caniuse.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "AWS ドキュメント",
+          "url": "https://docs.aws.amazon.com/search/doc-search.html?searchQuery=",
+          "home": "https://docs.aws.amazon.com/ja_jp/",
+          "domain": "docs.aws.amazon.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google Cloud ドキュメント",
+          "url": "https://cloud.google.com/s/results?q=",
+          "home": "https://cloud.google.com/docs",
+          "domain": "cloud.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Claude Docs",
+          "url": "",
+          "home": "https://docs.claude.com/",
+          "domain": "docs.claude.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "パッケージ／ライブラリ"
+        },
+        {
+          "name": "npm",
+          "url": "https://www.npmjs.com/search?q=",
+          "home": "https://www.npmjs.com",
+          "domain": "www.npmjs.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "PyPI",
+          "url": "https://pypi.org/search/?q=",
+          "home": "https://pypi.org",
+          "domain": "pypi.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "crates.io",
+          "url": "https://crates.io/search?q=",
+          "home": "https://crates.io",
+          "domain": "crates.io",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "pkg.go.dev",
+          "url": "https://pkg.go.dev/search?q=",
+          "home": "https://pkg.go.dev",
+          "domain": "pkg.go.dev",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "RubyGems",
+          "url": "https://rubygems.org/search?query=",
+          "home": "https://rubygems.org",
+          "domain": "rubygems.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Packagist",
+          "url": "https://packagist.org/?query=",
+          "home": "https://packagist.org",
+          "domain": "packagist.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Maven Central",
+          "url": "https://central.sonatype.com/search?q=",
+          "home": "https://central.sonatype.com",
+          "domain": "central.sonatype.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Docker Hub",
+          "url": "https://hub.docker.com/search?q=",
+          "home": "https://hub.docker.com",
+          "domain": "hub.docker.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "VS Code Marketplace",
+          "url": "https://marketplace.visualstudio.com/search?target=VSCode&term=",
+          "home": "https://marketplace.visualstudio.com/vscode",
+          "domain": "marketplace.visualstudio.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "データ／オンラインツール"
+        },
+        {
+          "name": "Kaggle",
+          "url": "https://www.kaggle.com/search?q=",
+          "home": "https://www.kaggle.com",
+          "domain": "www.kaggle.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "regex101",
+          "url": "",
+          "home": "https://regex101.com/",
+          "domain": "regex101.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "CodePen",
+          "url": "https://codepen.io/search/pens?q=",
+          "home": "https://codepen.io/",
+          "domain": "codepen.io",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "StackBlitz",
+          "url": "",
+          "home": "https://stackblitz.com/",
+          "domain": "stackblitz.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Mermaid Live Editor",
+          "url": "",
+          "home": "https://mermaid.live/",
+          "domain": "mermaid.live",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "crontab guru",
+          "url": "",
+          "home": "https://crontab.guru/",
+          "domain": "crontab.guru",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "開発ツール／ホスティング"
+        },
+        {
+          "name": "Cursor",
+          "url": "",
+          "home": "https://cursor.com/",
+          "domain": "cursor.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Vercel",
+          "url": "",
+          "home": "https://vercel.com/",
+          "domain": "vercel.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Cloudflare",
+          "url": "",
+          "home": "https://dash.cloudflare.com/",
+          "domain": "dash.cloudflare.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "調べもの／学習",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "論文／学術"
+        },
+        {
+          "name": "Google Scholar",
+          "url": "https://scholar.google.com/scholar?q=",
+          "home": "https://scholar.google.com/",
+          "domain": "scholar.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "CiNii Research",
+          "url": "https://cir.nii.ac.jp/all?q=",
+          "home": "https://cir.nii.ac.jp/",
+          "domain": "cir.nii.ac.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "J-STAGE",
+          "url": "https://www.jstage.jst.go.jp/result/global/-char/ja?globalSearchKey=",
+          "home": "https://www.jstage.jst.go.jp/",
+          "domain": "www.jstage.jst.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "KAKEN（科研費）",
+          "url": "https://kaken.nii.ac.jp/ja/search/?kw=",
+          "home": "https://kaken.nii.ac.jp/ja/",
+          "domain": "kaken.nii.ac.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "arXiv",
+          "url": "https://arxiv.org/search/?searchtype=all&query=",
+          "home": "https://arxiv.org/",
+          "domain": "arxiv.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "PubMed",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/?term=",
+          "home": "https://pubmed.ncbi.nlm.nih.gov/",
+          "domain": "pubmed.ncbi.nlm.nih.gov",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Semantic Scholar",
+          "url": "https://www.semanticscholar.org/search?q=",
+          "home": "https://www.semanticscholar.org/",
+          "domain": "www.semanticscholar.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google Patents",
+          "url": "https://patents.google.com/?q=",
+          "home": "https://patents.google.com/",
+          "domain": "patents.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "J-PlatPat（特許）",
+          "url": "",
+          "home": "https://www.j-platpat.inpit.go.jp/",
+          "domain": "www.j-platpat.inpit.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "図書館／書籍／アーカイブ"
+        },
+        {
+          "name": "国立国会図書館サーチ",
+          "url": "https://ndlsearch.ndl.go.jp/search?cs=bib&keyword=",
+          "home": "https://ndlsearch.ndl.go.jp/",
+          "domain": "ndlsearch.ndl.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "国立国会図書館デジタルコレクション",
+          "url": "",
+          "home": "https://dl.ndl.go.jp/",
+          "domain": "dl.ndl.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "カーリル（図書館の蔵書検索）",
+          "url": "",
+          "home": "https://calil.jp/",
+          "domain": "calil.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "青空文庫",
+          "url": "",
+          "home": "https://www.aozora.gr.jp/",
+          "domain": "www.aozora.gr.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google ブックス",
+          "url": "https://www.google.com/search?tbm=bks&q=",
+          "home": "https://books.google.com/",
+          "domain": "books.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Internet Archive",
+          "url": "https://archive.org/search?query=",
+          "home": "https://archive.org/",
+          "domain": "archive.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Project Gutenberg",
+          "url": "https://www.gutenberg.org/ebooks/search/?query=",
+          "home": "https://www.gutenberg.org/",
+          "domain": "www.gutenberg.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Wayback Machine",
+          "url": "https://web.archive.org/web/*/",
+          "home": "https://web.archive.org/",
+          "domain": "web.archive.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "archive.today",
+          "url": "",
+          "home": "https://archive.ph/",
+          "domain": "archive.ph",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "学習／講座"
+        },
+        {
+          "name": "Khan Academy",
+          "url": "https://ja.khanacademy.org/search?page_search_query=",
+          "home": "https://ja.khanacademy.org/",
+          "domain": "ja.khanacademy.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Coursera",
+          "url": "https://www.coursera.org/search?query=",
+          "home": "https://www.coursera.org/",
+          "domain": "www.coursera.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Udemy",
+          "url": "https://www.udemy.com/ja/courses/search/?q=",
+          "home": "https://www.udemy.com/ja/",
+          "domain": "www.udemy.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "edX",
+          "url": "https://www.edx.org/search?q=",
+          "home": "https://www.edx.org/",
+          "domain": "www.edx.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "TED",
+          "url": "https://www.ted.com/search?q=",
+          "home": "https://www.ted.com/",
+          "domain": "www.ted.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "NHK for School",
+          "url": "",
+          "home": "https://www.nhk.or.jp/school/",
+          "domain": "www.nhk.or.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Progate",
+          "url": "",
+          "home": "https://prog-8.com/",
+          "domain": "prog-8.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ドットインストール",
+          "url": "",
+          "home": "https://dotinstall.com/",
+          "domain": "dotinstall.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Duolingo",
+          "url": "",
+          "home": "https://www.duolingo.com/",
+          "domain": "www.duolingo.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Wolfram Alpha",
+          "url": "https://www.wolframalpha.com/input?i=",
+          "home": "https://www.wolframalpha.com/",
+          "domain": "www.wolframalpha.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Desmos（グラフ電卓）",
+          "url": "",
+          "home": "https://www.desmos.com/calculator",
+          "domain": "www.desmos.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "統計／データ／行政情報"
+        },
+        {
+          "name": "e-Stat（政府統計）",
+          "url": "",
+          "home": "https://www.e-stat.go.jp/",
+          "domain": "www.e-stat.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "総務省統計局",
+          "url": "",
+          "home": "https://www.stat.go.jp/",
+          "domain": "www.stat.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "e-Gov 法令検索",
+          "url": "",
+          "home": "https://laws.e-gov.go.jp/",
+          "domain": "laws.e-gov.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "官報",
+          "url": "",
+          "home": "https://www.kanpo.go.jp/",
+          "domain": "www.kanpo.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "国会会議録検索システム",
+          "url": "",
+          "home": "https://kokkai.ndl.go.jp/",
+          "domain": "kokkai.ndl.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "裁判例検索（裁判所）",
+          "url": "",
+          "home": "https://www.courts.go.jp/app/hanrei_jp/search1",
+          "domain": "www.courts.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Our World in Data",
+          "url": "https://ourworldindata.org/search?q=",
+          "home": "https://ourworldindata.org/",
+          "domain": "ourworldindata.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google トレンド",
+          "url": "https://trends.google.co.jp/trends/explore?geo=JP&q=",
+          "home": "https://trends.google.co.jp/trends/",
+          "domain": "trends.google.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google Dataset Search",
+          "url": "https://datasetsearch.research.google.com/search?query=",
+          "home": "https://datasetsearch.research.google.com/",
+          "domain": "datasetsearch.research.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "ファクトチェック"
+        },
+        {
+          "name": "Google Fact Check Explorer",
+          "url": "https://toolbox.google.com/factcheck/explorer/search/",
+          "home": "https://toolbox.google.com/factcheck/explorer",
+          "domain": "toolbox.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "日本ファクトチェックセンター",
+          "url": "",
+          "home": "https://www.factcheckcenter.jp/",
+          "domain": "www.factcheckcenter.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ファクトチェック・イニシアティブ",
+          "url": "",
+          "home": "https://fij.info/",
+          "domain": "fij.info",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "地図／交通／旅行",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "地図"
+        },
+        {
+          "name": "Google マップ",
+          "url": "https://www.google.com/maps/search/",
+          "home": "https://www.google.com/maps",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Yahoo!地図",
+          "url": "https://map.yahoo.co.jp/search?q=",
+          "home": "https://map.yahoo.co.jp/",
+          "domain": "map.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Apple マップ",
+          "url": "https://maps.apple.com/?q=",
+          "home": "https://maps.apple.com/",
+          "domain": "maps.apple.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "OpenStreetMap",
+          "url": "https://www.openstreetmap.org/search?query=",
+          "home": "https://www.openstreetmap.org/",
+          "domain": "www.openstreetmap.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google Earth",
+          "url": "https://earth.google.com/web/search/",
+          "home": "https://earth.google.com/web/",
+          "domain": "earth.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "地理院地図",
+          "url": "",
+          "home": "https://maps.gsi.go.jp/",
+          "domain": "maps.gsi.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "乗換／交通"
+        },
+        {
+          "name": "Yahoo!乗換案内",
+          "url": "",
+          "home": "https://transit.yahoo.co.jp/",
+          "domain": "transit.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "NAVITIME",
+          "url": "",
+          "home": "https://www.navitime.co.jp/",
+          "domain": "www.navitime.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ジョルダン",
+          "url": "",
+          "home": "https://www.jorudan.co.jp/",
+          "domain": "www.jorudan.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "駅探",
+          "url": "",
+          "home": "https://ekitan.com/",
+          "domain": "ekitan.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "えきねっと",
+          "url": "",
+          "home": "https://www.eki-net.com/",
+          "domain": "www.eki-net.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "スマートEX",
+          "url": "",
+          "home": "https://smartex.jp/",
+          "domain": "smartex.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "e5489（JR西日本）",
+          "url": "",
+          "home": "https://www.jr-odekake.net/",
+          "domain": "www.jr-odekake.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "JR東日本",
+          "url": "",
+          "home": "https://www.jreast.co.jp/",
+          "domain": "www.jreast.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "高速バスドットコム",
+          "url": "",
+          "home": "https://www.kosokubus.com/",
+          "domain": "www.kosokubus.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "JARTIC（道路交通情報）",
+          "url": "",
+          "home": "https://www.jartic.or.jp/",
+          "domain": "www.jartic.or.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "航空券"
+        },
+        {
+          "name": "Google フライト",
+          "url": "https://www.google.com/travel/flights?q=",
+          "home": "https://www.google.com/travel/flights",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Skyscanner",
+          "url": "",
+          "home": "https://www.skyscanner.jp/",
+          "domain": "www.skyscanner.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ANA",
+          "url": "",
+          "home": "https://www.ana.co.jp/",
+          "domain": "www.ana.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "JAL",
+          "url": "",
+          "home": "https://www.jal.co.jp/",
+          "domain": "www.jal.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Peach",
+          "url": "",
+          "home": "https://www.flypeach.com/",
+          "domain": "www.flypeach.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "宿泊／旅行"
+        },
+        {
+          "name": "じゃらん",
+          "url": "",
+          "home": "https://www.jalan.net/",
+          "domain": "www.jalan.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "楽天トラベル",
+          "url": "",
+          "home": "https://travel.rakuten.co.jp/",
+          "domain": "travel.rakuten.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "一休.com",
+          "url": "",
+          "home": "https://www.ikyu.com/",
+          "domain": "www.ikyu.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Booking.com",
+          "url": "https://www.booking.com/searchresults.ja.html?ss=",
+          "home": "https://www.booking.com/index.ja.html",
+          "domain": "www.booking.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Agoda",
+          "url": "",
+          "home": "https://www.agoda.com/ja-jp/",
+          "domain": "www.agoda.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Expedia",
+          "url": "",
+          "home": "https://www.expedia.co.jp/",
+          "domain": "www.expedia.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Airbnb",
+          "url": "",
+          "home": "https://www.airbnb.jp/",
+          "domain": "www.airbnb.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Tripadvisor",
+          "url": "https://www.tripadvisor.jp/Search?q=",
+          "home": "https://www.tripadvisor.jp/",
+          "domain": "www.tripadvisor.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Klook",
+          "url": "",
+          "home": "https://www.klook.com/ja/",
+          "domain": "www.klook.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "るるぶ&more.",
+          "url": "",
+          "home": "https://www.rurubu.travel/",
+          "domain": "www.rurubu.travel",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Rome2rio",
+          "url": "",
+          "home": "https://www.rome2rio.com/ja/",
+          "domain": "www.rome2rio.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "外務省 海外安全ホームページ",
+          "url": "",
+          "home": "https://www.anzen.mofa.go.jp/",
+          "domain": "www.anzen.mofa.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "天気／防災",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "天気"
+        },
+        {
+          "name": "気象庁",
+          "url": "",
+          "home": "https://www.jma.go.jp/jma/index.html",
+          "domain": "www.jma.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "tenki.jp",
+          "url": "",
+          "home": "https://tenki.jp/",
+          "domain": "tenki.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Yahoo!天気",
+          "url": "",
+          "home": "https://weather.yahoo.co.jp/weather/",
+          "domain": "weather.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ウェザーニュース",
+          "url": "",
+          "home": "https://weathernews.jp/",
+          "domain": "weathernews.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "windy",
+          "url": "",
+          "home": "https://www.windy.com/ja",
+          "domain": "www.windy.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "気象庁 雨雲の動き",
+          "url": "",
+          "home": "https://www.jma.go.jp/bosai/nowc/",
+          "domain": "www.jma.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "そらまめくん（大気汚染）",
+          "url": "",
+          "home": "https://soramame.env.go.jp/",
+          "domain": "soramame.env.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "防災"
+        },
+        {
+          "name": "気象庁 地震情報",
+          "url": "",
+          "home": "https://www.jma.go.jp/bosai/map.html#contents=earthquake_map",
+          "domain": "www.jma.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ハザードマップポータル",
+          "url": "",
+          "home": "https://disaportal.gsi.go.jp/",
+          "domain": "disaportal.gsi.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "川の防災情報（国土交通省）",
+          "url": "",
+          "home": "https://www.river.go.jp/",
+          "domain": "www.river.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "強震モニタ（防災科研）",
+          "url": "",
+          "home": "http://www.kyoshin.bosai.go.jp/",
+          "domain": "www.kyoshin.bosai.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "NHK 防災",
+          "url": "",
+          "home": "https://www.nhk.or.jp/bousai/",
+          "domain": "www.nhk.or.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Yahoo!防災速報",
+          "url": "",
+          "home": "https://emg.yahoo.co.jp/",
+          "domain": "emg.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "お金／投資",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "株／マーケット"
+        },
+        {
+          "name": "Yahoo!ファイナンス",
+          "url": "https://finance.yahoo.co.jp/search/?query=",
+          "home": "https://finance.yahoo.co.jp/",
+          "domain": "finance.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "株探",
+          "url": "",
+          "home": "https://kabutan.jp/",
+          "domain": "kabutan.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "みんかぶ",
+          "url": "",
+          "home": "https://minkabu.jp/",
+          "domain": "minkabu.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "TradingView",
+          "url": "https://www.tradingview.com/chart/?symbol=",
+          "home": "https://www.tradingview.com/",
+          "domain": "www.tradingview.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Investing.com",
+          "url": "https://jp.investing.com/search/?q=",
+          "home": "https://jp.investing.com/",
+          "domain": "jp.investing.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google ファイナンス",
+          "url": "",
+          "home": "https://www.google.com/finance/",
+          "domain": "www.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Finviz",
+          "url": "https://finviz.com/quote.ashx?t=",
+          "home": "https://finviz.com/",
+          "domain": "finviz.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Morningstar Japan",
+          "url": "",
+          "home": "https://www.morningstar.co.jp/",
+          "domain": "www.morningstar.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "日本取引所グループ (JPX)",
+          "url": "",
+          "home": "https://www.jpx.co.jp/",
+          "domain": "www.jpx.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "EDINET",
+          "url": "",
+          "home": "https://disclosure2.edinet-fsa.go.jp/",
+          "domain": "disclosure2.edinet-fsa.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "SEC EDGAR",
+          "url": "https://www.sec.gov/edgar/search/#/q=",
+          "home": "https://www.sec.gov/edgar/search/",
+          "domain": "www.sec.gov",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "為替／暗号資産"
+        },
+        {
+          "name": "Yahoo!ファイナンス 為替",
+          "url": "",
+          "home": "https://finance.yahoo.co.jp/quote/USDJPY=FX",
+          "domain": "finance.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "XE 通貨換算",
+          "url": "",
+          "home": "https://www.xe.com/ja/currencyconverter/",
+          "domain": "www.xe.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Wise",
+          "url": "",
+          "home": "https://wise.com/jp/",
+          "domain": "wise.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "CoinMarketCap",
+          "url": "",
+          "home": "https://coinmarketcap.com/",
+          "domain": "coinmarketcap.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "CoinGecko",
+          "url": "",
+          "home": "https://www.coingecko.com/ja",
+          "domain": "www.coingecko.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "証券／銀行／決済"
+        },
+        {
+          "name": "SBI証券",
+          "url": "",
+          "home": "https://www.sbisec.co.jp/",
+          "domain": "www.sbisec.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "楽天証券",
+          "url": "",
+          "home": "https://www.rakuten-sec.co.jp/",
+          "domain": "www.rakuten-sec.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "マネックス証券",
+          "url": "",
+          "home": "https://www.monex.co.jp/",
+          "domain": "www.monex.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "三菱UFJ銀行",
+          "url": "",
+          "home": "https://www.bk.mufg.jp/",
+          "domain": "www.bk.mufg.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "三井住友銀行",
+          "url": "",
+          "home": "https://www.smbc.co.jp/",
+          "domain": "www.smbc.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "みずほ銀行",
+          "url": "",
+          "home": "https://www.mizuhobank.co.jp/",
+          "domain": "www.mizuhobank.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ゆうちょ銀行",
+          "url": "",
+          "home": "https://www.jp-bank.japanpost.jp/",
+          "domain": "www.jp-bank.japanpost.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "楽天銀行",
+          "url": "",
+          "home": "https://www.rakuten-bank.co.jp/",
+          "domain": "www.rakuten-bank.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "PayPay",
+          "url": "",
+          "home": "https://paypay.ne.jp/",
+          "domain": "paypay.ne.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "家計／ポイント"
+        },
+        {
+          "name": "マネーフォワード ME",
+          "url": "",
+          "home": "https://moneyforward.com/",
+          "domain": "moneyforward.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Zaim",
+          "url": "",
+          "home": "https://zaim.net/",
+          "domain": "zaim.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "楽天ポイント",
+          "url": "",
+          "home": "https://point.rakuten.co.jp/",
+          "domain": "point.rakuten.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Vポイント",
+          "url": "",
+          "home": "https://vpoint.jp/",
+          "domain": "vpoint.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "グルメ／レシピ",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "お店探し"
+        },
+        {
+          "name": "食べログ",
+          "url": "https://tabelog.com/rst/rstsearch?sw=",
+          "home": "https://tabelog.com/",
+          "domain": "tabelog.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ホットペッパーグルメ",
+          "url": "https://www.hotpepper.jp/CSP/psh010/doBasic?FWT=",
+          "home": "https://www.hotpepper.jp/",
+          "domain": "www.hotpepper.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ぐるなび",
+          "url": "https://r.gnavi.co.jp/area/jp/rs/?fw=",
+          "home": "https://www.gnavi.co.jp/",
+          "domain": "www.gnavi.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Retty",
+          "url": "",
+          "home": "https://retty.me/",
+          "domain": "retty.me",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "一休.comレストラン",
+          "url": "",
+          "home": "https://restaurant.ikyu.com/",
+          "domain": "restaurant.ikyu.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "レシピ"
+        },
+        {
+          "name": "クックパッド",
+          "url": "https://cookpad.com/search/",
+          "home": "https://cookpad.com/",
+          "domain": "cookpad.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "クラシル",
+          "url": "https://www.kurashiru.com/search?query=",
+          "home": "https://www.kurashiru.com/",
+          "domain": "www.kurashiru.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "DELISH KITCHEN",
+          "url": "https://delishkitchen.tv/search?q=",
+          "home": "https://delishkitchen.tv/",
+          "domain": "delishkitchen.tv",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "楽天レシピ",
+          "url": "https://recipe.rakuten.co.jp/search/",
+          "home": "https://recipe.rakuten.co.jp/",
+          "domain": "recipe.rakuten.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Nadia",
+          "url": "",
+          "home": "https://oceans-nadia.com/",
+          "domain": "oceans-nadia.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "白ごはん.com",
+          "url": "",
+          "home": "https://www.sirogohan.com/",
+          "domain": "www.sirogohan.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "味の素パーク",
+          "url": "",
+          "home": "https://park.ajinomoto.co.jp/",
+          "domain": "park.ajinomoto.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "デリバリー／宅配"
+        },
+        {
+          "name": "Uber Eats",
+          "url": "https://www.ubereats.com/jp/search?q=",
+          "home": "https://www.ubereats.com/jp",
+          "domain": "www.ubereats.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "出前館",
+          "url": "",
+          "home": "https://demae-can.com/",
+          "domain": "demae-can.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "menu",
+          "url": "",
+          "home": "https://menu.jp/",
+          "domain": "menu.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Wolt",
+          "url": "",
+          "home": "https://wolt.com/ja/jpn",
+          "domain": "wolt.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Oisix",
+          "url": "",
+          "home": "https://www.oisix.com/",
+          "domain": "www.oisix.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "ふるさと納税"
+        },
+        {
+          "name": "さとふる",
+          "url": "",
+          "home": "https://www.satofull.jp/",
+          "domain": "www.satofull.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ふるさとチョイス",
+          "url": "",
+          "home": "https://www.furusato-tax.jp/",
+          "domain": "www.furusato-tax.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "楽天ふるさと納税",
+          "url": "",
+          "home": "https://event.rakuten.co.jp/furusato/",
+          "domain": "event.rakuten.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ふるなび",
+          "url": "",
+          "home": "https://furunavi.jp/",
+          "domain": "furunavi.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "お酒"
+        },
+        {
+          "name": "Vivino（ワイン）",
+          "url": "https://www.vivino.com/search/wines?q=",
+          "home": "https://www.vivino.com/",
+          "domain": "www.vivino.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Untappd（クラフトビール）",
+          "url": "https://untappd.com/search?q=",
+          "home": "https://untappd.com/",
+          "domain": "untappd.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "暮らし／手続き",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "住まい"
+        },
+        {
+          "name": "SUUMO",
+          "url": "",
+          "home": "https://suumo.jp/",
+          "domain": "suumo.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "LIFULL HOME'S",
+          "url": "",
+          "home": "https://www.homes.co.jp/",
+          "domain": "www.homes.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "アットホーム",
+          "url": "",
+          "home": "https://www.athome.co.jp/",
+          "domain": "www.athome.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "求人／キャリア"
+        },
+        {
+          "name": "Indeed",
+          "url": "https://jp.indeed.com/jobs?q=",
+          "home": "https://jp.indeed.com/",
+          "domain": "jp.indeed.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "doda",
+          "url": "",
+          "home": "https://doda.jp/",
+          "domain": "doda.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "リクナビNEXT",
+          "url": "",
+          "home": "https://next.rikunabi.com/",
+          "domain": "next.rikunabi.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "マイナビ転職",
+          "url": "",
+          "home": "https://tenshoku.mynavi.jp/",
+          "domain": "tenshoku.mynavi.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ビズリーチ",
+          "url": "",
+          "home": "https://www.bizreach.jp/",
+          "domain": "www.bizreach.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Wantedly",
+          "url": "",
+          "home": "https://www.wantedly.com/",
+          "domain": "www.wantedly.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Green",
+          "url": "",
+          "home": "https://www.green-japan.com/",
+          "domain": "www.green-japan.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ハローワークインターネットサービス",
+          "url": "",
+          "home": "https://www.hellowork.mhlw.go.jp/",
+          "domain": "www.hellowork.mhlw.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "クラウドワークス",
+          "url": "",
+          "home": "https://crowdworks.jp/",
+          "domain": "crowdworks.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ランサーズ",
+          "url": "",
+          "home": "https://www.lancers.jp/",
+          "domain": "www.lancers.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "タイミー",
+          "url": "",
+          "home": "https://taimee.co.jp/",
+          "domain": "taimee.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "配送／郵便"
+        },
+        {
+          "name": "ヤマト運輸 荷物お問い合わせ",
+          "url": "https://member.kms.kuronekoyamato.co.jp/parcel/detail?pno=",
+          "home": "https://toi.kuronekoyamato.co.jp/",
+          "domain": "toi.kuronekoyamato.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "日本郵便 追跡",
+          "url": "https://trackings.post.japanpost.jp/services/srv/search/direct?searchKind=S002&locale=ja&reqCodeNo1=",
+          "home": "https://trackings.post.japanpost.jp/services/srv/search/",
+          "domain": "trackings.post.japanpost.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "佐川急便 お荷物問い合わせ",
+          "url": "https://k2k.sagawa-exp.co.jp/p/web/okurijosearch.do?okurijoNo=",
+          "home": "https://www.sagawa-exp.co.jp/",
+          "domain": "www.sagawa-exp.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "日本郵便 郵便番号検索",
+          "url": "",
+          "home": "https://www.post.japanpost.jp/zipcode/",
+          "domain": "www.post.japanpost.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Amazon 注文履歴",
+          "url": "",
+          "home": "https://www.amazon.co.jp/gp/css/order-history",
+          "domain": "www.amazon.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "行政／手続き"
+        },
+        {
+          "name": "マイナポータル",
+          "url": "",
+          "home": "https://myna.go.jp/",
+          "domain": "myna.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "e-Gov",
+          "url": "",
+          "home": "https://www.e-gov.go.jp/",
+          "domain": "www.e-gov.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "デジタル庁",
+          "url": "",
+          "home": "https://www.digital.go.jp/",
+          "domain": "www.digital.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "国税庁",
+          "url": "",
+          "home": "https://www.nta.go.jp/",
+          "domain": "www.nta.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "e-Tax",
+          "url": "",
+          "home": "https://www.e-tax.nta.go.jp/",
+          "domain": "www.e-tax.nta.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "確定申告書等作成コーナー",
+          "url": "",
+          "home": "https://www.keisan.nta.go.jp/",
+          "domain": "www.keisan.nta.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "日本年金機構",
+          "url": "",
+          "home": "https://www.nenkin.go.jp/",
+          "domain": "www.nenkin.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ねんきんネット",
+          "url": "",
+          "home": "https://www.nenkin.go.jp/n_net/",
+          "domain": "www.nenkin.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "厚生労働省",
+          "url": "",
+          "home": "https://www.mhlw.go.jp/",
+          "domain": "www.mhlw.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "国民生活センター",
+          "url": "",
+          "home": "https://www.kokusen.go.jp/",
+          "domain": "www.kokusen.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "法テラス",
+          "url": "",
+          "home": "https://www.houterasu.or.jp/",
+          "domain": "www.houterasu.or.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "外務省 パスポート",
+          "url": "",
+          "home": "https://www.mofa.go.jp/mofaj/toko/passport/",
+          "domain": "www.mofa.go.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "調べもの"
+        },
+        {
+          "name": "電話番号検索 (jpnumber)",
+          "url": "https://www.jpnumber.com/searchnumber.do?number=",
+          "home": "https://www.jpnumber.com/",
+          "domain": "www.jpnumber.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "ゲーム",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "ストア"
+        },
+        {
+          "name": "Steam",
+          "url": "https://store.steampowered.com/search/?term=",
+          "home": "https://store.steampowered.com",
+          "domain": "store.steampowered.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Epic Games Store",
+          "url": "https://store.epicgames.com/ja/browse?q=",
+          "home": "https://store.epicgames.com/ja/",
+          "domain": "store.epicgames.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "GOG",
+          "url": "https://www.gog.com/en/games?query=",
+          "home": "https://www.gog.com",
+          "domain": "www.gog.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "itch.io",
+          "url": "https://itch.io/search?q=",
+          "home": "https://itch.io/",
+          "domain": "itch.io",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ニンテンドーeショップ／My Nintendo Store",
+          "url": "",
+          "home": "https://store-jp.nintendo.com/",
+          "domain": "store-jp.nintendo.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "PlayStation Store",
+          "url": "",
+          "home": "https://store.playstation.com/ja-jp/pages/latest",
+          "domain": "store.playstation.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Xbox ストア",
+          "url": "",
+          "home": "https://www.xbox.com/ja-JP/games/store",
+          "domain": "www.xbox.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "情報／レビュー／セール"
+        },
+        {
+          "name": "ファミ通.com",
+          "url": "",
+          "home": "https://www.famitsu.com/",
+          "domain": "www.famitsu.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "4Gamer.net",
+          "url": "",
+          "home": "https://www.4gamer.net/",
+          "domain": "www.4gamer.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "IGN Japan",
+          "url": "",
+          "home": "https://jp.ign.com/",
+          "domain": "jp.ign.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Metacritic",
+          "url": "",
+          "home": "https://www.metacritic.com/",
+          "domain": "www.metacritic.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "HowLongToBeat",
+          "url": "https://howlongtobeat.com/?q=",
+          "home": "https://howlongtobeat.com/",
+          "domain": "howlongtobeat.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "SteamDB",
+          "url": "https://steamdb.info/search/?a=app&q=",
+          "home": "https://steamdb.info/",
+          "domain": "steamdb.info",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "IsThereAnyDeal",
+          "url": "https://isthereanydeal.com/search/?q=",
+          "home": "https://isthereanydeal.com/",
+          "domain": "isthereanydeal.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "GameWith",
+          "url": "",
+          "home": "https://gamewith.jp/",
+          "domain": "gamewith.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "映画・アニメ・本",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "映画／ドラマ"
+        },
+        {
+          "name": "Filmarks",
+          "url": "https://filmarks.com/search/movies?q=",
+          "home": "https://filmarks.com/",
+          "domain": "filmarks.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "映画.com",
+          "url": "https://eiga.com/search/",
+          "home": "https://eiga.com/",
+          "domain": "eiga.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "IMDb",
+          "url": "https://www.imdb.com/find/?q=",
+          "home": "https://www.imdb.com/",
+          "domain": "www.imdb.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "TMDB",
+          "url": "https://www.themoviedb.org/search?query=",
+          "home": "https://www.themoviedb.org/",
+          "domain": "www.themoviedb.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Rotten Tomatoes",
+          "url": "https://www.rottentomatoes.com/search?search=",
+          "home": "https://www.rottentomatoes.com/",
+          "domain": "www.rottentomatoes.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "JustWatch（配信状況）",
+          "url": "https://www.justwatch.com/jp/%E6%A4%9C%E7%B4%A2?q=",
+          "home": "https://www.justwatch.com/jp",
+          "domain": "www.justwatch.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "アニメ"
+        },
+        {
+          "name": "MyAnimeList",
+          "url": "https://myanimelist.net/search/all?q=",
+          "home": "https://myanimelist.net/",
+          "domain": "myanimelist.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Annict",
+          "url": "https://annict.com/search?q=",
+          "home": "https://annict.com/",
+          "domain": "annict.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "しょぼいカレンダー",
+          "url": "https://cal.syoboi.jp/find?kw=",
+          "home": "https://cal.syoboi.jp/",
+          "domain": "cal.syoboi.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "本／マンガ"
+        },
+        {
+          "name": "Kindleストア",
+          "url": "https://www.amazon.co.jp/s?i=digital-text&k=",
+          "home": "https://www.amazon.co.jp/b?node=2250738051",
+          "domain": "www.amazon.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "読書メーター",
+          "url": "https://bookmeter.com/search?keyword=",
+          "home": "https://bookmeter.com/",
+          "domain": "bookmeter.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ブクログ",
+          "url": "https://booklog.jp/search?keyword=",
+          "home": "https://booklog.jp/",
+          "domain": "booklog.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "BOOK☆WALKER",
+          "url": "https://bookwalker.jp/search/?word=",
+          "home": "https://bookwalker.jp/",
+          "domain": "bookwalker.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "少年ジャンプ+",
+          "url": "",
+          "home": "https://shonenjumpplus.com/",
+          "domain": "shonenjumpplus.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "ライブ／チケット"
+        },
+        {
+          "name": "チケットぴあ",
+          "url": "",
+          "home": "https://t.pia.jp/",
+          "domain": "t.pia.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "イープラス",
+          "url": "https://eplus.jp/sf/search?block=true&keyword=",
+          "home": "https://eplus.jp/",
+          "domain": "eplus.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ローチケ",
+          "url": "",
+          "home": "https://l-tike.com/",
+          "domain": "l-tike.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "デザイン／制作",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "デザインツール"
+        },
+        {
+          "name": "Canva",
+          "url": "https://www.canva.com/search?q=",
+          "home": "https://www.canva.com/",
+          "domain": "www.canva.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Figma",
+          "url": "https://www.figma.com/community/search?resource_type=mixed&q=",
+          "home": "https://www.figma.com/",
+          "domain": "www.figma.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Adobe Express",
+          "url": "",
+          "home": "https://new.express.adobe.com/",
+          "domain": "new.express.adobe.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Photopea",
+          "url": "",
+          "home": "https://www.photopea.com/",
+          "domain": "www.photopea.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Excalidraw",
+          "url": "",
+          "home": "https://excalidraw.com/",
+          "domain": "excalidraw.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "draw.io (diagrams.net)",
+          "url": "",
+          "home": "https://app.diagrams.net/",
+          "domain": "app.diagrams.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "フォント／アイコン"
+        },
+        {
+          "name": "Google Fonts",
+          "url": "https://fonts.google.com/?query=",
+          "home": "https://fonts.google.com/",
+          "domain": "fonts.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google Material Symbols",
+          "url": "https://fonts.google.com/icons?icon.query=",
+          "home": "https://fonts.google.com/icons",
+          "domain": "fonts.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Adobe Fonts",
+          "url": "",
+          "home": "https://fonts.adobe.com/",
+          "domain": "fonts.adobe.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Font Awesome",
+          "url": "https://fontawesome.com/search?q=",
+          "home": "https://fontawesome.com/",
+          "domain": "fontawesome.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Flaticon",
+          "url": "https://www.flaticon.com/search?word=",
+          "home": "https://www.flaticon.com/",
+          "domain": "www.flaticon.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "The Noun Project",
+          "url": "https://thenounproject.com/search/icons/?q=",
+          "home": "https://thenounproject.com/",
+          "domain": "thenounproject.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Icons8",
+          "url": "https://icons8.com/icons/set/",
+          "home": "https://icons8.com/icons",
+          "domain": "icons8.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "配色／インスピレーション"
+        },
+        {
+          "name": "Coolors",
+          "url": "",
+          "home": "https://coolors.co/",
+          "domain": "coolors.co",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Color Hunt",
+          "url": "",
+          "home": "https://colorhunt.co/",
+          "domain": "colorhunt.co",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Adobe Color",
+          "url": "",
+          "home": "https://color.adobe.com/ja/",
+          "domain": "color.adobe.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Dribbble",
+          "url": "https://dribbble.com/search/",
+          "home": "https://dribbble.com/",
+          "domain": "dribbble.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Behance",
+          "url": "https://www.behance.net/search/projects?search=",
+          "home": "https://www.behance.net/",
+          "domain": "www.behance.net",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Awwwards",
+          "url": "",
+          "home": "https://www.awwwards.com/",
+          "domain": "www.awwwards.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Google Arts & Culture",
+          "url": "https://artsandculture.google.com/search?q=",
+          "home": "https://artsandculture.google.com/",
+          "domain": "artsandculture.google.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "WebAIM コントラストチェッカー",
+          "url": "",
+          "home": "https://webaim.org/resources/contrastchecker/",
+          "domain": "webaim.org",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    },
+    {
+      "folderName": "スポーツ／アウトドア",
+      "engines": [
+        {
+          "isHeading": true,
+          "name": "ニュース／結果"
+        },
+        {
+          "name": "Yahoo!スポーツ",
+          "url": "",
+          "home": "https://sports.yahoo.co.jp/",
+          "domain": "sports.yahoo.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "NHKスポーツ",
+          "url": "",
+          "home": "https://www3.nhk.or.jp/sports/",
+          "domain": "www3.nhk.or.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Number Web",
+          "url": "",
+          "home": "https://number.bunshun.jp/",
+          "domain": "number.bunshun.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "日刊スポーツ",
+          "url": "",
+          "home": "https://www.nikkansports.com/",
+          "domain": "www.nikkansports.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "スポーツ報知",
+          "url": "",
+          "home": "https://hochi.news/",
+          "domain": "hochi.news",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "サンスポ",
+          "url": "",
+          "home": "https://www.sanspo.com/",
+          "domain": "www.sanspo.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ESPN",
+          "url": "https://www.espn.com/search/_/q/",
+          "home": "https://www.espn.com/",
+          "domain": "www.espn.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "BBC Sport",
+          "url": "",
+          "home": "https://www.bbc.com/sport",
+          "domain": "www.bbc.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Flashscore",
+          "url": "",
+          "home": "https://www.flashscore.co.jp/",
+          "domain": "www.flashscore.co.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Sofascore",
+          "url": "",
+          "home": "https://www.sofascore.com/ja/",
+          "domain": "www.sofascore.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "競技別"
+        },
+        {
+          "name": "NPB",
+          "url": "",
+          "home": "https://npb.jp/",
+          "domain": "npb.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "MLB",
+          "url": "",
+          "home": "https://www.mlb.com/",
+          "domain": "www.mlb.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Jリーグ",
+          "url": "",
+          "home": "https://www.jleague.jp/",
+          "domain": "www.jleague.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Transfermarkt",
+          "url": "https://www.transfermarkt.jp/schnellsuche/ergebnis/schnellsuche?query=",
+          "home": "https://www.transfermarkt.jp/",
+          "domain": "www.transfermarkt.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Bリーグ",
+          "url": "",
+          "home": "https://www.bleague.jp/",
+          "domain": "www.bleague.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "NBA",
+          "url": "",
+          "home": "https://www.nba.com/",
+          "domain": "www.nba.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Formula 1",
+          "url": "",
+          "home": "https://www.formula1.com/",
+          "domain": "www.formula1.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "netkeiba",
+          "url": "",
+          "home": "https://www.netkeiba.com/",
+          "domain": "www.netkeiba.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "isHeading": true,
+          "name": "アウトドア／フィットネス"
+        },
+        {
+          "name": "YAMAP",
+          "url": "",
+          "home": "https://yamap.com/",
+          "domain": "yamap.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "ヤマレコ",
+          "url": "",
+          "home": "https://www.yamareco.com/",
+          "domain": "www.yamareco.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "Strava",
+          "url": "",
+          "home": "https://www.strava.com/",
+          "domain": "www.strava.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "RUNNET",
+          "url": "",
+          "home": "https://runnet.jp/",
+          "domain": "runnet.jp",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        },
+        {
+          "name": "なっぷ（キャンプ場予約）",
+          "url": "",
+          "home": "https://www.nap-camp.com/",
+          "domain": "www.nap-camp.com",
+          "iconUrl": "",
+          "encoding": "UTF-8"
+        }
+      ]
+    }
+  ]
+}
