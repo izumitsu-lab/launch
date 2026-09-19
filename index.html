@@ -7,13 +7,12 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Launch</title>
   
-  <!-- ファビコン（ブラウザのタブ用） -->
   <link rel="icon" type="image/png" href="favicon-32.png">
-  <!-- iOSホーム画面用アイコン -->
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/encoding-japanese/2.0.0/encoding.min.js"></script>
+
   <style>
-    /* 🎨 カラーパレット (ライトモード) */
+    /* 🎨 カラーパレット */
     :root {
       --bg-color: #f2f2f7;
       --card-bg: #ffffff;
@@ -30,7 +29,6 @@
       --app-green: #34c759;
     }
 
-    /* 🌙 カラーパレット (ダークモード対応) */
     @media (prefers-color-scheme: dark) {
       :root {
         --bg-color: #000000;
@@ -62,14 +60,12 @@
     
     .view {
       position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      display: flex; flex-direction: column; opacity: 0; pointer-events: none; 
+      display: flex; flex-direction: column; opacity: 1; pointer-events: auto; 
       background-color: var(--bg-color);
       transition: opacity 0.25s ease;
     }
     .view.scrollable { overflow-y: auto; }
-    .view.active { opacity: 1; pointer-events: auto; z-index: 5; }
 
-    /* 共通コンポーネント: ヘッダー＆タブ */
     header {
       background-color: var(--bg-color);
       @supports (backdrop-filter: blur(20px)) { background-color: color-mix(in srgb, var(--bg-color) 85%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
@@ -81,7 +77,7 @@
     .tab:hover { color: var(--text-main); }
     .tab.active { color: var(--text-main); font-weight: 600; }
     .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--accent-color); border-radius: 2px 2px 0 0; }
-    .tab.dragging { opacity: 0.4; transform: scale(0.95); }
+    .tab.dragging { opacity: 0.4; transform: scale(0.95); pointer-events: none; }
     .tab.drag-over { color: var(--app-blue); background: var(--menu-hover); border-radius: 6px 6px 0 0; }
     
     .add-folder-btn { font-size: 14px; font-weight: 600; opacity: 0; color: var(--app-blue); padding-left: 8px; padding-right: 8px; transition: opacity 0.3s ease; }
@@ -90,143 +86,165 @@
     .slider { display: flex; flex: 1; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
     .slider::-webkit-scrollbar { display: none; }
     .folder { min-width: 100%; width: 100%; flex-shrink: 0; height: 100%; padding: 32px; scroll-snap-align: start; overflow-y: auto; overflow-x: hidden; }
-    
-    @media (max-width: 768px) { 
-      .folder { padding: 20px 16px; overflow-x: hidden; } 
-    }
+    @media (max-width: 768px) { .folder { padding: 20px 16px; overflow-x: hidden; } }
 
-    /* お気に入り＆検索のグリッドと小見出し */
-    .grid, .engine-grid { display: grid; gap: 12px; max-width: 1400px; margin: 0 auto; align-content: start; padding-bottom: 120px; min-height: 100%;}
+    .folder-inner { max-width: 1400px; margin: 0 auto; padding-bottom: 120px; min-height: 100%; }
+    .folder-columns { width: 100%; }
     
-    /* 🖥️ PC時のアイコンサイズ設定（設定から変更可能） */
-    body.grid-size-120 .grid, body.grid-size-120 .engine-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-    body.grid-size-140 .grid, body.grid-size-140 .engine-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-    body.grid-size-160 .grid, body.grid-size-160 .engine-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    body.layout-split .folder-columns { column-count: 2; column-gap: 32px; }
+    @media (max-width: 1024px) { body.layout-split .folder-columns { column-count: 1; } }
+
+    .section-group { break-inside: avoid; page-break-inside: avoid; -webkit-column-break-inside: avoid; margin-bottom: 24px; }
+    body.layout-split .section-group { display: inline-block; width: 100%; vertical-align: top; margin-bottom: 24px;}
+    .section-group.dragging-group { opacity: 0.4; }
+
+    .grid { display: grid; gap: 12px; align-content: start; }
+    body.grid-size-120 .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    body.grid-size-140 .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    body.grid-size-160 .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    @media (max-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px; } }
     
-    /* 📱 スマホ時のグリッド表示設定（3列に変更し余白を詰める） */
-    @media (max-width: 768px) { 
-      .grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px; padding-bottom: 100px; }
-      .engine-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px; padding-bottom: 100px; }
-    }
-    
-    /* 🌟 小見出し */
-    .section-heading {
-      grid-column: 1 / -1;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-main);
-      letter-spacing: -0.2px;
-      padding: 0 4px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      user-select: none;
-      cursor: grab;
-      transition: opacity 0.2s;
-    }
+    .section-heading { font-size: 14px; font-weight: 600; color: var(--text-main); letter-spacing: -0.2px; padding: 0 4px; display: flex; align-items: center; gap: 8px; user-select: none; cursor: grab; transition: opacity 0.2s; margin-top: 40px; margin-bottom: 16px; }
     .section-heading:active { cursor: grabbing; }
-    .section-heading.dragging { opacity: 0.4; }
-    
-    /* 小見出しのスペース設定 */
-    body.heading-space-small .section-heading { margin-top: 8px; margin-bottom: -4px; }
-    body.heading-space-medium .section-heading { margin-top: 24px; margin-bottom: 4px; }
-    body.heading-space-large .section-heading { margin-top: 40px; margin-bottom: 12px; }
+    .section-heading.dragging { opacity: 0.4; pointer-events: none; }
     .section-heading:first-child { margin-top: 0px !important; }
-
-    @media (max-width: 768px) {
-      body.heading-space-small .section-heading { margin-top: 4px; margin-bottom: -2px; }
-      body.heading-space-medium .section-heading { margin-top: 16px; margin-bottom: 2px; }
-      body.heading-space-large .section-heading { margin-top: 28px; margin-bottom: 8px; }
-      .section-heading:first-child { margin-top: 0px !important; }
-    }
-
-    /* 🌟 小見出し追加ボタン */
-    .add-heading-btn {
-      grid-column: 1 / -1;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-sub);
-      background: transparent;
-      border: 2px dashed var(--nav-border);
-      border-radius: 12px;
-      padding: 12px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      opacity: 0;
-    }
+    
+    .add-heading-btn { font-size: 13px; font-weight: 600; color: var(--text-sub); background: transparent; border: 2px dashed var(--nav-border); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.2s ease; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0; }
     .add-heading-btn:hover { background: var(--menu-hover); color: var(--app-blue); border-color: var(--app-blue); transform: translateY(-2px); opacity: 1 !important; }
     .add-heading-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
-    /* カード（お気に入り・検索モード共通）のスタイル */
-    .card { background: var(--card-bg); border-radius: 12px; text-decoration: none; color: var(--text-main); display: flex; flex-direction: column; align-items: center; justify-content: space-between; aspect-ratio: 4 / 3; padding: 16px 12px 12px; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 2px 8px var(--shadow-color), 0 1px 2px var(--shadow-color); border: 1px solid rgba(128, 128, 128, 0.05); cursor: pointer; user-select: none; width: 100%; min-width: 0; }
+    .card { background: var(--card-bg); border-radius: 12px; text-decoration: none; color: var(--text-main); display: flex; flex-direction: column; align-items: center; justify-content: space-between; aspect-ratio: 4 / 3; padding: 16px 12px 12px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 2px 8px var(--shadow-color), 0 1px 2px var(--shadow-color); border: 1px solid rgba(128, 128, 128, 0.05); cursor: pointer; user-select: none; width: 100%; min-width: 0; position: relative; }
     .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px var(--hover-shadow), 0 4px 8px var(--shadow-color); }
-    .card.dragging { opacity: 0.4; transform: scale(0.95); box-shadow: none; }
+    .card.dragging { opacity: 0.4; transform: scale(0.95); box-shadow: none; pointer-events: none; }
     .card-icon { width: 100%; flex-grow: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; pointer-events: none; min-height: 0; }
     .card-icon img { max-width: 56px; max-height: 56px; width: 100%; height: 100%; object-fit: contain; border-radius: 8px; background: transparent; }
     .card-title { font-size: 13px; font-weight: 600; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-sub); pointer-events: none; }
     
-    /* 📱 スマホ時のカード調整 */
-    @media (max-width: 768px) {
-      .card { padding: 12px 8px 8px; border-radius: 10px; aspect-ratio: 1 / 1; }
-      .card-title { font-size: 11px; }
-    }
+    body.mode-search.has-query .card[data-has-search="false"] { opacity: 0.3; filter: grayscale(100%); pointer-events: none; box-shadow: none; }
+    @media (max-width: 768px) { .card { padding: 12px 8px 8px; border-radius: 10px; aspect-ratio: 1 / 1; } .card-title { font-size: 11px; } }
 
-    /* 追加ボタン（お気に入り・検索モード共通） */
-    .add-bookmark-btn, .add-engine-btn { background: transparent; border: 2px dashed var(--nav-border); box-shadow: none; opacity: 0; transition: opacity 0.3s, background 0.2s; justify-content: center;}
-    .add-bookmark-btn:hover, .add-engine-btn:hover { opacity: 1 !important; background: var(--menu-hover); border-color: var(--app-blue); transform: translateY(-2px); box-shadow: none;}
-    .add-bookmark-btn .card-icon svg, .add-engine-btn .card-icon svg { width: 32px; height: 32px; fill: var(--text-sub); transition: fill 0.2s; }
-    .add-bookmark-btn:hover .card-icon svg, .add-engine-btn:hover .card-icon svg { fill: var(--app-blue); }
+    /* 🌟 リストから選ぶ用のカードスタイル */
+    .selectable-card { position: relative; cursor: pointer; border: 2px solid transparent !important; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); }
+    .selectable-card:hover { border-color: var(--nav-border) !important; transform: translateY(-4px); }
+    .selectable-card.selected { border-color: var(--app-blue) !important; background-color: rgba(0, 122, 255, 0.04); box-shadow: 0 8px 24px rgba(0,122,255,0.15) !important; transform: translateY(-4px); }
+    .selectable-card .check-icon { display: none; position: absolute; top: 8px; right: 8px; width: 22px; height: 22px; fill: #fff; background: var(--app-blue); border-radius: 50%; padding: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.15); z-index: 2; }
+    .selectable-card.selected .check-icon { display: block; animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
 
-    /* 検索画面トップバー */
-    .search-top-bar { padding: 32px 32px 16px; flex-shrink: 0; background-color: var(--bg-color); z-index: 20; }
-    @media (max-width: 768px) { .search-top-bar { padding: 24px 16px 12px; } }
-    .search-input-wrapper { position: relative; width: 100%; max-width: 680px; margin: 0 auto; display: flex; align-items: center; }
-    .search-icon { position: absolute; left: 16px; width: 20px; height: 20px; fill: var(--text-sub); pointer-events: none; }
-    .search-input { width: 100%; padding: 16px 90px 16px 48px; font-size: 17px; border-radius: 16px; border: 1px solid var(--nav-border); background: var(--card-bg); color: var(--text-main); box-shadow: 0 4px 16px var(--shadow-color); outline: none; transition: all 0.2s ease; -webkit-appearance: none; }
+    .search-top-bar { overflow: hidden; max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background-color: var(--bg-color); z-index: 20; flex-shrink: 0; }
+    body.mode-search .search-top-bar { max-height: 120px; padding-top: 32px; padding-bottom: 16px; opacity: 1; }
+    @media (max-width: 768px) { body.mode-search .search-top-bar { padding-top: 24px; padding-bottom: 12px; } }
+    .search-input-wrapper { position: relative; width: 100%; max-width: 680px; margin: 0 auto; display: flex; align-items: center; padding: 0 32px; }
+    .search-icon { position: absolute; left: 48px; width: 20px; height: 20px; fill: var(--text-sub); pointer-events: none; z-index: 2; }
+    .search-input { width: 100%; padding: 16px 88px 16px 48px; font-size: 17px; border-radius: 16px; border: 1px solid var(--nav-border); background: var(--card-bg); color: var(--text-main); box-shadow: 0 4px 16px var(--shadow-color); outline: none; transition: all 0.2s ease; -webkit-appearance: none; position: relative; z-index: 1; }
     .search-input::-webkit-search-cancel-button { display: none; }
     .search-input:focus { border-color: var(--app-blue); box-shadow: 0 4px 20px rgba(0, 122, 255, 0.15); }
-    .search-input::placeholder { color: var(--text-sub); opacity: 0.7; }
-    .search-actions { position: absolute; right: 8px; display: flex; align-items: center; gap: 2px; }
+    .search-actions { position: absolute; right: 40px; display: flex; align-items: center; gap: 4px; z-index: 2; }
     .icon-btn { background: transparent; border: none; padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; fill: var(--text-sub); transition: background 0.2s, fill 0.2s; }
     .icon-btn:hover { background: var(--nav-border); fill: var(--text-main); }
     .icon-btn svg { width: 18px; height: 18px; }
-    
-    .history-popup { display: none; position: absolute; top: 100%; left: 0; right: 0; margin-top: 12px; background: var(--menu-bg); border: 1px solid var(--menu-border); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15); border-radius: 16px; max-height: 300px; overflow-y: auto; z-index: 100; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
-    .history-item { padding: 14px 20px; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 14px; color: var(--text-main); border-bottom: 1px solid var(--nav-border); transition: background 0.15s; }
-    .history-item:last-child { border-bottom: none; }
-    .history-item:hover { background: var(--menu-hover); }
-    .history-icon { width: 18px; height: 18px; fill: var(--text-sub); flex-shrink: 0; }
-    .history-text { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .history-delete { padding: 6px; fill: var(--text-sub); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: -8px; transition: 0.2s; }
-    .history-delete:hover { background: rgba(255,0,0,0.1); fill: #ff3b30; }
-    .history-empty { padding: 24px; text-align: center; color: var(--text-sub); font-size: 14px; }
 
-    /* 設定画面 */
-    .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 0 4px; }
-    .page-title { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 0; }
-    .settings-close-btn { 
-      background: var(--card-bg); border: 1px solid var(--nav-border); border-radius: 50%;
-      width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; fill: var(--text-sub); transition: all 0.2s ease; box-shadow: 0 2px 8px var(--shadow-color);
+    .history-dropdown { 
+      position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-10px);
+      width: calc(100% - 64px); max-width: 616px; background: var(--card-bg); border: 1px solid var(--nav-border); 
+      border-radius: 16px; box-shadow: 0 8px 32px var(--shadow-color); opacity: 0; visibility: hidden; 
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10000; overflow: hidden; pointer-events: none; 
     }
-    .settings-close-btn:hover { background: var(--nav-border); fill: var(--text-main); transform: scale(1.05); }
-    .settings-close-btn svg { width: 20px; height: 20px; }
+    .history-dropdown.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+    .history-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; cursor: pointer; color: var(--text-main); transition: background 0.15s; border-bottom: 1px solid var(--nav-border); }
+    .history-item:hover { background: var(--menu-hover); }
+    .history-text { display: flex; align-items: center; gap: 12px; font-size: 15px; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .history-text svg { width: 18px; height: 18px; fill: var(--text-sub); flex-shrink: 0; }
+    .history-remove { padding: 4px; border-radius: 50%; fill: var(--text-sub); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .history-remove:hover { fill: #ff3b30; background: rgba(255,59,48,0.1); }
+    .history-empty { padding: 16px; text-align: center; color: var(--text-sub); font-size: 14px; }
 
-    .settings-container { padding: 40px 24px; width: 100%; max-width: 800px; margin: 0 auto; padding-bottom: 120px; }
-    .settings-section { margin-bottom: 32px; }
+    /* 🌟 FAB (真ん中に浮いているボタン) */
+    .fab-switch {
+      position: fixed; bottom: calc(86px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); border-radius: 50%;
+      background: var(--card-bg); border: 1px solid var(--nav-border); box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08);
+      display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      @supports (backdrop-filter: blur(20px)) { background: color-mix(in srgb, var(--card-bg) 85%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    }
+    .fab-switch:hover { transform: translateX(-50%) scale(1.1); box-shadow: 0 12px 40px rgba(0,0,0,0.16), 0 6px 20px rgba(0,0,0,0.12); }
+    .fab-switch:active { transform: translateX(-50%) scale(0.95); }
+    .fab-switch svg { fill: var(--text-main); position: absolute; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+    body:not(.mode-search) .fab-switch .icon-search { opacity: 1; transform: scale(1) rotate(0deg); }
+    body:not(.mode-search) .fab-switch .icon-bookmark { opacity: 0; transform: scale(0.5) rotate(-90deg); }
+    body.mode-search .fab-switch .icon-search { opacity: 0; transform: scale(0.5) rotate(90deg); }
+    body.mode-search .fab-switch .icon-bookmark { opacity: 1; transform: scale(1) rotate(0deg); }
+    body.fab-size-small .fab-switch { width: 64px; height: 64px; } body.fab-size-small .fab-switch svg { width: 28px; height: 28px; }
+    body.fab-size-medium .fab-switch { width: 72px; height: 72px; } body.fab-size-medium .fab-switch svg { width: 32px; height: 32px; }
+    body.fab-size-large .fab-switch { width: 80px; height: 80px; } body.fab-size-large .fab-switch svg { width: 36px; height: 36px; }
+
+    /* 🌟 下部ナビゲーション */
+    .bottom-nav { 
+      position: fixed; bottom: 0; right: 0; left: 0; height: 74px; padding-bottom: env(safe-area-inset-bottom); 
+      background-color: transparent; border-top: 1px solid transparent; 
+      display: flex; justify-content: center; align-items: center; z-index: 90; transition: all 0.3s ease; 
+    }
+    .bottom-nav-inner {
+      display: flex; gap: 48px; opacity: 0; transform: translateY(16px); pointer-events: none; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .bottom-nav:hover, .bottom-nav.force-show { background-color: var(--bg-color); border-top: 1px solid var(--nav-border); }
+    @supports (backdrop-filter: blur(20px)) { 
+      .bottom-nav:hover, .bottom-nav.force-show { 
+        background-color: color-mix(in srgb, var(--bg-color) 85%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
+      } 
+    }
+    .bottom-nav:hover .bottom-nav-inner, .bottom-nav.force-show .bottom-nav-inner { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    
+    .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--text-sub); cursor: pointer; transition: all 0.2s; }
+    .nav-item:hover { color: var(--text-main); transform: scale(1.05); }
+    .nav-item.active { color: var(--app-blue); }
+    .nav-item svg { width: 26px; height: 26px; fill: currentColor; }
+    .nav-label { font-size: 11px; font-weight: 600; letter-spacing: 0.3px; }
+
+    /* 🌟 編集オフモード時の非表示設定 */
+    body.read-only-mode .add-folder-btn, 
+    body.read-only-mode .add-heading-btn,
+    body.read-only-mode .edit-only { display: none !important; }
+    body.read-only-mode .section-heading, 
+    body.read-only-mode .tab { cursor: default; }
+
+    /* 🌟 新しいガラスモーダル (設定＆プロファイル＆JSON選択用) */
+    .glass-modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      z-index: 10000; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease; padding: 20px;
+    }
+    .glass-modal-overlay.show { opacity: 1; pointer-events: auto; }
+    .glass-modal {
+      background: var(--bg-color); width: 100%; max-width: 500px; max-height: 85vh;
+      border-radius: 20px; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+      transform: scale(0.95) translateY(10px); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--menu-border);
+    }
+    .glass-modal-overlay.show .glass-modal { transform: scale(1) translateY(0); }
+    .glass-modal-header {
+      padding: 16px 24px; text-align: center; font-size: 17px; font-weight: 600;
+      border-bottom: 1px solid var(--nav-border); position: relative; background: var(--card-bg); flex-shrink: 0;
+    }
+    .glass-modal-close {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      background: var(--bg-color); border-radius: 50%; width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; fill: var(--text-sub); transition: all 0.2s;
+    }
+    .glass-modal-close:hover { background: var(--nav-border); fill: var(--text-main); }
+    .glass-modal-body { padding: 24px; overflow-y: auto; flex: 1; scrollbar-width: thin; }
+    
+    /* モーダル内の設定UI (iOS Settings風) */
+    .settings-section { margin-bottom: 24px; }
+    .settings-section:last-child { margin-bottom: 0; }
     .settings-section-title { font-size: 13px; text-transform: uppercase; color: var(--text-sub); margin-bottom: 8px; margin-left: 16px; letter-spacing: 0.5px; }
     .settings-group { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid var(--nav-border); }
-    .settings-row { padding: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--nav-border); font-size: 16px; color: var(--text-main); cursor: pointer; transition: background 0.15s; }
-    .settings-row:active { background: var(--menu-hover); }
+    .settings-row { padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--nav-border); font-size: 16px; color: var(--text-main); transition: background 0.15s; }
     .settings-row:last-child { border-bottom: none; }
-    .settings-row.danger { color: #ff3b30; justify-content: center; font-weight: 600; }
-    .settings-row.blue { color: var(--app-blue); justify-content: center; font-weight: 600; }
+    .settings-row.actionable { cursor: pointer; }
+    .settings-row.actionable:active { background: var(--menu-hover); }
+    .settings-row.danger { color: #ff3b30; justify-content: center; font-weight: 600; cursor: pointer; }
+    .settings-row.blue { color: var(--app-blue); justify-content: center; font-weight: 600; cursor: pointer; }
     
     .custom-select {
       appearance: none; background-color: transparent; border: none; font-size: 16px; color: var(--text-sub); text-align: right; outline: none; cursor: pointer; padding-right: 20px;
@@ -235,452 +253,713 @@
     }
     .custom-select:focus { color: var(--app-blue); }
 
-    .toggle { position: relative; display: inline-block; width: 50px; height: 30px; }
-    .toggle input { opacity: 0; width: 0; height: 0; }
-    .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--nav-border); transition: .3s; border-radius: 30px; }
-    .toggle-slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-    .toggle input:checked + .toggle-slider { background-color: var(--app-green); }
-    .toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
+    /* プロファイルカードUI */
+    .profile-card { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--card-bg); border: 1px solid var(--nav-border); border-radius: 12px; margin-bottom: 10px; transition: all 0.2s ease; cursor: pointer; }
+    .profile-card:last-child { margin-bottom: 0; }
+    .profile-card:hover { border-color: var(--app-blue); }
+    .profile-card.active { border-color: var(--app-blue); border-width: 2px; padding: 13px 15px; } 
+    .profile-info { display: flex; align-items: center; gap: 12px; overflow: hidden; flex: 1; }
+    .profile-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--menu-hover); display: flex; align-items: center; justify-content: center; fill: var(--text-sub); flex-shrink: 0; transition: all 0.2s; }
+    .profile-card.active .profile-icon { background: rgba(0, 122, 255, 0.1); fill: var(--app-blue); }
+    .profile-name { font-size: 15px; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .profile-actions { display: flex; gap: 4px; transition: opacity 0.2s; }
+    .profile-action-btn { background: transparent; border: none; padding: 8px; border-radius: 8px; cursor: pointer; fill: var(--text-sub); transition: background 0.2s, fill 0.2s; display: flex; align-items: center; justify-content: center; }
+    .profile-action-btn:hover { background: var(--menu-hover); fill: var(--text-main); }
+    .profile-action-btn.delete:hover { background: rgba(255,59,48,0.1); fill: #ff3b30; }
 
-    /* 🌟 FAB（切り替えボタン）のサイズ設定 */
-    .fab-switch {
-      position: fixed;
-      bottom: calc(56px + env(safe-area-inset-bottom));
-      left: 50%; transform: translateX(-50%);
-      border-radius: 50%;
-      background: var(--card-bg);
-      @supports (backdrop-filter: blur(20px)) {
-        background: color-mix(in srgb, var(--card-bg) 85%, transparent);
-        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      }
-      border: 1px solid var(--nav-border);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; z-index: 100;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-    }
-    .fab-switch:hover { transform: translateX(-50%) scale(1.1); box-shadow: 0 12px 40px rgba(0,0,0,0.16), 0 6px 20px rgba(0,0,0,0.12); }
-    .fab-switch:active { transform: translateX(-50%) scale(0.95); }
-    .fab-switch svg { fill: var(--text-main); position: absolute; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-    .fab-switch .icon-search { opacity: 1; transform: scale(1) rotate(0deg); }
-    .fab-switch .icon-bookmark { opacity: 0; transform: scale(0.5) rotate(-90deg); }
-    .fab-switch.mode-search .icon-search { opacity: 0; transform: scale(0.5) rotate(90deg); }
-    .fab-switch.mode-search .icon-bookmark { opacity: 1; transform: scale(1) rotate(0deg); }
+    /* Edit/Add Modal */
+    .modal-box { background: var(--card-bg); border: 1px solid var(--menu-border); border-radius: 16px; padding: 24px; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; }
+    .edit-modal-overlay.show .modal-box { transform: scale(1); }
+    .modal-box h3 { margin-bottom: 20px; font-size: 18px; font-weight: 600; color: var(--text-main); text-align: center; }
+    .modal-inputs { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .modal-inputs input, .modal-inputs select { padding: 14px 16px; border-radius: 10px; border: 1px solid var(--nav-border); background: var(--bg-color); color: var(--text-main); font-size: 15px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .modal-inputs input:focus, .modal-inputs select:focus { border-color: var(--app-blue); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15); }
+    .modal-inputs select { appearance: none; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%238e8e93%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 16px center; background-size: 12px auto; }
+    .modal-actions { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 12px; }
+    .modal-btn { padding: 12px 20px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; border: none; transition: background 0.2s, transform 0.1s; }
+    .modal-btn:active { transform: scale(0.97); }
+    .modal-btn.cancel { background: var(--bg-color); color: var(--text-main); }
+    .modal-btn.cancel:hover { background: var(--nav-border); }
+    .modal-btn.save { background: var(--app-blue); color: #fff; }
+    .modal-btn.save:hover { background: #0056b3; }
+    .modal-btn.save:disabled { background: var(--nav-border); color: var(--text-sub); cursor: not-allowed; transform: none; }
 
-    /* FAB 各サイズのCSS制御 */
-    body.fab-size-small .fab-switch { width: 64px; height: 64px; }
-    body.fab-size-small .fab-switch svg { width: 28px; height: 28px; }
-    body.fab-size-medium .fab-switch { width: 72px; height: 72px; }
-    body.fab-size-medium .fab-switch svg { width: 32px; height: 32px; }
-    body.fab-size-large .fab-switch { width: 80px; height: 80px; }
-    body.fab-size-large .fab-switch svg { width: 36px; height: 36px; }
+    /* 確認用カスタムモーダル */
+    .confirm-box { background: var(--card-bg); border: 1px solid var(--menu-border); border-radius: 16px; padding: 24px; width: 90%; max-width: 320px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; text-align: center; }
+    .confirm-modal-overlay.show .confirm-box { transform: scale(1); }
+    .confirm-box h3 { margin-bottom: 12px; font-size: 16px; font-weight: 600; color: var(--text-main); }
+    .confirm-box p { font-size: 14px; color: var(--text-sub); margin-bottom: 24px; white-space: pre-wrap; line-height: 1.5; }
 
-    /* 🌟 下部ナビゲーション（設定＆編集モード切替） */
-    .bottom-nav { 
-      position: fixed; bottom: 0; right: 0; left: 0;
-      height: 60px; padding-bottom: env(safe-area-inset-bottom); 
-      background-color: transparent; border-top: 1px solid transparent; 
-      display: flex; justify-content: flex-end; gap: 24px; padding-right: 24px; align-items: center; z-index: 90; 
-      transition: all 0.3s ease;
-    }
-    .bottom-nav:hover, .bottom-nav.force-show {
-      background-color: var(--bg-color); 
-      border-top: 1px solid var(--nav-border);
-    }
-    @supports (backdrop-filter: blur(20px)) {
-      .bottom-nav:hover, .bottom-nav.force-show {
-        background-color: color-mix(in srgb, var(--bg-color) 85%, transparent); 
-        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
-      }
-    }
-    .nav-item { 
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; 
-      color: var(--text-sub); cursor: pointer; height: 100%; transition: all 0.2s; 
-      opacity: 0; transform: translateY(10px); pointer-events: none;
-    }
-    .bottom-nav:hover .nav-item, .bottom-nav.force-show .nav-item { opacity: 1; transform: translateY(0); pointer-events: auto; }
-    .nav-item:hover { color: var(--text-main); }
-    .nav-item.active { color: var(--app-blue); }
-    .nav-item svg { width: 24px; height: 24px; fill: currentColor; }
-    .nav-label { font-size: 11px; font-weight: 600; }
-
-    /* 🌟 編集モード：オフ（Read Only Mode）の時のUI調整 */
-    body.read-only-mode .add-folder-btn,
-    body.read-only-mode .add-bookmark-btn,
-    body.read-only-mode .add-engine-btn,
-    body.read-only-mode .add-heading-btn {
-      display: none !important;
-    }
-    body.read-only-mode .section-heading,
-    body.read-only-mode .tab {
-      cursor: default;
-    }
-
-    /* 右クリックメニュー */
+    /* コンテキストメニュー */
     .context-menu { display: none; position: fixed; background: var(--menu-bg); border: 1px solid var(--menu-border); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); border-radius: 10px; padding: 6px 0; z-index: 9999; min-width: 200px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
     .menu-item { padding: 8px 16px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-main); transition: background 0.1s; }
     .menu-item:hover { background: var(--menu-hover); }
     .menu-item svg { width: 16px; height: 16px; fill: var(--text-sub); }
     .menu-divider { height: 1px; background: var(--menu-border); margin: 6px 0; }
-
-    /* カスタムモーダル */
-    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 10000; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s ease; }
-    .modal-overlay.show { opacity: 1; }
-    .modal-box { background: var(--card-bg); border: 1px solid var(--menu-border); border-radius: 16px; padding: 24px; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    .modal-overlay.show .modal-box { transform: scale(1); }
-    .modal-box h3 { margin-bottom: 20px; font-size: 18px; font-weight: 600; color: var(--text-main); text-align: center; }
-    .modal-inputs { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-    .modal-inputs input { padding: 14px 16px; border-radius: 10px; border: 1px solid var(--nav-border); background: var(--bg-color); color: var(--text-main); font-size: 15px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
-    .modal-inputs input:focus { border-color: var(--app-blue); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15); }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 12px; }
-    .modal-btn { padding: 12px 20px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; border: none; transition: background 0.2s; }
-    .modal-btn.cancel { background: var(--bg-color); color: var(--text-main); }
-    .modal-btn.cancel:hover { background: var(--nav-border); }
-    .modal-btn.save { background: var(--app-blue); color: #fff; }
-    .modal-btn.save:hover { background: #0056b3; }
   </style>
 </head>
-<body class="heading-space-small fab-size-medium grid-size-140">
+<body class="fab-size-medium grid-size-140 layout-single">
 
-  <!-- 中央に浮かぶ切り替えボタン (FAB) -->
-  <div class="fab-switch" id="modeSwitchBtn" title="切り替え">
+  <!-- 🌟 中央のフローティング切り替えボタン (FAB) -->
+  <div class="fab-switch" id="modeSwitchBtn" title="モード切り替え">
     <svg class="icon-search" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
     <svg class="icon-bookmark" viewBox="0 0 24 24"><path d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/></svg>
   </div>
 
   <div class="main-content">
-    <!-- ⭐️ お気に入り画面 -->
-    <div id="view-favorites" class="view active">
-      <header><div class="tabs" id="favTabsContainer"></div></header>
-      <div class="slider" id="favSliderContainer"></div>
-    </div>
-
-    <!-- 🔍 検索画面 -->
-    <div id="view-search" class="view">
+    <div id="view-main" class="view active">
+      
+      <!-- 🔍 検索バー周辺 -->
       <div class="search-top-bar">
         <div class="search-input-wrapper">
           <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
           <input type="text" id="searchInput" class="search-input" placeholder="ウェブや商品を検索..." autocomplete="off">
           <div class="search-actions">
+            <button class="icon-btn" id="historyBtn" title="検索履歴"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></button>
             <button class="icon-btn" id="clearBtn" title="クリア" style="display: none;"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-            <button class="icon-btn" id="historyBtn" title="検索履歴"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></button>
           </div>
-          <div class="history-popup" id="historyPopup"></div>
         </div>
       </div>
-      <header><div class="tabs" id="searchTabsContainer"></div></header>
-      <div class="slider" id="searchSliderContainer"></div>
-    </div>
+      <div id="historyDropdown" class="history-dropdown"></div>
 
-    <!-- ⚙️ 設定画面 -->
-    <div id="view-settings" class="view scrollable">
-      <div class="settings-container">
-        
-        <!-- 🌟 設定画面のヘッダー＆閉じるボタン -->
-        <div class="settings-header">
-          <h2 class="page-title">設定</h2>
-          <button class="settings-close-btn" id="settingsCloseBtn" title="閉じる">
-            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      <header><div class="tabs" id="tabsContainer"></div></header>
+      <div class="slider" id="sliderContainer"></div>
+    </div>
+  </div>
+
+  <!-- 🌟 下部ナビゲーション -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <div class="nav-item" id="nav-edit-toggle" title="編集モード切り替え">
+        <svg id="icon-edit-on" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+        <svg id="icon-edit-off" viewBox="0 0 24 24" style="display:none;"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        <span class="nav-label" id="label-edit-toggle">編集：オン</span>
+      </div>
+      <div class="nav-item" id="nav-profiles" title="プロファイル">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span class="nav-label">プロファイル</span>
+      </div>
+      <div class="nav-item" id="nav-settings" title="設定">
+        <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+        <span class="nav-label">設定</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🌟 プロファイルモーダル (ガラスモーダル) -->
+  <div id="profilesModal" class="glass-modal-overlay">
+    <div class="glass-modal" style="max-width: 440px;">
+      <div class="glass-modal-header">
+        プロファイル
+        <button class="glass-modal-close" onclick="closeModalUi('profilesModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+      </div>
+      <div class="glass-modal-body">
+        <div id="profileListContainer" style="margin-bottom: 24px;"></div>
+        <div class="edit-only" style="display: flex; gap: 12px; justify-content: center;">
+          <button class="modal-btn save" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="createNewProfile()">
+            <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#fff;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg> 新規作成
           </button>
+          <button class="modal-btn cancel" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;" id="importProfileBtn">
+            <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg> インポート
+          </button>
+          <input type="file" id="importFileInput" accept=".json" style="display: none;">
         </div>
-        
+      </div>
+    </div>
+  </div>
+
+  <!-- 🌟 設定モーダル (ガラスモーダル) -->
+  <div id="settingsModal" class="glass-modal-overlay">
+    <div class="glass-modal" style="max-width: 600px;">
+      <div class="glass-modal-header">
+        設定
+        <button class="glass-modal-close" onclick="closeModalUi('settingsModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+      </div>
+      <div class="glass-modal-body">
         <div class="settings-section">
           <div class="settings-section-title">デザイン</div>
           <div class="settings-group">
-            <div class="settings-row" style="cursor: default;">
-              <span>小見出しの余白</span>
-              <select id="settingHeadingSpace" class="custom-select">
-                <option value="small" selected>狭い</option>
-                <option value="medium">普通</option>
-                <option value="large">広い</option>
-              </select>
-            </div>
-            <div class="settings-row" style="cursor: default;">
-              <span>切替ボタンの大きさ</span>
-              <select id="settingFabSize" class="custom-select">
-                <option value="small">小さい</option>
-                <option value="medium" selected>普通</option>
-                <option value="large">大きい</option>
-              </select>
-            </div>
-            <div class="settings-row" style="cursor: default;">
-              <span>アイコンの大きさ</span>
-              <select id="settingGridSize" class="custom-select">
-                <option value="120">小さい (120px)</option>
-                <option value="140" selected>普通 (140px)</option>
-                <option value="160">大きい (160px)</option>
-              </select>
-            </div>
+            <div class="settings-row"><span>レイアウト</span><select id="settingLayoutMode" class="custom-select"><option value="single">1カラム (標準)</option><option value="split">2カラム (左右分割)</option></select></div>
+            <div class="settings-row"><span>切替ボタンの大きさ</span><select id="settingFabSize" class="custom-select"><option value="small">小さい</option><option value="medium">普通</option><option value="large">大きい</option></select></div>
+            <div class="settings-row"><span>アイコンの大きさ</span><select id="settingGridSize" class="custom-select"><option value="120">小さい (120px)</option><option value="140">普通 (140px)</option><option value="160">大きい (160px)</option></select></div>
           </div>
         </div>
-
         <div class="settings-section">
           <div class="settings-section-title">リンクの開き方</div>
           <div class="settings-group">
-            <div class="settings-row" style="cursor: default;">
-              <span>開き方を指定</span>
+            <div class="settings-row"><span>開き方を指定</span>
               <select id="settingLinkOpenMode" class="custom-select">
                 <option value="self">現在のタブ</option>
-                <option value="blank" selected>新しいタブ</option>
-                <option value="background">バックグラウンド</option>
+                <option value="blank">新しいタブ</option>
               </select>
             </div>
           </div>
         </div>
-
-        <div class="settings-section">
-          <div class="settings-section-title">検索の設定</div>
-          <div class="settings-group">
-            <div class="settings-row"><span>検索履歴を保存する</span><label class="toggle"><input type="checkbox" id="settingSaveHistory" checked><span class="toggle-slider"></span></label></div>
-          </div>
-        </div>
-
         <div class="settings-section">
           <div class="settings-section-title">データ管理</div>
           <div class="settings-group">
-            <div class="settings-row blue" id="exportDataBtn"><span>データをエクスポート (JSON)</span></div>
-            <div class="settings-row blue" id="importDataBtn"><span>データをインポート (JSON)</span></div>
-          </div>
-          <input type="file" id="importFileInput" accept=".json" style="display: none;">
-        </div>
-
-        <div class="settings-section">
-          <div class="settings-section-title">システム</div>
-          <div class="settings-group">
-            <div class="settings-row danger" id="initDataBtn"><span>すべてのデータを初期化</span></div>
+            <div class="settings-row actionable blue" id="exportAllProfilesBtn"><span>全てのプロファイルをエクスポート</span></div>
+            <div class="settings-row actionable danger edit-only" id="initDataBtn"><span>すべてのデータを初期化</span></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 🌟 下部ナビゲーションバー（編集モード切替ボタン追加） -->
-  <nav class="bottom-nav">
-    <div class="nav-item" id="nav-edit-toggle" title="編集モード切り替え">
-      <svg id="icon-edit-on" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-      <svg id="icon-edit-off" viewBox="0 0 24 24" style="display:none;"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-      <span class="nav-label" id="label-edit-toggle">編集：オン</span>
-    </div>
-    <div class="nav-item" id="nav-settings" title="設定">
-      <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
-      <span class="nav-label">設定</span>
-    </div>
-  </nav>
-
-  <!-- カスタムモーダル -->
-  <div id="customModal" class="modal-overlay" style="display:none;">
+  <!-- アイテム/フォルダ/プロファイル 編集用モーダル -->
+  <div id="customModal" class="glass-modal-overlay edit-modal-overlay">
     <div class="modal-box">
       <h3 id="modalTitle">Edit</h3>
       <div class="modal-inputs">
-        <input type="text" id="modalInput1" autocomplete="off">
-        <input type="text" id="modalInput2" autocomplete="off">
-        <input type="text" id="modalInput3" autocomplete="off" placeholder="カスタムアイコンURL (任意)">
+        <input type="text" id="modalInput1" autocomplete="off" placeholder="名前">
+        <input type="text" id="modalInput2" autocomplete="off" placeholder="ブックマークURL (例: https://google.com)">
+        <input type="text" id="modalInput3" autocomplete="off" placeholder="検索用URL (任意, クエリを末尾に)">
+        <select id="modalInputEncoding">
+          <option value="UTF-8">文字コード: UTF-8</option>
+          <option value="SJIS">文字コード: Shift_JIS</option>
+          <option value="EUCJP">文字コード: EUC-JP</option>
+        </select>
+        <input type="text" id="modalInput4" autocomplete="off" placeholder="カスタムアイコンURL (任意)">
       </div>
       <div class="modal-actions">
-        <button id="modalCancelBtn" class="modal-btn cancel">キャンセル</button>
-        <button id="modalSaveBtn" class="modal-btn save">保存</button>
+        <!-- 🌟 リストから選ぶボタン (アイテム追加時のみ表示される) -->
+        <button id="modalPresetBtn" class="modal-btn" style="background: var(--app-green); color: white; display: none; padding: 12px 14px; font-size: 14px;">
+          <svg style="width:18px;height:18px;fill:currentColor;vertical-align:middle;margin-right:6px;" viewBox="0 0 24 24"><path d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/></svg>リストから選ぶ
+        </button>
+        <div style="display: flex; gap: 8px; margin-left: auto;">
+          <button id="modalCancelBtn" class="modal-btn cancel">キャンセル</button>
+          <button id="modalSaveBtn" class="modal-btn save">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🌟 JSONリスト選択用モーダル (ガラスモーダル) -->
+  <div id="jsonSelectModal" class="glass-modal-overlay">
+    <div class="glass-modal" style="max-width: 860px; max-height: 85vh; width: 95%;">
+      <div class="glass-modal-header">
+        リストからアイテムを選ぶ
+        <button class="glass-modal-close" onclick="closeModalUi('jsonSelectModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+      </div>
+      <!-- スクロール領域 -->
+      <div class="glass-modal-body" id="jsonSelectBody" style="padding: 24px; padding-bottom: 40px;">
+        <div style="text-align: center; color: var(--text-sub); margin-top: 20px;">読み込み中...</div>
+      </div>
+      <!-- アクション領域 -->
+      <div style="padding: 16px 24px; border-top: 1px solid var(--nav-border); background: var(--card-bg); display: flex; justify-content: flex-end; gap: 12px; flex-shrink: 0;">
+        <button class="modal-btn cancel" onclick="closeModalUi('jsonSelectModal')">キャンセル</button>
+        <button id="jsonSelectAddBtn" class="modal-btn save" disabled>アイテムを追加</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- カスタム確認モーダル (アラート兼用) -->
+  <div id="confirmModal" class="glass-modal-overlay confirm-modal-overlay">
+    <div class="confirm-box">
+      <h3 id="confirmTitle">確認</h3>
+      <p id="confirmMessage"></p>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button id="confirmCancelBtn" class="modal-btn cancel" style="flex: 1;">キャンセル</button>
+        <button id="confirmOkBtn" class="modal-btn save" style="flex: 1;">OK</button>
       </div>
     </div>
   </div>
 
   <!-- コンテキストメニュー -->
   <div id="contextMenu" class="context-menu">
-    <div class="menu-item menu-type-open" id="menuOpen"><svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>新しいタブで開く</div>
-    <div class="menu-divider menu-type-open" id="menuDivider"></div>
+    <div class="menu-item menu-type-item" id="menuOpen"><svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>新しいタブで開く</div>
+    <div class="menu-divider menu-type-item" id="menuDivider"></div>
     <div class="menu-item menu-type-edit" id="menuEdit"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>編集</div>
-    <div class="menu-item menu-type-copy" id="menuCopy"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>URLをコピー</div>
+    <div class="menu-item menu-type-item" id="menuCopy"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>URLをコピー</div>
     <div class="menu-item menu-type-edit" id="menuRemove"><svg viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>削除</div>
     <div class="menu-item menu-type-folder" id="menuRenameFolder"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>名前変更</div>
     <div class="menu-item menu-type-folder" id="menuRemoveFolder"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.12-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg>削除</div>
   </div>
 
   <script>
-    /* =========================================================
-       1. 🌟 各種設定のロード＆適用ロジック
-       ========================================================= */
+    let currentTabIndex = 0;
+    const searchInput = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('clearBtn');
+    
+    const toggleClearBtn = () => {
+      const hasQuery = searchInput.value.trim().length > 0;
+      clearBtn.style.display = hasQuery ? 'flex' : 'none';
+      if (hasQuery) document.body.classList.add('has-query');
+      else document.body.classList.remove('has-query');
+    };
+    searchInput.addEventListener('input', toggleClearBtn); 
+    clearBtn.addEventListener('click', () => { searchInput.value = ''; toggleClearBtn(); searchInput.focus(); });
+
+    const applySetting = (id, key, prefix, defaultVal) => {
+      const el = document.getElementById(id);
+      let val = localStorage.getItem(key) || defaultVal;
+      el.value = val;
+      const applyCls = () => {
+        Array.from(el.options).forEach(opt => document.body.classList.remove(`${prefix}-${opt.value}`));
+        document.body.classList.add(`${prefix}-${el.value}`);
+      };
+      applyCls();
+      el.addEventListener('change', (e) => { localStorage.setItem(key, e.target.value); applyCls(); });
+    };
+
+    applySetting('settingLayoutMode', 'layout_mode', 'layout', 'single');
+    applySetting('settingFabSize', 'fab_size', 'fab-size', 'medium');
+    applySetting('settingGridSize', 'grid_size', 'grid-size', '140');
+
+    // リンクの開き方の設定
     const settingLinkOpenMode = document.getElementById('settingLinkOpenMode');
-    if (localStorage.getItem('link_open_mode')) settingLinkOpenMode.value = localStorage.getItem('link_open_mode');
+    if (localStorage.getItem('link_open_mode')) {
+      settingLinkOpenMode.value = localStorage.getItem('link_open_mode');
+    } else {
+      settingLinkOpenMode.value = 'blank';
+      localStorage.setItem('link_open_mode', 'blank');
+    }
     settingLinkOpenMode.addEventListener('change', (e) => localStorage.setItem('link_open_mode', e.target.value));
 
-    // 小見出しの余白
-    const settingHeadingSpace = document.getElementById('settingHeadingSpace');
-    if (localStorage.getItem('heading_space')) settingHeadingSpace.value = localStorage.getItem('heading_space');
-    const applyHeadingSpace = () => {
-      document.body.classList.remove('heading-space-small', 'heading-space-medium', 'heading-space-large');
-      document.body.classList.add(`heading-space-${settingHeadingSpace.value}`);
-    };
-    applyHeadingSpace();
-    settingHeadingSpace.addEventListener('change', (e) => { localStorage.setItem('heading_space', e.target.value); applyHeadingSpace(); });
-
-    // 切替ボタン(FAB)の大きさ
-    const settingFabSize = document.getElementById('settingFabSize');
-    if (localStorage.getItem('fab_size')) settingFabSize.value = localStorage.getItem('fab_size');
-    const applyFabSize = () => {
-      document.body.classList.remove('fab-size-small', 'fab-size-medium', 'fab-size-large');
-      document.body.classList.add(`fab-size-${settingFabSize.value}`);
-    };
-    applyFabSize();
-    settingFabSize.addEventListener('change', (e) => { localStorage.setItem('fab_size', e.target.value); applyFabSize(); });
-
-    // アイコンの大きさ（グリッド幅）
-    const settingGridSize = document.getElementById('settingGridSize');
-    if (localStorage.getItem('grid_size')) settingGridSize.value = localStorage.getItem('grid_size');
-    const applyGridSize = () => {
-      document.body.classList.remove('grid-size-120', 'grid-size-140', 'grid-size-160');
-      document.body.classList.add(`grid-size-${settingGridSize.value}`);
-    };
-    applyGridSize();
-    settingGridSize.addEventListener('change', (e) => { localStorage.setItem('grid_size', e.target.value); applyGridSize(); });
-
-    // リンクを開く処理
     function openLink(url) {
+      if(!url) return;
       const mode = settingLinkOpenMode.value;
       if (mode === 'self') window.location.href = url;
-      else if (mode === 'background') { const newWindow = window.open(url, '_blank', 'noopener,noreferrer'); if (newWindow) newWindow.blur(); window.focus(); } 
       else window.open(url, '_blank', 'noopener,noreferrer');
     }
 
-    /* =========================================================
-       2. 🌟 編集モード管理 (Read Only Toggle)
-       ========================================================= */
     let isEditMode = localStorage.getItem('edit_mode') !== 'false';
     const navEditToggle = document.getElementById('nav-edit-toggle');
-    const iconEditOn = document.getElementById('icon-edit-on');
-    const iconEditOff = document.getElementById('icon-edit-off');
-    const labelEditToggle = document.getElementById('label-edit-toggle');
-
     const updateEditMode = () => {
       if (isEditMode) {
         document.body.classList.remove('read-only-mode');
-        iconEditOn.style.display = 'block'; iconEditOff.style.display = 'none';
-        labelEditToggle.textContent = '編集：オン';
-        navEditToggle.classList.add('active');
+        document.getElementById('icon-edit-on').style.display = 'block'; document.getElementById('icon-edit-off').style.display = 'none';
+        document.getElementById('label-edit-toggle').textContent = '編集：オン'; navEditToggle.classList.add('active');
       } else {
         document.body.classList.add('read-only-mode');
-        iconEditOn.style.display = 'none'; iconEditOff.style.display = 'block';
-        labelEditToggle.textContent = '編集：オフ';
-        navEditToggle.classList.remove('active');
+        document.getElementById('icon-edit-on').style.display = 'none'; document.getElementById('icon-edit-off').style.display = 'block';
+        document.getElementById('label-edit-toggle').textContent = '編集：オフ'; navEditToggle.classList.remove('active');
       }
       localStorage.setItem('edit_mode', isEditMode);
     };
     updateEditMode();
     navEditToggle.addEventListener('click', () => { isEditMode = !isEditMode; updateEditMode(); });
 
+    // ガラスモーダル関連
+    const openModalUi = (id) => document.getElementById(id).classList.add('show');
+    const closeModalUi = (id) => document.getElementById(id).classList.remove('show');
+    document.querySelectorAll('.glass-modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => { 
+        if(e.target === overlay && !overlay.classList.contains('edit-modal-overlay') && !overlay.classList.contains('confirm-modal-overlay')) overlay.classList.remove('show'); 
+      });
+    });
 
-    /* =========================================================
-       3. 画面切り替えロジック
-       ========================================================= */
-    const views = { favorites: document.getElementById('view-favorites'), search: document.getElementById('view-search'), settings: document.getElementById('view-settings') };
-    const navSettings = document.getElementById('nav-settings'); const bottomNav = document.querySelector('.bottom-nav'); const modeSwitchBtn = document.getElementById('modeSwitchBtn');
-    let currentMode = 'favorites';
+    document.getElementById('nav-profiles').addEventListener('click', () => openModalUi('profilesModal'));
+    document.getElementById('nav-settings').addEventListener('click', () => openModalUi('settingsModal'));
 
-    function switchView(targetName) {
-      Object.values(views).forEach(view => view.classList.remove('active'));
-      if (targetName === 'settings') {
-        views.settings.classList.add('active'); navSettings.classList.add('active'); bottomNav.classList.add('force-show'); 
-      } else {
-        currentMode = targetName; views[targetName].classList.add('active'); navSettings.classList.remove('active'); bottomNav.classList.remove('force-show');
-        if (targetName === 'search') { modeSwitchBtn.classList.add('mode-search'); setTimeout(() => document.getElementById('searchInput').focus(), 100); } 
-        else modeSwitchBtn.classList.remove('mode-search');
-      }
-    }
-    
-    navSettings.addEventListener('click', () => { if (views.settings.classList.contains('active')) switchView(currentMode); else switchView('settings'); });
-    document.getElementById('settingsCloseBtn').addEventListener('click', () => switchView(currentMode));
-    
-    modeSwitchBtn.addEventListener('click', () => { if (currentMode === 'favorites') switchView('search'); else switchView('favorites'); });
-    document.addEventListener('keydown', (e) => { if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); switchView('search'); } });
-
-    /* =========================================================
-       4. 汎用モーダル (入力画面)
-       ========================================================= */
-    let modalCallback = null;
-    const modalOverlay = document.getElementById('customModal'); const modalTitle = document.getElementById('modalTitle');
-    const modalInput1 = document.getElementById('modalInput1'); const modalInput2 = document.getElementById('modalInput2'); const modalInput3 = document.getElementById('modalInput3');
-    const modalSaveBtn = document.getElementById('modalSaveBtn');
-
-    function openModal(title, val1, val2, val3, showUrl, urlPlaceholder, showIconInput, callback) {
-      modalTitle.textContent = title;
-      modalInput1.value = val1; modalInput1.placeholder = (showUrl || title.includes("見出し")) ? "名前を入力" : "フォルダ名を入力";
-      if (showUrl) { modalInput2.value = val2; modalInput2.placeholder = urlPlaceholder; modalInput2.style.display = 'block'; } else { modalInput2.style.display = 'none'; }
-      if (showIconInput) { modalInput3.value = val3 || ""; modalInput3.style.display = 'block'; } else { modalInput3.style.display = 'none'; }
-      modalCallback = callback; modalOverlay.style.display = 'flex';
-      setTimeout(() => modalOverlay.classList.add('show'), 10);
-      modalInput1.focus();
-    }
-    function closeModal() { modalOverlay.classList.remove('show'); setTimeout(() => modalOverlay.style.display = 'none', 200); }
-    document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
-    modalSaveBtn.addEventListener('click', () => { if (modalCallback) modalCallback(modalInput1.value, modalInput2.value, modalInput3.value); closeModal(); });
-    const handleEnter = (e) => { if (e.key === 'Enter') { if (e.isComposing) return; e.preventDefault(); modalSaveBtn.click(); } };
-    modalInput1.addEventListener('keydown', handleEnter); modalInput2.addEventListener('keydown', handleEnter); modalInput3.addEventListener('keydown', handleEnter);
-
-    /* =========================================================
-       5. フルデータセットの初期化
-       ========================================================= */
-    const getDomain = (url) => { try { return new URL(url).hostname; } catch(e){ return ""; } };
-    
-    const defaultBookmarkData = [
-      { folderName: "主要", bookmarks: [ { isHeading: true, title: "ポータル" }, { title: "Google", url: "https://www.google.com", iconUrl: "" }, { title: "Yahoo! JAPAN", url: "https://www.yahoo.co.jp", iconUrl: "" }, { title: "duckduckgo", url: "https://duckduckgo.com/", iconUrl: "" }, { isHeading: true, title: "メール／カレンダー／コミュニケーション" }, { title: "Gmail", url: "https://mail.google.com", iconUrl: "https://play-lh.googleusercontent.com/c6KD_8-GvnGRJA4lRQ4y5YnUa3-LOeYAS7ubw1jWyB9bmr6Kj6zzRvh2A5WBB-Vd3e6zhElmhDv07fCJx2Fc=w480-h960-rw" }, { title: "Outlook mail", url: "https://outlook.cloud.microsoft/mail/", iconUrl: "" }, { title: "Google calendaar", url: "https://calendar.google.com/calendar/u/0/r", iconUrl: "https://play-lh.googleusercontent.com/vEoqLbT_QkYcEaawWBRc22N6i98OUtOUpM1LmKdVs_xx7lCsUyFfV0ZiqoUXjMijUteiBhhN4K5MpoF96FRNOg=w480-h960-rw" }, { title: "slack", url: "https://app.slack.com/client/", iconUrl: "" }, { title: "teams", url: "https://teams.microsoft.com/", iconUrl: "" }, { title: "zoom", url: "https://www.zoom.com/ja", iconUrl: "" }, { isHeading: true, title: "ツール" }, { title: "notion", url: "https://www.notion.so", iconUrl: "" }, { title: "todoist", url: "https://todoist.com/app?lang=ja", iconUrl: "" }, { title: "simplenote", url: "https://app.simplenote.com/", iconUrl: "" }, { title: "raindrop", url: "https://app.raindrop.io/", iconUrl: "" }, { isHeading: true, title: "ファイル" }, { title: "onedrive", url: "https://onedrive.live.com/", iconUrl: "" }, { title: "box", url: "https://app.box.com/folder/0", iconUrl: "" }, { title: "dropbox", url: "https://www.dropbox.com/h", iconUrl: "" } ] },
-      { folderName: "AI", bookmarks: [ { isHeading: true, title: "AI" }, { title: "ChatGPT", url: "https://chat.openai.com", iconUrl: "" }, { title: "Claude", url: "https://claude.ai", iconUrl: "" }, { title: "Gemini", url: "https://gemini.google.com", iconUrl: "" }, { title: "Copilot", url: "https://copilot.microsoft.com", iconUrl: "https://play-lh.googleusercontent.com/LO0qJeIk4uKo6HJB5fkMpipB9x4BedNr0YegnCJKOxsX8SNZIoY-NC8-KL-cLQyUgmmKFyZRa0cdyaNkDsyBveg=w480-h960-rw" }, { title: "deepseek", url: "https://chat.deepseek.com/", iconUrl: "" }, { title: "Perplexity", url: "https://www.perplexity.ai", iconUrl: "" }, { isHeading: true, title: "アカデミック" }, { title: "Gemini Notebook", url: "https://notebook.google.com/", iconUrl: "https://play-lh.googleusercontent.com/gQAp2_D_utKEdDI4Nr6_We5DAl2y7kPzoBKo8IE36rSDZyM_R5emL_t9zG4wHop8iMbFHzDVMlYKNTNSnzPCVw=w480-h960-rw" }, { title: "elicit", url: "https://elicit.com/", iconUrl: "" }, { title: "scispace", url: "https://scispace.com/ja", iconUrl: "" }, { isHeading: true, title: "翻訳" }, { title: "DeepL", url: "https://www.deepl.com/ja/translator", iconUrl: "" } ] },
-      { folderName: "ニュース", bookmarks: [ { isHeading: true, title: "ポータル" }, { title: "Yahoo!ニュース", url: "https://news.yahoo.co.jp", iconUrl: "" }, { title: "日本経済新聞", url: "https://www.nikkei.com", iconUrl: "" }, { isHeading: true, title: "国際ニュース" }, { title: "ロイター", url: "https://jp.reuters.com", iconUrl: "" }, { title: "BBC Japan", url: "https://www.bbc.com/japanese", iconUrl: "" }, { title: "CNN.co.jp", url: "https://www.cnn.co.jp", iconUrl: "" }, { title: "AFPBB News", url: "https://www.afpbb.com", iconUrl: "" }, { title: "天気", url: "https://weather.yahoo.co.jp/weather/", iconUrl: "" } ] },
-      { folderName: "動画・SNS", bookmarks: [ { isHeading: true, title: "動画" }, { title: "YouTube", url: "https://www.youtube.com", iconUrl: "" }, { title: "netlix", url: "https://www.netflix.com/browse", iconUrl: "" }, { title: "TVer", url: "https://tver.jp/", iconUrl: "" }, { isHeading: true, title: "SNS" }, { title: "X (Twitter)", url: "https://twitter.com", iconUrl: "" }, { title: "Instagram", url: "https://www.instagram.com", iconUrl: "" }, { title: "TikTok", url: "https://www.tiktok.com", iconUrl: "" }, { title: "Facebook", url: "https://www.facebook.com", iconUrl: "" }, { title: "LinkedIn", url: "https://www.linkedin.com", iconUrl: "" } ] },
-      { folderName: "ショッピング", bookmarks: [ { isHeading: true, title: "総合通販" }, { title: "Amazon", url: "https://www.amazon.co.jp", iconUrl: "" }, { title: "楽天市場", url: "https://www.rakuten.co.jp", iconUrl: "" }, { title: "Yahoo!ショッピング", url: "https://shopping.yahoo.co.jp", iconUrl: "" }, { title: "ヨドバシ.com", url: "https://www.yodobashi.com", iconUrl: "" }, { isHeading: true, title: "フリマ／オークション" }, { title: "メルカリ", url: "https://jp.mercari.com/", iconUrl: "" }, { title: "ヤフオク", url: "https://auctions.yahoo.co.jp/", iconUrl: "" }, { isHeading: true, title: "価格比較" }, { title: "価格.com", url: "https://kakaku.com", iconUrl: "" } ] },
-      { folderName: "お店", bookmarks: [ { isHeading: true, title: "雑貨" }, { title: "無印良品", url: "https://www.muji.com/jp/ja/store", iconUrl: "" }, { title: "ニトリ", url: "https://www.nitori-net.jp", iconUrl: "" }, { title: "ダイソー", url: "https://jp.daisonet.com/", iconUrl: "" }, { isHeading: true, title: "ファッション" }, { title: "ユニクロ", url: "https://www.uniqlo.com/jp/ja/", iconUrl: "" }, { title: "ZOZOTOWN", url: "https://zozo.jp", iconUrl: "" } ] },
-      { folderName: "交通", bookmarks: [ { isHeading: true, title: "地図" }, { title: "Google Maps", url: "https://www.google.com/maps", iconUrl: "" }, { isHeading: true, title: "旅行" }, { title: "じゃらん", url: "https://www.jalan.net/", iconUrl: "" }, { title: "楽天トラベル", url: "https://travel.rakuten.co.jp/", iconUrl: "" }, { title: "agoda", url: "https://www.agoda.com/ja-jp/", iconUrl: "" } ] }
-    ];
-    let bookmarkData = JSON.parse(localStorage.getItem('bookmarks_data')) || defaultBookmarkData;
-    function saveBookmarks() { localStorage.setItem('bookmarks_data', JSON.stringify(bookmarkData)); }
-
-    const defaultSearchEnginesData = [
-      { folderName: "ウェブ", engines: [ { isHeading: true, name: "ポータル" }, { name: "Google", url: "https://www.google.com/search?q=", home: "https://www.google.com", domain: "google.com", iconUrl: "" }, { name: "Yahoo! JAPAN", url: "https://search.yahoo.co.jp/search?p=", home: "https://www.yahoo.co.jp", domain: "yahoo.co.jp", iconUrl: "" }, { name: "DuckDuckGo", url: "https://duckduckgo.com/?q=", home: "https://duckduckgo.com", domain: "duckduckgo.com", iconUrl: "" }, { name: "Bing", url: "https://www.bing.com/search?q=", home: "https://www.bing.com", domain: "bing.com", iconUrl: "" }, { isHeading: true, name: "動画／画像" }, { name: "YouTube", url: "https://www.youtube.com/results?search_query=", home: "https://www.youtube.com", domain: "youtube.com", iconUrl: "" }, { name: "画像検索", url: "https://www.google.com/search?tbm=isch&q=", home: "https://www.google.com/imghp", domain: "google.com", iconUrl: "" }, { isHeading: true, name: "SNS" }, { name: "リアルタイム", url: "https://search.yahoo.co.jp/realtime/search?p=", home: "https://search.yahoo.co.jp/realtime", domain: "yahoo.co.jp", iconUrl: "" }, { name: "X", url: "https://twitter.com/search?q=", home: "https://twitter.com", domain: "twitter.com", iconUrl: "" }, { name: "Instagram", url: "https://www.instagram.com/explore/tags/", home: "https://www.instagram.com", domain: "instagram.com", iconUrl: "" }, { isHeading: true, name: "辞書" }, { name: "Wikipedia", url: "https://ja.wikipedia.org/wiki/Special:Search?search=", home: "https://ja.wikipedia.org", domain: "wikipedia.org", iconUrl: "" }, { name: "Weblio辞書", url: "https://www.weblio.jp/content/", home: "https://www.weblio.jp", domain: "weblio.jp", iconUrl: "" }, { name: "コトバンク", url: "https://kotobank.jp/word/", home: "https://kotobank.jp", domain: "kotobank.jp", iconUrl: "" }, { name: "英辞郎", url: "https://eow.alc.co.jp/search?q=", home: "https://eow.alc.co.jp", domain: "alc.co.jp", iconUrl: "" } ] },
-      { folderName: "ショッピング", engines: [ { isHeading: true, name: "総合通販" }, { name: "Amazon", url: "https://www.amazon.co.jp/s?k=", home: "https://www.amazon.co.jp", domain: "amazon.co.jp", iconUrl: "" }, { name: "楽天市場", url: "https://search.rakuten.co.jp/search/mall/", home: "https://www.rakuten.co.jp", domain: "rakuten.co.jp", iconUrl: "" }, { name: "Y!ショッピング", url: "https://shopping.yahoo.co.jp/search?p=", home: "https://shopping.yahoo.co.jp", domain: "shopping.yahoo.co.jp", iconUrl: "" }, { name: "ヨドバシ", url: "https://www.yodobashi.com/?word=", home: "https://www.yodobashi.com", domain: "yodobashi.com", iconUrl: "" }, { name: "モノタロウ", url: "https://www.monotaro.com/s/q-", home: "https://www.monotaro.com", domain: "monotaro.com", iconUrl: "" }, { isHeading: true, name: "フリマ／オークション" }, { name: "メルカリ", url: "https://jp.mercari.com/search?keyword=", home: "https://jp.mercari.com", domain: "mercari.com", iconUrl: "" }, { name: "ヤフオク!", url: "https://auctions.yahoo.co.jp/search/search?p=", home: "https://auctions.yahoo.co.jp", domain: "auctions.yahoo.co.jp", iconUrl: "" }, { name: "ヤフーフリマ", url: "https://paypayfleamarket.yahoo.co.jp/search/", home: "https://paypayfleamarket.yahoo.co.jp", domain: "paypayfleamarket.yahoo.co.jp", iconUrl: "" }, { name: "ラクマ", url: "https://fril.jp/search/", home: "https://fril.jp", domain: "fril.jp", iconUrl: "" }, { name: "ジモティー", url: "https://jmty.jp/all/search?keyword=", home: "https://jmty.jp", domain: "jmty.jp", iconUrl: "" }, { isHeading: true, name: "海外" }, { name: "Qoo10", url: "https://www.qoo10.jp/gmkt.inc/Search/Default.aspx?keyword=", home: "https://www.qoo10.jp", domain: "qoo10.jp", iconUrl: "" }, { name: "Temu", url: "https://www.temu.com/search_result.html?search_key=", home: "https://www.temu.com", domain: "www.temu.com", iconUrl: "" }, { isHeading: true, name: "ハンドメイド" }, { name: "minnne", url: "https://minne.com/category/saleonly?input_method=typing&q=", home: "https://minne.com", domain: "minne.com", iconUrl: "" }, { name: "Creema", url: "https://www.creema.jp/listing?active=pc_home-leftside&mode=keyword&q=", home: "https://www.creema.jp", domain: "www.creema.jp", iconUrl: "" }, { isHeading: true, name: "価格比較" }, { name: "価格.com", url: "https://kakaku.com/search_results/?query=", home: "https://kakaku.com", domain: "kakaku.com", iconUrl: "" } ] },
-      { folderName: "お店", engines: [ { isHeading: true, name: "ファッション" }, { name: "ユニクロ", url: "https://www.uniqlo.com/jp/ja/search?q=", home: "https://www.uniqlo.com", domain: "www.uniqlo.com", iconUrl: "" }, { name: "ZOZOTOWN", url: "https://zozo.jp/search/?p_keyv=", home: "https://zozo.jp", domain: "zozo.jp", iconUrl: "" }, { isHeading: true, name: "100均" }, { name: "ダイソー", url: "https://jp.daisonet.com/search?type=product&q=", home: "https://jp.daisonet.com", domain: "jp.daisonet.com", iconUrl: "" }, { name: "無印良品", url: "https://www.muji.com/jp/ja/store/search/cmdty/", home: "https://www.muji.com", domain: "www.muji.com", iconUrl: "" }, { name: "ニトリ", url: "https://www.nitori-net.jp/ec/search/?q=", home: "https://www.nitori-net.jp", domain: "www.nitori-net.jp", iconUrl: "" }, { isHeading: true, name: "本" }, { name: "bookoff", url: "https://shopping.bookoff.co.jp/search/keyword/", home: "https://shopping.bookoff.co.jp", domain: "shopping.bookoff.co.jp", iconUrl: "" }, { name: "ビックカメラ", url: "https://www.biccamera.com/bc/category/?q=", home: "https://www.biccamera.com", domain: "biccamera.com", iconUrl: "" }, { name: "コストコ", url: "https://www.costco.co.jp/search?text=", home: "https://www.costco.co.jp", domain: "www.costco.co.jp", iconUrl: "" } ] },
-      { folderName: "地図・グルメ", engines: [ { isHeading: true, name: "地図" }, { name: "Google MAP", url: "https://www.google.com/maps/search/", home: "https://www.google.com/maps", domain: "google.com", iconUrl: "" }, { isHeading: true, name: "旅行" }, { name: "じゃらん", url: "https://www.jalan.net/uw/uwp2011/uww2011init.do?keyword=", home: "https://www.jalan.net", domain: "www.jalan.net", iconUrl: "" }, { name: "楽天トラベル", url: "https://kw.travel.rakuten.co.jp/keyword/Search.do?charset=utf-8&f_max=30&l-id=topC_search_keyword&f_query=", home: "https://kw.travel.rakuten.co.jp", domain: "kw.travel.rakuten.co.jp", iconUrl: "" }, { isHeading: true, name: "グルメ" }, { name: "食べログ", url: "https://tabelog.com/rstLst/?sw=", home: "https://tabelog.com", domain: "tabelog.com", iconUrl: "" }, { name: "ぐるなび", url: "https://r.gnavi.co.jp/area/jp/rs/?fw=", home: "https://r.gnavi.co.jp", domain: "gnavi.co.jp", iconUrl: "" }, { name: "ホットペッパー", url: "https://www.hotpepper.jp/CSP/psh010/doSearch?freeWord=", home: "https://www.hotpepper.jp", domain: "hotpepper.jp", iconUrl: "" } ] },
-      { folderName: "エンタメ", engines: [ { isHeading: true, name: "動画" }, { name: "Youtube", url: "https://www.youtube.com/results?search_query=", home: "https://www.youtube.com", domain: "www.youtube.com", iconUrl: "" }, { name: "Prime Video", url: "https://www.amazon.co.jp/s?i=instant-video&k=", home: "https://www.amazon.co.jp/Prime-Video", domain: "amazon.co.jp", iconUrl: "" }, { name: "TVer", url: "https://tver.jp/search/", home: "https://tver.jp", domain: "tver.jp", iconUrl: "" }, { name: "abema", url: "https://abema.tv/search?q=", home: "https://abema.tv", domain: "abema.tv", iconUrl: "" }, { name: "Spotify", url: "https://open.spotify.com/search/", home: "https://open.spotify.com", domain: "spotify.com", iconUrl: "" }, { isHeading: true, name: "映画" }, { name: "映画.com", url: "https://eiga.com/search/", home: "https://eiga.com", domain: "eiga.com", iconUrl: "" }, { name: "Filmarks", url: "https://filmarks.com/search/movies?q=", home: "https://filmarks.com", domain: "filmarks.com", iconUrl: "" } ] },
-      { folderName: "レシピ", engines: [ { isHeading: true, name: "レシピ" }, { name: "クックパッド", url: "https://cookpad.com/search/", home: "https://cookpad.com", domain: "cookpad.com", iconUrl: "" }, { name: "クラシル", url: "https://www.kurashiru.com/search?query=", home: "https://www.kurashiru.com", domain: "kurashiru.com", iconUrl: "" }, { name: "ホームクッキング", url: "https://www.kikkoman.co.jp/homecook/search/select_search.html?kw=", home: "https://www.kikkoman.co.jp", domain: "www.kikkoman.co.jp", iconUrl: "" }, { name: "デリッシュ", url: "https://delishkitchen.tv/search?q=", home: "https://delishkitchen.tv", domain: "delishkitchen.tv", iconUrl: "" } ] },
-      { folderName: "素材", engines: [ { isHeading: true, name: "画像" }, { name: "unsplash", url: "https://unsplash.com/ja/s/%E5%86%99%E7%9C%9F/", home: "https://unsplash.com", domain: "unsplash.com", iconUrl: "" }, { name: "pixabay", url: "https://pixabay.com/ja/images/search/", home: "https://pixabay.com", domain: "pixabay.com", iconUrl: "" }, { isHeading: true, name: "音声" }, { name: "効果音", url: "https://soundeffect-lab.info/sound/search.php?s=", home: "https://soundeffect-lab.info", domain: "soundeffect-lab.info", iconUrl: "" }, { name: "freesound.org", url: "https://freesound.org/search/?q=", home: "https://freesound.org", domain: "freesound.org", iconUrl: "" } ] },
-      { folderName: "学術", engines: [ { name: "Google Scholar", url: "https://scholar.google.com/scholar?q=", home: "https://scholar.google.com", domain: "scholar.google.com", iconUrl: "" }, { name: "CiNii", url: "https://cir.nii.ac.jp/all?q=", home: "https://cir.nii.ac.jp", domain: "nii.ac.jp", iconUrl: "" } ] }
-    ];
-    let searchEnginesData = JSON.parse(localStorage.getItem('search_engines_data')) || defaultSearchEnginesData;
-    function saveSearchEngines() { localStorage.setItem('search_engines_data', JSON.stringify(searchEnginesData)); }
-
-    /* =========================================================
-       6. 検索窓・履歴の処理
-       ========================================================= */
-    const searchInput = document.getElementById('searchInput'); const clearBtn = document.getElementById('clearBtn'); const historyBtn = document.getElementById('historyBtn'); const historyPopup = document.getElementById('historyPopup'); const settingSaveHistory = document.getElementById('settingSaveHistory'); const HISTORY_KEY = 'search_history'; let searchHistory = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
-    if (localStorage.getItem('save_history_pref') !== null) settingSaveHistory.checked = localStorage.getItem('save_history_pref') === 'true'; settingSaveHistory.addEventListener('change', (e) => localStorage.setItem('save_history_pref', e.target.checked));
-    const toggleClearBtn = () => clearBtn.style.display = searchInput.value.length > 0 ? 'flex' : 'none'; searchInput.addEventListener('input', toggleClearBtn); clearBtn.addEventListener('click', () => { searchInput.value = ''; toggleClearBtn(); searchInput.focus(); });
-    const renderHistory = () => { historyPopup.innerHTML = ''; if (searchHistory.length === 0) { historyPopup.innerHTML = '<div class="history-empty">検索履歴はありません</div>'; return; } searchHistory.forEach((keyword, index) => { const item = document.createElement('div'); item.className = 'history-item'; item.innerHTML = `<svg class="history-icon" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg><div class="history-text">${keyword}</div><div class="history-delete"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></div>`; item.querySelector('.history-delete').addEventListener('click', (e) => { e.stopPropagation(); searchHistory.splice(index, 1); localStorage.setItem(HISTORY_KEY, JSON.stringify(searchHistory)); renderHistory(); }); item.addEventListener('click', () => { searchInput.value = keyword; toggleClearBtn(); historyPopup.style.display = 'none'; }); historyPopup.appendChild(item); }); };
-    historyBtn.addEventListener('click', (e) => { e.stopPropagation(); if (historyPopup.style.display === 'block') historyPopup.style.display = 'none'; else { renderHistory(); historyPopup.style.display = 'block'; } }); document.addEventListener('click', (e) => { if (!historyPopup.contains(e.target) && e.target !== historyBtn && !historyBtn.contains(e.target)) historyPopup.style.display = 'none'; });
-    
-    const executeSearch = (url, home) => { 
-      const query = searchInput.value.trim(); 
-      if (query) { 
-        if (settingSaveHistory.checked) { searchHistory = searchHistory.filter(k => k !== query); searchHistory.unshift(query); if (searchHistory.length > 20) searchHistory.pop(); localStorage.setItem(HISTORY_KEY, JSON.stringify(searchHistory)); } 
-        openLink(url + encodeURIComponent(query)); 
-      } else { openLink(home); } 
-      searchInput.blur(); historyPopup.style.display = 'none'; 
-    };
-    searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { 
-      const firstEngine = searchEnginesData[0]?.engines.find(eng => !eng.isHeading);
-      if (firstEngine) executeSearch(firstEngine.url, firstEngine.home); 
-    } });
-
-    /* =========================================================
-       7. コンテキストメニュー表示処理 (編集モード対応)
-       ========================================================= */
-    function showContextMenu(e, type, target) {
-      if (!isEditMode) return; // 編集モードオフ時は何もしない
+    // カスタム確認モーダル関数
+    let confirmCallback = null;
+    const confirmModal = document.getElementById('confirmModal');
+    function showConfirm(title, message, isDanger, callback, isAlert = false) {
+      document.getElementById('confirmTitle').textContent = title;
+      document.getElementById('confirmMessage').textContent = message;
+      const okBtn = document.getElementById('confirmOkBtn');
+      const cancelBtn = document.getElementById('confirmCancelBtn');
       
+      if (isAlert) {
+        cancelBtn.style.display = 'none';
+        okBtn.style.background = 'var(--app-blue)';
+        okBtn.textContent = 'OK';
+      } else {
+        cancelBtn.style.display = 'block';
+        if (isDanger) {
+          okBtn.style.background = '#ff3b30';
+          okBtn.textContent = '削除';
+        } else {
+          okBtn.style.background = 'var(--app-blue)';
+          okBtn.textContent = 'OK';
+        }
+      }
+      confirmCallback = callback;
+      confirmModal.classList.add('show');
+    }
+    document.getElementById('confirmCancelBtn').addEventListener('click', () => confirmModal.classList.remove('show'));
+    document.getElementById('confirmOkBtn').addEventListener('click', () => {
+      if(confirmCallback) confirmCallback();
+      confirmModal.classList.remove('show');
+    });
+
+    const modeSwitchBtn = document.getElementById('modeSwitchBtn');
+    modeSwitchBtn.addEventListener('click', () => { 
+      document.body.classList.toggle('mode-search');
+      if (document.body.classList.contains('mode-search')) { toggleClearBtn(); setTimeout(() => searchInput.focus(), 100); } 
+      else { document.body.classList.remove('has-query'); searchInput.blur(); }
+    });
+
+    // 🌟 アイテム追加・編集モーダル関数 (onPresetClick 引数を追加)
+    let modalCallback = null;
+    const customModal = document.getElementById('customModal');
+    function openEditModal(title, v1, v2, v3, v4, enc, modeType, callback, onPresetClick) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalInput1').value = v1 || ""; document.getElementById('modalInput2').value = v2 || ""; 
+      document.getElementById('modalInput3').value = v3 || ""; document.getElementById('modalInput4').value = v4 || "";
+      document.getElementById('modalInputEncoding').value = enc || "UTF-8";
+      
+      document.getElementById('modalInput1').style.display = 'block';
+      if (modeType === 'item') {
+        document.getElementById('modalInput1').placeholder = "名前 (例: Google)";
+        document.getElementById('modalInput2').style.display = 'block'; document.getElementById('modalInput3').style.display = 'block';
+        document.getElementById('modalInputEncoding').style.display = 'block'; document.getElementById('modalInput4').style.display = 'block';
+      } else {
+        if (modeType === 'folder') document.getElementById('modalInput1').placeholder = "フォルダ名を入力";
+        else if (modeType === 'profile') document.getElementById('modalInput1').placeholder = "プロファイル名を入力";
+        else document.getElementById('modalInput1').placeholder = "小見出しを入力";
+
+        document.getElementById('modalInput2').style.display = 'none'; document.getElementById('modalInput3').style.display = 'none';
+        document.getElementById('modalInputEncoding').style.display = 'none'; document.getElementById('modalInput4').style.display = 'none';
+      }
+
+      // プリセットから選ぶボタンの制御
+      const presetBtn = document.getElementById('modalPresetBtn');
+      if (onPresetClick) {
+        presetBtn.style.display = 'block';
+        presetBtn.onclick = () => {
+          customModal.classList.remove('show');
+          onPresetClick();
+        };
+      } else {
+        presetBtn.style.display = 'none';
+        presetBtn.onclick = null;
+      }
+
+      modalCallback = callback; customModal.classList.add('show');
+      setTimeout(() => document.getElementById('modalInput1').focus(), 100);
+    }
+    
+    document.getElementById('modalCancelBtn').addEventListener('click', () => customModal.classList.remove('show'));
+    document.getElementById('modalSaveBtn').addEventListener('click', () => { 
+      if (modalCallback) modalCallback(document.getElementById('modalInput1').value, document.getElementById('modalInput2').value, document.getElementById('modalInput3').value, document.getElementById('modalInput4').value, document.getElementById('modalInputEncoding').value); 
+      customModal.classList.remove('show'); 
+    });
+
+    // ▼ JSONから読み込んだ初期データ (フォールバック用) ▼
+    const defaultAppData = [
+      {
+        "folderName": "ウェブ",
+        "engines": [
+          { "isHeading": true, "name": "ポータル" },
+          { "name": "Google", "url": "https://www.google.com/search?q=", "home": "https://www.google.com", "domain": "google.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "Yahoo! JAPAN", "url": "https://search.yahoo.co.jp/search?p=", "home": "https://www.yahoo.co.jp", "domain": "yahoo.co.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "DuckDuckGo", "url": "https://duckduckgo.com/?q=", "home": "https://duckduckgo.com", "domain": "duckduckgo.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "isHeading": true, "name": "メール／カレンダー／コミュニケーション" },
+          { "name": "Calendar", "url": "https://calendar.google.com/calendar/u/0/r/search?q=", "home": "https://calendar.google.com/calendar/", "domain": "calendar.google.com", "iconUrl": "https://play-lh.googleusercontent.com/vEoqLbT_QkYcEaawWBRc22N6i98OUtOUpM1LmKdVs_xx7lCsUyFfV0ZiqoUXjMijUteiBhhN4K5MpoF96FRNOg=w480-h960-rw", "encoding": "UTF-8" },
+          { "name": "outlook", "url": "", "home": "https://outlook.office.com/mail/", "domain": "outlook.office.com", "iconUrl": "https://img.utdstc.com/icon/f00/db2/f00db21aa992c5b8de82d2862b72fa6fe477319ff7051483a1e3e636ebb7d59d:200", "encoding": "UTF-8" },
+          { "name": "gmail", "url": "https://mail.google.com/mail/u/0/#search/", "home": "https://mail.google.com/mail/u/0/#inbox", "domain": "mail.google.com", "iconUrl": "https://play-lh.googleusercontent.com/c6KD_8-GvnGRJA4lRQ4y5YnUa3-LOeYAS7ubw1jWyB9bmr6Kj6zzRvh2A5WBB-Vd3e6zhElmhDv07fCJx2Fc=w480-h960-rw", "encoding": "UTF-8" },
+          { "name": "slack", "url": "", "home": "https://app.slack.com/client/", "domain": "app.slack.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "teams", "url": "", "home": "https://teams.microsoft.com/v2/", "domain": "teams.microsoft.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "isHeading": true, "name": "動画／画像" },
+          { "name": "YouTube", "url": "https://www.youtube.com/results?search_query=", "home": "https://www.youtube.com", "domain": "youtube.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "画像検索", "url": "https://www.google.com/search?tbm=isch&q=", "home": "https://www.google.com/imghp", "domain": "google.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "リアルタイム", "url": "https://search.yahoo.co.jp/realtime/search?p=", "home": "https://search.yahoo.co.jp/realtime", "domain": "search.yahoo.co.jp", "iconUrl": "https://play-lh.googleusercontent.com/R3K6pxTPN6gGj91GOpikk30D6kWiPH59OpY4SqF4ZJGrX_vCFQEbBUT8aAOCLIzyKbHj2xcn5JspJw-icaK3tRw=w480-h960-rw", "encoding": "UTF-8" },
+          { "isHeading": true, "name": "ツール" },
+          { "name": "notion", "url": "", "home": "https://www.notion.so", "domain": "www.notion.so", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "todoint", "url": "https://app.todoist.com/app/search/aaa", "home": "https://app.todoist.com/", "domain": "app.todoist.com", "iconUrl": "https://play-lh.googleusercontent.com/03uYCmB2qWmmr-rIL8X_gj20wdIxLPW3bmqf1ZSNlwf_ZjuQYGnNnOB-8ig2CBzwqyf5meCgOgUEzxvC1QY6rg=s96-rw", "encoding": "UTF-8" },
+          { "name": "raindrop", "url": "https://app.raindrop.io/my/0/", "home": "https://app.raindrop.io/my/0", "domain": "app.raindrop.io", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "simplenote", "url": "", "home": "https://app.simplenote.com/", "domain": "app.simplenote.com", "iconUrl": "", "encoding": "UTF-8" }
+        ]
+      },
+      {
+        "folderName": "AI",
+        "engines": [
+          { "isHeading": true, "name": "AI" },
+          { "name": "chatGPT", "url": "", "home": "https://chatgpt.com/", "domain": "chatgpt.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "claude", "url": "", "home": "https://claude.ai/chat/", "domain": "claude.ai", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "gemini", "url": "", "home": "https://gemini.google.com/", "domain": "gemini.google.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "deepseek", "url": "", "home": "https://chat.deepseek.com/", "domain": "chat.deepseek.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "perplexity", "url": "https://www.perplexity.ai/search?q=", "home": "https://www.perplexity.ai/", "domain": "www.perplexity.ai", "iconUrl": "", "encoding": "UTF-8" }
+        ]
+      },
+      {
+        "folderName": "ニュース",
+        "engines": [
+          { "isHeading": true, "name": "ポータル" },
+          { "name": "Yahooニュース", "url": "https://news.yahoo.co.jp/search?p=", "home": "https://news.yahoo.co.jp", "domain": "news.yahoo.co.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "Googleニュース", "url": "https://news.google.com/search?q=", "home": "https://news.google.com/home?hl=ja&gl=JP", "domain": "news.google.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "47news", "url": "https://www.47news.jp/search?q=", "home": "https://www.47news.jp/", "domain": "www.47news.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "日経", "url": "https://www.nikkei.com/search?keyword=", "home": "https://www.nikkei.com", "domain": "www.nikkei.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "isHeading": true, "name": "国際ニュース" },
+          { "name": "ロイター", "url": "https://www.reuters.com/jp/site-search/?query=", "home": "https://jp.reuters.com", "domain": "jp.reuters.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "CNN", "url": "", "home": "https://www.cnn.co.jp", "domain": "www.cnn.co.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "BBC", "url": "", "home": "https://www.bbc.com/japanese", "domain": "www.bbc.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "afpbb", "url": "https://www.afpbb.com/search?fulltext=", "home": "https://www.afpbb.com/", "domain": "www.afpbb.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "isHeading": true, "name": "記事" },
+          { "name": "はてな", "url": "https://b.hatena.ne.jp/q/", "home": "https://b.hatena.ne.jp/hotentry/all", "domain": "b.hatena.ne.jp", "iconUrl": "", "encoding": "UTF-8" }
+        ]
+      },
+      {
+        "folderName": "エンタメ",
+        "engines": [
+          { "isHeading": true, "name": "動画" },
+          { "name": "Youtube", "url": "https://www.youtube.com/results?search_query=", "home": "https://www.youtube.com", "domain": "www.youtube.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "Netflix", "url": "https://www.netflix.com/search?q=", "home": "https://www.netflix.com", "domain": "www.netflix.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "Prime Video", "url": "https://www.amazon.co.jp/s?i=instant-video&k=", "home": "https://www.amazon.co.jp/Prime-Video", "domain": "amazon.co.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "TVer", "url": "https://tver.jp/search/", "home": "https://tver.jp", "domain": "tver.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "abema", "url": "https://abema.tv/search?q=", "home": "https://abema.tv/", "domain": "abema.tv", "iconUrl": "", "encoding": "UTF-8" },
+          { "isHeading": true, "name": "SNS" },
+          { "name": "X", "url": "https://twitter.com/search?q=", "home": "https://x.com/", "domain": "x.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "Instagram", "url": "https://www.instagram.com/explore/tags/", "home": "https://www.instagram.com", "domain": "instagram.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "tiktok", "url": "https://www.tiktok.com/search?q=", "home": "https://www.tiktok.com/", "domain": "www.tiktok.com", "iconUrl": "", "encoding": "UTF-8" }
+        ]
+      },
+      {
+        "folderName": "ショッピング",
+        "engines": [
+          { "isHeading": true, "name": "総合通販" },
+          { "name": "Amazon", "url": "https://www.amazon.co.jp/s?k=", "home": "https://www.amazon.co.jp", "domain": "amazon.co.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "楽天市場", "url": "https://search.rakuten.co.jp/search/mall/", "home": "https://www.rakuten.co.jp", "domain": "rakuten.co.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "Y!ショッピング", "url": "https://shopping.yahoo.co.jp/search?p=", "home": "https://shopping.yahoo.co.jp", "domain": "shopping.yahoo.co.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "ヨドバシ", "url": "https://www.yodobashi.com/?word=", "home": "https://www.yodobashi.com", "domain": "www.yodobashi.com", "iconUrl": "https://play-lh.googleusercontent.com/AHhokkIYtJ2I-7OVd_a5IUD_xlYr_I3i580VXak9U9a5wdGWui7fBA96Ae-W_Zt6GM3Y0v-ntYpMpnSIgD3mMg=w480-h960-rw", "encoding": "UTF-8" },
+          { "isHeading": true, "name": "フリマ／オークション" },
+          { "name": "メルカリ", "url": "https://jp.mercari.com/search?keyword=", "home": "https://jp.mercari.com", "domain": "mercari.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "ヤフオク!", "url": "https://auctions.yahoo.co.jp/search/search?p=", "home": "https://auctions.yahoo.co.jp", "domain": "auctions.yahoo.co.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "Yahooフリマ", "url": "https://paypayfleamarket.yahoo.co.jp/search/", "home": "https://paypayfleamarket.yahoo.co.jp/", "domain": "paypayfleamarket.yahoo.co.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "minne", "url": "https://minne.com/category/saleonly?input_method=typing&q=", "home": "https://minne.com/", "domain": "minne.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "isHeading": true, "name": "海外" },
+          { "name": "temu", "url": "https://www.temu.com/search_result.html?search_key=", "home": "https://www.temu.com/jp", "domain": "www.temu.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "Qoo10", "url": "https://www.qoo10.jp/gmkt.inc/Search/Default.aspx?keyword=", "home": "https://www.qoo10.jp", "domain": "qoo10.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "isHeading": true, "name": "価格" },
+          { "name": "価格.com", "url": "https://kakaku.com/search_results/?query=", "home": "https://kakaku.com", "domain": "kakaku.com", "iconUrl": "", "encoding": "SJIS" },
+          { "name": "keepa", "url": "https://keepa.com/#!search/5-", "home": "https://keepa.com/", "domain": "keepa.com", "iconUrl": "", "encoding": "UTF-8" }
+        ]
+      },
+      {
+        "folderName": "お店",
+        "engines": [
+          { "isHeading": true, "name": "雑貨" },
+          { "name": "無印良品", "url": "https://www.muji.com/jp/ja/store/search/cmdty/", "home": "https://www.muji.com/jp/ja/store", "domain": "www.muji.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "ニトリ", "url": "https://www.nitori-net.jp/ec/search/?q=", "home": "https://www.nitori-net.jp", "domain": "www.nitori-net.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "ダイソー", "url": "https://jp.daisonet.com/search?type=product&q=", "home": "https://jp.daisonet.com/", "domain": "jp.daisonet.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "isHeading": true, "name": "ファッション" },
+          { "name": "ユニクロ", "url": "https://www.uniqlo.com/jp/ja/search?q=", "home": "https://www.uniqlo.com/jp/ja/", "domain": "www.uniqlo.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "zozotown", "url": "https://zozo.jp/search/?p_keyv=", "home": "https://zozo.jp", "domain": "zozo.jp", "iconUrl": "", "encoding": "SJIS" },
+          { "isHeading": true, "name": "家電" }
+        ]
+      },
+      {
+        "folderName": "辞書",
+        "engines": [
+          { "isHeading": true, "name": "辞書" },
+          { "name": "Wikipedia", "url": "https://ja.wikipedia.org/wiki/Special:Search?search=", "home": "https://ja.wikipedia.org", "domain": "wikipedia.org", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "Weblio辞書", "url": "https://www.weblio.jp/content/", "home": "https://www.weblio.jp", "domain": "www.weblio.jp", "iconUrl": "https://play-lh.googleusercontent.com/mgzo238CIcMk1PrQzyqxY_YKgQEF_9hO9H8eRi_yB9OVhirE5NDRMd9bi6WJdXDc7s5RIfLO_o6Jky4B4qDx2Bw=s96-rw", "encoding": "UTF-8" },
+          { "name": "コトバンク", "url": "https://kotobank.jp/word/", "home": "https://kotobank.jp", "domain": "kotobank.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "英辞郎", "url": "https://eow.alc.co.jp/search?q=", "home": "https://eow.alc.co.jp", "domain": "alc.co.jp", "iconUrl": "", "encoding": "UTF-8" },
+          { "isHeading": true, "name": "翻訳" },
+          { "name": "英→和（DeepL）", "url": "https://www.deepl.com/translator?#en/ja/", "home": "https://www.deepl.com/translator?#en/ja/", "domain": "www.deepl.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "和→英（DeepL）", "url": "https://www.deepl.com/translator?#ja/en/", "home": "https://www.deepl.com/translator?#ja/en/", "domain": "www.deepl.com", "iconUrl": "", "encoding": "UTF-8" }
+        ]
+      },
+      {
+        "folderName": "素材",
+        "engines": [
+          { "isHeading": true, "name": "画像" },
+          { "name": "usnplash", "url": "https://unsplash.com/ja/s/%E5%86%99%E7%9C%9F/", "home": "https://unsplash.com/ja", "domain": "unsplash.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "pixabay", "url": "https://pixabay.com/ja/images/search/", "home": "https://pixabay.com/ja/", "domain": "pixabay.com", "iconUrl": "", "encoding": "UTF-8" },
+          { "isHeading": true, "name": "サウンド" },
+          { "name": "効果音ラボ", "url": "https://soundeffect-lab.info/sound/search.php?s=", "home": "https://soundeffect-lab.info/sound/anime/", "domain": "soundeffect-lab.info", "iconUrl": "", "encoding": "UTF-8" },
+          { "name": "freesound", "url": "https://freesound.org/search/?q=", "home": "https://freesound.org/", "domain": "freesound.org", "iconUrl": "", "encoding": "UTF-8" }
+        ]
+      }
+    ];
+    // ▲ JSONデータここまで ▲
+
+    // プロファイル管理ロジック
+    let profiles = JSON.parse(localStorage.getItem('launch_profiles')) || [];
+    let currentProfileId = localStorage.getItem('launch_current_profile_id');
+
+    if (profiles.length === 0) {
+      let oldData = JSON.parse(localStorage.getItem('app_data_v2'));
+      if (oldData) profiles.push({ id: 'default', name: 'デフォルト (移行済み)', data: oldData });
+      else profiles.push({ id: 'default', name: 'デフォルト', data: defaultAppData });
+      currentProfileId = 'default';
+      localStorage.setItem('launch_profiles', JSON.stringify(profiles));
+      localStorage.setItem('launch_current_profile_id', currentProfileId);
+    }
+    if (!currentProfileId || !profiles.find(p => p.id === currentProfileId)) {
+      currentProfileId = profiles[0].id; localStorage.setItem('launch_current_profile_id', currentProfileId);
+    }
+
+    let appData = profiles.find(p => p.id === currentProfileId).data;
+    function saveAppData() {
+      let p = profiles.find(x => x.id === currentProfileId);
+      if(p) p.data = appData;
+      localStorage.setItem('launch_profiles', JSON.stringify(profiles));
+    }
+
+    function renderProfilesList() {
+      const container = document.getElementById('profileListContainer');
+      container.innerHTML = '';
+      profiles.forEach(p => {
+        const isActive = p.id === currentProfileId;
+        const card = document.createElement('div');
+        card.className = `profile-card ${isActive ? 'active' : ''}`;
+        
+        const info = document.createElement('div');
+        info.className = 'profile-info';
+        info.innerHTML = `
+          <div class="profile-icon">
+            <svg viewBox="0 0 24 24" style="width:20px;height:20px;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </div>
+          <span class="profile-name">${p.name}</span>
+        `;
+        
+        card.onclick = () => {
+          if(!isActive) {
+            currentProfileId = p.id; localStorage.setItem('launch_current_profile_id', currentProfileId);
+            appData = profiles.find(x => x.id === currentProfileId).data; currentTabIndex = 0;
+            renderApp(); renderProfilesList();
+          }
+          closeModalUi('profilesModal');
+        };
+
+        const actions = document.createElement('div');
+        actions.className = 'profile-actions';
+
+        const exportBtn = document.createElement('button');
+        exportBtn.className = 'profile-action-btn'; exportBtn.title = 'エクスポート';
+        exportBtn.innerHTML = '<svg viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>';
+        exportBtn.onclick = (e) => {
+          e.stopPropagation();
+          const dateStr = new Date().toISOString().split('T')[0];
+          const exportObj = { type: 'launch_profile_v1', name: p.name, app_data: p.data };
+          const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob);
+          const a = document.createElement('a'); a.href = url; a.download = `${p.name}_${dateStr}.json`; a.click(); URL.revokeObjectURL(url);
+        };
+        actions.appendChild(exportBtn);
+
+        const editBtn = document.createElement('button');
+        editBtn.className = 'profile-action-btn edit-only'; editBtn.title = '名前変更';
+        editBtn.innerHTML = '<svg viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>';
+        editBtn.onclick = (e) => { 
+          e.stopPropagation(); 
+          openEditModal("プロファイル名を変更", p.name, "", "", "", "", 'profile', (newName) => {
+            if(newName && newName.trim()) { 
+              p.name = newName.trim(); 
+              localStorage.setItem('launch_profiles', JSON.stringify(profiles)); 
+              renderProfilesList(); 
+            }
+          });
+        };
+        actions.appendChild(editBtn);
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'profile-action-btn delete edit-only'; delBtn.title = '削除';
+        delBtn.innerHTML = '<svg viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.12-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg>';
+        delBtn.onclick = (e) => { 
+          e.stopPropagation(); 
+          if(profiles.length <= 1) return showConfirm("エラー", "最後のプロファイルは削除できません。", false, null, true);
+          showConfirm("プロファイルの削除", `「${p.name}」を削除してもよろしいですか？`, true, () => {
+            profiles = profiles.filter(x => x.id !== p.id);
+            if(currentProfileId === p.id) { currentProfileId = profiles[0].id; appData = profiles[0].data; localStorage.setItem('launch_current_profile_id', currentProfileId); renderApp(); }
+            localStorage.setItem('launch_profiles', JSON.stringify(profiles)); renderProfilesList();
+          });
+        };
+        if(profiles.length > 1) actions.appendChild(delBtn);
+
+        card.appendChild(info);
+        card.appendChild(actions);
+        container.appendChild(card);
+      });
+    }
+    renderProfilesList();
+
+    function createNewProfile() {
+      openEditModal("プロファイル作成", "新しいプロファイル", "", "", "", "", 'profile', (name) => {
+        if (name && name.trim()) {
+          const newId = 'profile_' + Date.now();
+          profiles.push({ id: newId, name: name.trim(), data: JSON.parse(JSON.stringify(defaultAppData)) });
+          localStorage.setItem('launch_profiles', JSON.stringify(profiles));
+          renderProfilesList();
+        }
+      });
+    }
+
+    // 🌟 インポート処理
+    document.getElementById('importProfileBtn').addEventListener('click', () => { document.getElementById('importFileInput').click(); });
+    document.getElementById('importFileInput').addEventListener('change', (e) => {
+      const file = e.target.files[0]; if (!file) return; const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const d = JSON.parse(event.target.result);
+          if (d.type === 'launch_profile_v1' && d.app_data) {
+            profiles.push({ id: 'profile_' + Date.now(), name: (d.name || "インポート") + " (コピー)", data: d.app_data });
+          } else if (d.app_data_v2) {
+            profiles.push({ id: 'profile_' + Date.now(), name: "インポート (旧データ)", data: d.app_data_v2 });
+          } else { throw new Error(); }
+          localStorage.setItem('launch_profiles', JSON.stringify(profiles));
+          showConfirm("完了", "プロファイルのインポートが完了しました。", false, null, true);
+          renderProfilesList();
+        } catch (err) { showConfirm("エラー", "無効なJSONファイルです。", false, null, true); }
+        e.target.value = ''; 
+      }; reader.readAsText(file);
+    });
+
+    // 🌟 全プロファイル一括エクスポート
+    document.getElementById('exportAllProfilesBtn').addEventListener('click', () => {
+      const dateStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+      profiles.forEach((p, index) => {
+        setTimeout(() => {
+          const exportObj = { type: 'launch_profile_v1', name: p.name, app_data: p.data };
+          const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a'); 
+          a.href = url; 
+          a.download = `${p.name}_${dateStr}.json`; 
+          a.click(); 
+          URL.revokeObjectURL(url);
+        }, index * 400); 
+      });
+    });
+
+    // 検索履歴処理
+    let searchHistory = JSON.parse(localStorage.getItem('search_history')) || [];
+    function saveSearchHistory(query) {
+      if (!query) return; searchHistory = searchHistory.filter(q => q !== query); searchHistory.unshift(query);
+      if (searchHistory.length > 10) searchHistory.pop(); localStorage.setItem('search_history', JSON.stringify(searchHistory));
+    }
+    function renderHistory() {
+      const dropdown = document.getElementById('historyDropdown'); dropdown.innerHTML = '';
+      if (searchHistory.length === 0) { dropdown.innerHTML = '<div class="history-empty">検索履歴はありません</div>'; return; }
+      searchHistory.forEach(query => {
+        const item = document.createElement('div'); item.className = 'history-item';
+        item.innerHTML = `<div class="history-text"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg><span>${query}</span></div><div class="history-remove"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></div>`;
+        item.querySelector('.history-text').addEventListener('click', () => { searchInput.value = query; toggleClearBtn(); dropdown.classList.remove('show'); searchInput.focus(); });
+        item.querySelector('.history-remove').addEventListener('click', (e) => { e.stopPropagation(); searchHistory = searchHistory.filter(q => q !== query); localStorage.setItem('search_history', JSON.stringify(searchHistory)); renderHistory(); });
+        dropdown.appendChild(item);
+      });
+    }
+    document.getElementById('historyBtn').addEventListener('click', (e) => { e.stopPropagation(); renderHistory(); document.getElementById('historyDropdown').classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!document.getElementById('historyDropdown').contains(e.target) && !document.getElementById('historyBtn').contains(e.target)) document.getElementById('historyDropdown').classList.remove('show'); });
+    
+    const executeSearch = (engineUrl, engineHome, encoding = 'UTF-8') => { 
+      const query = searchInput.value.trim(); 
+      if (query && engineUrl) {
+        saveSearchHistory(query);
+        let encodedQuery = (encoding === 'UTF-8' || typeof Encoding === 'undefined') ? encodeURIComponent(query) : Encoding.urlEncode(Encoding.convert(Encoding.stringToCode(query), encoding, 'UNICODE'));
+        openLink(engineUrl + encodedQuery); 
+      } else openLink(engineHome);
+      searchInput.blur();
+    };
+
+    searchInput.addEventListener('keypress', (e) => { 
+      if (e.key === 'Enter') { 
+        const firstEngine = appData[currentTabIndex].engines.find(eng => !eng.isHeading && eng.url);
+        if (firstEngine) executeSearch(firstEngine.url, firstEngine.home, firstEngine.encoding); 
+      } 
+    });
+
+    function showContextMenu(e, type, target) {
+      if (!isEditMode) return;
       window.currentContextTarget = target; window.currentContextType = type;
       const menu = document.getElementById('contextMenu');
       document.querySelectorAll('.menu-item, .menu-divider').forEach(el => el.style.display = 'none');
-      
-      if (type === 'bookmark') { document.querySelectorAll('.menu-type-open, .menu-type-edit, .menu-type-copy').forEach(el => el.style.display = 'flex'); document.getElementById('menuDivider').style.display = 'block'; }
-      else if (type === 'search-engine') { document.querySelectorAll('.menu-type-edit, .menu-type-copy').forEach(el => el.style.display = 'flex'); }
-      else if (type === 'folder' || type === 'search-folder') { document.querySelectorAll('.menu-type-folder').forEach(el => el.style.display = 'flex'); }
-      else if (type === 'heading' || type === 'search-heading') { document.querySelectorAll('.menu-type-edit').forEach(el => el.style.display = 'flex'); }
-      
+      if (type === 'item') { document.querySelectorAll('.menu-type-item, .menu-type-edit').forEach(el => el.style.display = 'flex'); document.getElementById('menuDivider').style.display = 'block'; }
+      else if (type === 'folder') { document.querySelectorAll('.menu-type-folder').forEach(el => el.style.display = 'flex'); }
+      else if (type === 'heading') { document.querySelectorAll('.menu-type-edit').forEach(el => el.style.display = 'flex'); }
       menu.style.display = 'block';
       let x = e.clientX, y = e.clientY;
       if (x + menu.offsetWidth > window.innerWidth) x -= menu.offsetWidth;
@@ -689,309 +968,340 @@
     }
     document.addEventListener('click', (e) => { if (e.button !== 2) document.getElementById('contextMenu').style.display = 'none'; });
 
-    /* =========================================================
-       8. お気に入り画面の描画 & D&D
-       ========================================================= */
-    const favTabs = document.getElementById('favTabsContainer'); const favSlider = document.getElementById('favSliderContainer');
-    let draggedFav = null; let draggedFavTab = null;
-    const favObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting && views.favorites.classList.contains('active')) { favTabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); const idx = entry.target.id.split('-')[2]; const activeTab = favTabs.querySelector(`.tab[data-index="${idx}"]`); if (activeTab) { activeTab.classList.add('active'); activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } } }); }, { root: favSlider, rootMargin: '0px', threshold: 0.6 });
+    const tabsContainer = document.getElementById('tabsContainer'); 
+    const sliderContainer = document.getElementById('sliderContainer');
+    let draggedItem = null; let draggedTab = null;
+    
+    const tabObserver = new IntersectionObserver((entries) => { 
+      entries.forEach(entry => { 
+        if (entry.isIntersecting) { 
+          tabsContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); 
+          const idx = parseInt(entry.target.id.split('-')[2]); 
+          const activeTab = tabsContainer.querySelector(`.tab[data-index="${idx}"]`); 
+          if (activeTab) { activeTab.classList.add('active'); activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); currentTabIndex = idx; } 
+        } 
+      }); 
+    }, { root: sliderContainer, rootMargin: '0px', threshold: 0.6 });
 
-    const updateFavData = () => {
-      const allFolders = document.querySelectorAll('#favSliderContainer .folder');
-      allFolders.forEach((fDiv, fIdx) => {
-        const elements = Array.from(fDiv.querySelectorAll('.grid > *:not(.add-bookmark-btn):not(.add-heading-btn)'));
-        bookmarkData[fIdx].bookmarks = elements.map(el => {
-          if (el.classList.contains('section-heading')) return { isHeading: true, title: el.dataset.title };
-          return { title: el.dataset.title, url: el.dataset.url, iconUrl: el.dataset.iconUrl };
+    const updateDOMData = () => {
+      document.querySelectorAll('#sliderContainer .folder').forEach((fDiv, fIdx) => {
+        const newEngines = [];
+        fDiv.querySelectorAll('.section-group').forEach(group => {
+          const heading = group.querySelector('.section-heading');
+          if (heading) newEngines.push({ isHeading: true, name: heading.dataset.name });
+          Array.from(group.querySelectorAll('.grid > .card')).forEach(card => {
+            newEngines.push({ name: card.dataset.name, url: card.dataset.url, home: card.dataset.home, domain: card.dataset.domain, iconUrl: card.dataset.iconUrl, encoding: card.dataset.encoding });
+          });
         });
+        appData[fIdx].engines = newEngines;
       });
-      saveBookmarks(); renderFavorites();
+      saveAppData(); renderApp();
     };
 
-    function renderFavorites() {
-      favTabs.innerHTML = ''; favSlider.innerHTML = ''; favObserver.disconnect();
-      bookmarkData.forEach((folder, index) => {
-        const tab = document.createElement('div'); tab.className = `tab ${index === 0 ? 'active' : ''}`; tab.textContent = folder.folderName; tab.dataset.index = index; tab.setAttribute('draggable', 'true');
-        tab.addEventListener('click', () => { const slider = document.getElementById('favSliderContainer'); slider.scrollLeft = slider.clientWidth * index; });
-        tab.addEventListener('dragstart', (e) => { if(!isEditMode) { e.preventDefault(); return; } draggedFavTab = tab; setTimeout(() => tab.classList.add('dragging'), 0); });
-        tab.addEventListener('dragend', () => { if(!draggedFavTab) return; draggedFavTab.classList.remove('dragging'); const currentTabs = Array.from(favTabs.querySelectorAll('.tab:not(.add-folder-btn)')); bookmarkData = currentTabs.map(t => bookmarkData[parseInt(t.dataset.index)]); saveBookmarks(); renderFavorites(); draggedFavTab = null; });
-        tab.addEventListener('dragover', e => { e.preventDefault(); if (draggedFavTab && draggedFavTab !== tab) { const rect = tab.getBoundingClientRect(); if (e.clientX < rect.left + rect.width / 2) favTabs.insertBefore(draggedFavTab, tab); else favTabs.insertBefore(draggedFavTab, tab.nextSibling); } else if (draggedFav) { tab.classList.add('drag-over'); } });
+    // 🌟 プリセット(JSON)から選んで一括追加するモーダルの処理
+    async function openJsonSelectModal(targetFolderIndex) {
+      const modal = document.getElementById('jsonSelectModal');
+      const body = document.getElementById('jsonSelectBody');
+      const addBtn = document.getElementById('jsonSelectAddBtn');
+      let selectedItems = [];
+
+      modal.classList.add('show');
+      body.innerHTML = '<div style="text-align: center; color: var(--text-sub); margin-top: 40px;">読み込み中...</div>';
+      addBtn.disabled = true;
+      addBtn.textContent = 'アイテムを追加';
+
+      let parsedData = null;
+      try {
+        const res = await fetch('default.json');
+        if (res.ok) {
+          const json = await res.json();
+          parsedData = json.app_data || json;
+        }
+      } catch (e) {
+        console.warn('default.jsonの取得に失敗しました。内蔵のデフォルトデータを使用します。', e);
+      }
+      
+      // CORSエラーやfetch失敗時は内蔵のdefaultAppDataを使用
+      if (!parsedData) parsedData = defaultAppData;
+
+      body.innerHTML = '';
+      parsedData.forEach(folder => {
+        // フォルダ名を見出しとして表示
+        const fTitle = document.createElement('h3');
+        fTitle.textContent = folder.folderName;
+        fTitle.style.marginTop = '32px';
+        fTitle.style.marginBottom = '16px';
+        fTitle.style.fontSize = '18px';
+        fTitle.style.fontWeight = '700';
+        fTitle.style.color = 'var(--text-main)';
+        if (body.children.length === 0) fTitle.style.marginTop = '0';
+        body.appendChild(fTitle);
+
+        let currentGrid = document.createElement('div');
+        currentGrid.className = 'grid';
+        body.appendChild(currentGrid);
+
+        folder.engines.forEach(item => {
+          if (item.isHeading) {
+            const h = document.createElement('div');
+            h.textContent = item.name;
+            h.style.gridColumn = '1 / -1';
+            h.style.fontSize = '14px';
+            h.style.fontWeight = '600';
+            h.style.color = 'var(--app-blue)';
+            h.style.marginTop = '16px';
+            h.style.marginBottom = '4px';
+            h.style.borderBottom = '1px solid var(--nav-border)';
+            h.style.paddingBottom = '4px';
+            currentGrid.appendChild(h);
+          } else {
+            const card = document.createElement('div');
+            card.className = 'card selectable-card';
+            let iconHtml = item.iconUrl ? `<img src="${item.iconUrl}" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=${item.domain}&sz=128';" alt="${item.name}">` : `<img src="https://www.google.com/s2/favicons?domain=${item.domain}&sz=128" onerror="this.onerror=null; this.src='https://logo.clearbit.com/${item.domain}';" alt="${item.name}">`;
+            card.innerHTML = `
+              <div class="card-icon">${iconHtml}</div>
+              <div class="card-title">${item.name}</div>
+              <svg class="check-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            `;
+            
+            card.onclick = () => {
+              const idx = selectedItems.indexOf(item);
+              if (idx === -1) {
+                selectedItems.push(item);
+                card.classList.add('selected');
+              } else {
+                selectedItems.splice(idx, 1);
+                card.classList.remove('selected');
+              }
+              if (selectedItems.length > 0) {
+                addBtn.disabled = false;
+                addBtn.textContent = `${selectedItems.length}個のアイテムを追加`;
+              } else {
+                addBtn.disabled = true;
+                addBtn.textContent = 'アイテムを追加';
+              }
+            };
+            currentGrid.appendChild(card);
+          }
+        });
+      });
+
+      // 追加ボタンの挙動
+      addBtn.onclick = () => {
+        if (selectedItems.length === 0) return;
+        // シャローコピーで追加
+        const itemsToAdd = selectedItems.map(item => ({ ...item }));
+        appData[targetFolderIndex].engines.push(...itemsToAdd);
+        saveAppData();
+        renderApp();
+        closeModalUi('jsonSelectModal');
+      };
+    }
+
+    function renderApp() {
+      tabsContainer.innerHTML = ''; sliderContainer.innerHTML = ''; tabObserver.disconnect();
+      appData.forEach((folder, index) => {
+        const tab = document.createElement('div'); tab.className = `tab ${index === currentTabIndex ? 'active' : ''}`; tab.textContent = folder.folderName; tab.dataset.index = index; tab.setAttribute('draggable', 'true');
+        tab.addEventListener('click', () => { sliderContainer.scrollLeft = sliderContainer.clientWidth * index; });
+        tab.addEventListener('dragstart', (e) => { if(!isEditMode) return e.preventDefault(); draggedTab = tab; setTimeout(() => tab.classList.add('dragging'), 0); });
+        tab.addEventListener('dragend', () => { 
+          if(!draggedTab) return; draggedTab.classList.remove('dragging'); 
+          const currentTabs = Array.from(tabsContainer.querySelectorAll('.tab:not(.add-folder-btn)')); 
+          appData = currentTabs.map(t => appData[parseInt(t.dataset.index)]); 
+          currentTabIndex = currentTabs.indexOf(draggedTab) !== -1 ? currentTabs.indexOf(draggedTab) : 0;
+          saveAppData(); renderApp(); draggedTab = null; 
+        });
+        tab.addEventListener('dragover', e => { 
+          e.preventDefault(); 
+          if (draggedTab && draggedTab !== tab) { const rect = tab.getBoundingClientRect(); if (e.clientX < rect.left + rect.width / 2) tabsContainer.insertBefore(draggedTab, tab); else tabsContainer.insertBefore(draggedTab, tab.nextSibling); } 
+          else if (draggedItem && draggedItem.classList.contains('card')) tab.classList.add('drag-over'); 
+        });
         tab.addEventListener('dragleave', () => tab.classList.remove('drag-over'));
-        tab.addEventListener('drop', e => { e.preventDefault(); tab.classList.remove('drag-over'); if (draggedFav) { const targetGrid = document.querySelector(`#fav-folder-${index} .grid`); targetGrid.insertBefore(draggedFav, targetGrid.querySelector('.add-bookmark-btn')); } });
+        tab.addEventListener('drop', e => { 
+          e.preventDefault(); tab.classList.remove('drag-over'); 
+          if (draggedItem && draggedItem.classList.contains('card')) { 
+            const firstGrid = document.querySelector(`#app-folder-${index} .folder-columns .grid`);
+            if(firstGrid) { firstGrid.appendChild(draggedItem); currentTabIndex = index; updateDOMData(); }
+          } 
+        });
         tab.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'folder', tab); });
-        favTabs.appendChild(tab);
+        tabsContainer.appendChild(tab);
 
-        const folderDiv = document.createElement('div'); folderDiv.className = 'folder'; folderDiv.id = `fav-folder-${index}`;
-        const gridDiv = document.createElement('div'); gridDiv.className = 'grid';
-        gridDiv.addEventListener('dragover', e => { 
+        const folderDiv = document.createElement('div'); folderDiv.className = 'folder'; folderDiv.id = `app-folder-${index}`;
+        const folderInner = document.createElement('div'); folderInner.className = 'folder-inner';
+        const folderColumns = document.createElement('div'); folderColumns.className = 'folder-columns';
+        
+        folderColumns.addEventListener('dragover', e => {
           e.preventDefault(); 
-          const target = e.target.closest('.card, .section-heading, .add-heading-btn'); 
-          if (target && target !== draggedFav && !draggedFavTab) { 
-            if (target.classList.contains('add-bookmark-btn') || target.classList.contains('add-heading-btn')) {
-              gridDiv.insertBefore(draggedFav, gridDiv.querySelector('.add-bookmark-btn'));
-            } else {
-              const rect = target.getBoundingClientRect(); 
-              if (target.classList.contains('section-heading')) {
-                if (e.clientY < rect.top + rect.height / 2) gridDiv.insertBefore(draggedFav, target); 
-                else gridDiv.insertBefore(draggedFav, target.nextSibling); 
-              } else {
-                if (e.clientX < rect.left + rect.width / 2) gridDiv.insertBefore(draggedFav, target); 
-                else gridDiv.insertBefore(draggedFav, target.nextSibling); 
+          if (draggedItem && draggedItem.classList.contains('section-heading')) {
+            const targetGroup = e.target.closest('.section-group'); const draggedGroup = draggedItem.closest('.section-group');
+            if (targetGroup && targetGroup !== draggedGroup && !draggedTab) {
+              const rect = targetGroup.getBoundingClientRect();
+              if (e.clientY < rect.top + rect.height / 2) folderColumns.insertBefore(draggedGroup, targetGroup); else folderColumns.insertBefore(draggedGroup, targetGroup.nextSibling);
+            }
+          } else if (draggedItem && draggedItem.classList.contains('card')) {
+            const targetGroup = e.target.closest('.section-group'); const targetCard = e.target.closest('.card');
+            if (targetCard && targetCard !== draggedItem && !draggedTab) {
+              const rect = targetCard.getBoundingClientRect();
+              let isAfter = e.clientX > rect.left + rect.width / 2;
+              if (e.clientY < rect.top + rect.height * 0.25) isAfter = false;
+              if (e.clientY > rect.bottom - rect.height * 0.25) isAfter = true;
+              if (isAfter) targetCard.parentElement.insertBefore(draggedItem, targetCard.nextSibling); else targetCard.parentElement.insertBefore(draggedItem, targetCard);
+            } else if (targetGroup && !targetCard && !draggedTab) {
+              const targetGrid = targetGroup.querySelector('.grid');
+              if (targetGrid && draggedItem.parentElement !== targetGrid) { 
+                targetGrid.appendChild(draggedItem);
               }
             }
-          } 
+          }
         });
 
-        folder.bookmarks.forEach((bm, bmIndex) => {
-          if (bm.isHeading) {
-            const heading = document.createElement('div'); heading.className = 'section-heading'; heading.textContent = bm.title;
-            heading.dataset.title = bm.title; heading.dataset.folderIndex = index; heading.dataset.itemIndex = bmIndex; heading.setAttribute('draggable', 'true');
-            heading.addEventListener('dragstart', (e) => { if(!isEditMode){ e.preventDefault(); return; } draggedFav = heading; setTimeout(() => heading.classList.add('dragging'), 0); });
-            heading.addEventListener('dragend', () => { if(!draggedFav) return; draggedFav.classList.remove('dragging'); updateFavData(); draggedFav = null; });
+        let currentGroup = null; let currentGrid = null;
+        const createGroup = (headingData) => {
+          currentGroup = document.createElement('div'); currentGroup.className = 'section-group';
+          if (headingData) {
+            const heading = document.createElement('div'); heading.className = 'section-heading'; heading.textContent = headingData.name; heading.dataset.name = headingData.name; heading.setAttribute('draggable', 'true');
+            heading.addEventListener('dragstart', (e) => { if(!isEditMode) return e.preventDefault(); draggedItem = heading; setTimeout(() => { heading.classList.add('dragging'); currentGroup.classList.add('dragging-group'); }, 0); });
+            heading.addEventListener('dragend', () => { if(!draggedItem) return; draggedItem.classList.remove('dragging'); currentGroup.classList.remove('dragging-group'); updateDOMData(); draggedItem = null; });
             heading.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'heading', heading); });
-            gridDiv.appendChild(heading);
+            currentGroup.appendChild(heading);
+          }
+          currentGrid = document.createElement('div'); currentGrid.className = 'grid'; currentGroup.appendChild(currentGrid); folderColumns.appendChild(currentGroup);
+        };
+
+        if (folder.engines.length === 0 || !folder.engines[0].isHeading) createGroup(null);
+
+        folder.engines.forEach((item) => {
+          if (item.isHeading) {
+            createGroup(item);
           } else {
-            const domain = getDomain(bm.url); const card = document.createElement('a'); card.className = 'card'; card.href = bm.url; card.dataset.url = bm.url; card.dataset.title = bm.title; card.dataset.iconUrl = bm.iconUrl || ""; card.dataset.folderIndex = index; card.dataset.itemIndex = bmIndex; card.setAttribute('draggable', 'true');
-            card.addEventListener('click', (e) => { if (e.metaKey || e.ctrlKey) return; e.preventDefault(); openLink(bm.url); });
-            card.addEventListener('dragstart', (e) => { if(!isEditMode){ e.preventDefault(); return; } draggedFav = card; setTimeout(() => card.classList.add('dragging'), 0); });
-            card.addEventListener('dragend', () => { if(!draggedFav) return; draggedFav.classList.remove('dragging'); updateFavData(); draggedFav = null; });
-            card.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'bookmark', card); });
-            
-            let iconHtml = bm.iconUrl ? `<img src="${bm.iconUrl}" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=${domain}&sz=256';" alt="${bm.title}">` : `<img src="https://logo.clearbit.com/${domain}" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=${domain}&sz=256';" alt="${bm.title}">`;
-            card.innerHTML = `<div class="card-icon">${iconHtml}</div><div class="card-title">${bm.title}</div>`;
-            gridDiv.appendChild(card);
+            const btn = document.createElement('div'); btn.className = 'card'; 
+            btn.dataset.name = item.name; btn.dataset.url = item.url || ""; btn.dataset.home = item.home || ""; 
+            btn.dataset.domain = item.domain || ""; btn.dataset.iconUrl = item.iconUrl || ""; btn.dataset.encoding = item.encoding || "UTF-8"; btn.setAttribute('draggable', 'true'); btn.dataset.hasSearch = item.url ? "true" : "false"; 
+            btn.addEventListener('click', (e) => { 
+              if (e.metaKey || e.ctrlKey) return; 
+              if (document.body.classList.contains('mode-search')) { const query = searchInput.value.trim(); if (query === "") openLink(item.home); else if (item.url) executeSearch(item.url, item.home, item.encoding); } 
+              else openLink(item.home); 
+            });
+            btn.addEventListener('dragstart', (e) => { if(!isEditMode) return e.preventDefault(); draggedItem = btn; setTimeout(() => btn.classList.add('dragging'), 0); });
+            btn.addEventListener('dragend', () => { if(!draggedItem) return; draggedItem.classList.remove('dragging'); updateDOMData(); draggedItem = null; });
+            btn.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'item', btn); });
+            let iconHtml = item.iconUrl ? `<img src="${item.iconUrl}" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=${item.domain}&sz=128';" alt="${item.name}">` : `<img src="https://www.google.com/s2/favicons?domain=${item.domain}&sz=128" onerror="this.onerror=null; this.src='https://logo.clearbit.com/${item.domain}';" alt="${item.name}">`;
+            btn.innerHTML = `<div class="card-icon">${iconHtml}</div><div class="card-title">${item.name}</div>`; currentGrid.appendChild(btn);
           }
         });
+        folderInner.appendChild(folderColumns);
 
-        const addCard = document.createElement('a'); addCard.className = 'card add-bookmark-btn';
-        addCard.innerHTML = `<div class="card-icon"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></div><div class="card-title" style="color:var(--text-sub);">追加</div>`;
-        addCard.addEventListener('click', (e) => { e.preventDefault(); openModal("ブックマークを追加", "", "", "", true, "URL (例: https://example.com)", true, (title, url, iconUrl) => { if (!url || !title) return; if (!url.startsWith('http')) url = 'https://' + url; bookmarkData[index].bookmarks.push({ title: title, url: url, iconUrl: iconUrl }); saveBookmarks(); renderFavorites(); }); });
-        gridDiv.appendChild(addCard); 
+        // 🌟 フォルダ下部の追加ボタン
+        const actionBtns = document.createElement('div');
+        actionBtns.style.display = 'flex';
+        actionBtns.style.gap = '12px';
+        actionBtns.style.marginTop = '16px';
 
-        const addHeadingBtn = document.createElement('div'); addHeadingBtn.className = 'add-heading-btn';
-        addHeadingBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>小見出しを追加`;
-        addHeadingBtn.addEventListener('click', () => {
-          openModal("小見出しを追加", "", "", "", false, "", false, (title) => {
-            if (title && title.trim()) { bookmarkData[index].bookmarks.push({ isHeading: true, title: title.trim() }); saveBookmarks(); renderFavorites(); }
-          });
-        });
-        gridDiv.appendChild(addHeadingBtn);
-
-        folderDiv.appendChild(gridDiv); favSlider.appendChild(folderDiv); favObserver.observe(folderDiv);
-      });
-      const addFolderBtn = document.createElement('div'); addFolderBtn.className = 'tab add-folder-btn'; addFolderBtn.textContent = '＋ 追加'; addFolderBtn.title = '新しいフォルダを追加';
-      addFolderBtn.addEventListener('click', () => { openModal("フォルダを追加", "", "", "", false, "", false, (name) => { if (name && name.trim()) { bookmarkData.push({ folderName: name.trim(), bookmarks: [] }); saveBookmarks(); renderFavorites(); setTimeout(() => { const slider = document.getElementById('favSliderContainer'); slider.scrollLeft = slider.scrollWidth; }, 100); } }); });
-      favTabs.appendChild(addFolderBtn);
-    }
-    renderFavorites();
-
-    /* =========================================================
-       9. 検索画面の描画 & D&D
-       ========================================================= */
-    const searchTabs = document.getElementById('searchTabsContainer'); const searchSlider = document.getElementById('searchSliderContainer');
-    let draggedSearch = null; let draggedSearchTab = null;
-    const searchObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting && views.search.classList.contains('active')) { searchTabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); const idx = entry.target.id.split('-')[2]; const activeTab = searchTabs.querySelector(`.tab[data-index="${idx}"]`); if (activeTab) { activeTab.classList.add('active'); activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } } }); }, { root: searchSlider, rootMargin: '0px', threshold: 0.6 });
-
-    const updateSearchData = () => {
-      const allFolders = document.querySelectorAll('#searchSliderContainer .folder');
-      allFolders.forEach((fDiv, fIdx) => {
-        const elements = Array.from(fDiv.querySelectorAll('.engine-grid > *:not(.add-engine-btn):not(.add-heading-btn)'));
-        searchEnginesData[fIdx].engines = elements.map(el => {
-          if (el.classList.contains('section-heading')) return { isHeading: true, name: el.dataset.name };
-          return { name: el.dataset.name, url: el.dataset.url, home: el.dataset.home, domain: el.dataset.domain, iconUrl: el.dataset.iconUrl };
-        });
-      });
-      saveSearchEngines(); renderSearchEngines();
-    };
-
-    function renderSearchEngines() {
-      searchTabs.innerHTML = ''; searchSlider.innerHTML = ''; searchObserver.disconnect();
-      searchEnginesData.forEach((folder, index) => {
-        const tab = document.createElement('div'); tab.className = `tab ${index === 0 ? 'active' : ''}`; tab.textContent = folder.folderName; tab.dataset.index = index; tab.setAttribute('draggable', 'true');
-        tab.addEventListener('click', () => { const slider = document.getElementById('searchSliderContainer'); slider.scrollLeft = slider.clientWidth * index; });
-        tab.addEventListener('dragstart', (e) => { if(!isEditMode) { e.preventDefault(); return; } draggedSearchTab = tab; setTimeout(() => tab.classList.add('dragging'), 0); });
-        tab.addEventListener('dragend', () => { if(!draggedSearchTab) return; draggedSearchTab.classList.remove('dragging'); const currentTabs = Array.from(searchTabs.querySelectorAll('.tab:not(.add-folder-btn)')); searchEnginesData = currentTabs.map(t => searchEnginesData[parseInt(t.dataset.index)]); saveSearchEngines(); renderSearchEngines(); draggedSearchTab = null; });
-        tab.addEventListener('dragover', e => { e.preventDefault(); if (draggedSearchTab && draggedSearchTab !== tab) { const rect = tab.getBoundingClientRect(); if (e.clientX < rect.left + rect.width / 2) searchTabs.insertBefore(draggedSearchTab, tab); else searchTabs.insertBefore(draggedSearchTab, tab.nextSibling); } else if (draggedSearch) { tab.classList.add('drag-over'); } });
-        tab.addEventListener('dragleave', () => tab.classList.remove('drag-over'));
-        tab.addEventListener('drop', e => { e.preventDefault(); tab.classList.remove('drag-over'); if (draggedSearch) { const targetGrid = document.querySelector(`#search-folder-${index} .engine-grid`); targetGrid.insertBefore(draggedSearch, targetGrid.querySelector('.add-engine-btn')); } });
-        tab.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'search-folder', tab); });
-        searchTabs.appendChild(tab);
-
-        const folderDiv = document.createElement('div'); folderDiv.className = 'folder'; folderDiv.id = `search-folder-${index}`;
-        const gridDiv = document.createElement('div'); gridDiv.className = 'engine-grid';
-        gridDiv.addEventListener('dragover', e => { 
-          e.preventDefault(); 
-          const target = e.target.closest('.card, .section-heading, .add-heading-btn'); 
-          if (target && target !== draggedSearch && !draggedSearchTab) { 
-            if (target.classList.contains('add-engine-btn') || target.classList.contains('add-heading-btn')) {
-              gridDiv.insertBefore(draggedSearch, gridDiv.querySelector('.add-engine-btn'));
-            } else {
-              const rect = target.getBoundingClientRect(); 
-              if (target.classList.contains('section-heading')) {
-                if (e.clientY < rect.top + rect.height / 2) gridDiv.insertBefore(draggedSearch, target); 
-                else gridDiv.insertBefore(draggedSearch, target.nextSibling); 
-              } else {
-                if (e.clientX < rect.left + rect.width / 2) gridDiv.insertBefore(draggedSearch, target); 
-                else gridDiv.insertBefore(draggedSearch, target.nextSibling); 
-              }
+        const addItemBtn = document.createElement('div');
+        addItemBtn.className = 'add-heading-btn';
+        addItemBtn.style.flex = '1';
+        addItemBtn.style.marginTop = '0';
+        addItemBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>アイテムを追加`;
+        addItemBtn.addEventListener('click', () => {
+          // openEditModal にコールバック（手動追加用）と、onPresetClick（リストから選ぶ用）を渡す
+          openEditModal("アイテムを追加", "", "", "", "", "UTF-8", 'item', 
+            (name, homeUrl, searchUrl, iconUrl, enc) => { 
+              if (!homeUrl || !name) return; if (!homeUrl.startsWith('http')) homeUrl = 'https://' + homeUrl; if (searchUrl && !searchUrl.startsWith('http')) searchUrl = 'https://' + searchUrl; 
+              let domain = ""; try { domain = new URL(homeUrl).hostname; } catch(err){}
+              appData[index].engines.push({ name: name, url: searchUrl || "", home: homeUrl, domain: domain, iconUrl: iconUrl || "", encoding: enc, isHeading: false });
+              saveAppData(); renderApp();
+            },
+            () => {
+              // プリセットから選ぶボタンが押されたとき
+              openJsonSelectModal(index);
             }
-          } 
+          );
         });
 
-        folder.engines.forEach((engine, engIndex) => {
-          if (engine.isHeading) {
-            const heading = document.createElement('div'); heading.className = 'section-heading'; heading.textContent = engine.name;
-            heading.dataset.name = engine.name; heading.dataset.folderIndex = index; heading.dataset.itemIndex = engIndex; heading.setAttribute('draggable', 'true');
-            heading.addEventListener('dragstart', (e) => { if(!isEditMode) { e.preventDefault(); return; } draggedSearch = heading; setTimeout(() => heading.classList.add('dragging'), 0); });
-            heading.addEventListener('dragend', () => { if(!draggedSearch) return; draggedSearch.classList.remove('dragging'); updateSearchData(); draggedSearch = null; });
-            heading.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'search-heading', heading); });
-            gridDiv.appendChild(heading);
-          } else {
-            const btn = document.createElement('div'); btn.className = 'card'; btn.dataset.name = engine.name; btn.dataset.url = engine.url; btn.dataset.home = engine.home; btn.dataset.domain = engine.domain; btn.dataset.iconUrl = engine.iconUrl || ""; btn.dataset.folderIndex = index; btn.dataset.itemIndex = engIndex; btn.setAttribute('draggable', 'true');
-            btn.addEventListener('click', (e) => { if (e.metaKey || e.ctrlKey) return; executeSearch(engine.url, engine.home); });
-            btn.addEventListener('dragstart', (e) => { if(!isEditMode) { e.preventDefault(); return; } draggedSearch = btn; setTimeout(() => btn.classList.add('dragging'), 0); });
-            btn.addEventListener('dragend', () => { if(!draggedSearch) return; draggedSearch.classList.remove('dragging'); updateSearchData(); draggedSearch = null; });
-            btn.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, 'search-engine', btn); });
-            
-            let engineIconHtml = engine.iconUrl ? `<img src="${engine.iconUrl}" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=${engine.domain}&sz=128';" alt="${engine.name}">` : `<img src="https://www.google.com/s2/favicons?domain=${engine.domain}&sz=128" alt="${engine.name}">`;
-            btn.innerHTML = `<div class="card-icon">${engineIconHtml}</div><div class="card-title">${engine.name}</div>`;
-            gridDiv.appendChild(btn);
-          }
-        });
-
-        const addBtn = document.createElement('div'); addBtn.className = 'card add-engine-btn'; 
-        addBtn.innerHTML = `<div class="card-icon"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></div><div class="card-title" style="color:var(--text-sub);">追加</div>`;
-        addBtn.addEventListener('click', (e) => { e.preventDefault(); openModal("検索エンジンを追加", "", "", "", true, "検索URL (例: https://google.com/search?q=)", true, (name, url, iconUrl) => { if (!url || !name) return; if (!url.startsWith('http')) url = 'https://' + url; try { const urlObj = new URL(url); searchEnginesData[index].engines.push({ name: name, url: url, home: urlObj.origin, domain: urlObj.hostname, iconUrl: iconUrl }); saveSearchEngines(); renderSearchEngines(); } catch(err) { alert("正しいURLを入力してください"); } }); });
-        gridDiv.appendChild(addBtn); 
-
-        const addHeadingBtn = document.createElement('div'); addHeadingBtn.className = 'add-heading-btn';
+        const addHeadingBtn = document.createElement('div'); 
+        addHeadingBtn.className = 'add-heading-btn'; 
+        addHeadingBtn.style.flex = '1'; 
+        addHeadingBtn.style.marginTop = '0';
         addHeadingBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>小見出しを追加`;
-        addHeadingBtn.addEventListener('click', () => {
-          openModal("小見出しを追加", "", "", "", false, "", false, (name) => {
-            if (name && name.trim()) { searchEnginesData[index].engines.push({ isHeading: true, name: name.trim() }); saveSearchEngines(); renderSearchEngines(); }
-          });
-        });
-        gridDiv.appendChild(addHeadingBtn);
+        addHeadingBtn.addEventListener('click', () => openEditModal("小見出しを追加", "", "", "", "", "", 'heading', (name) => { if (name && name.trim()) { appData[index].engines.push({ isHeading: true, name: name.trim() }); saveAppData(); renderApp(); } }));
 
-        folderDiv.appendChild(gridDiv); searchSlider.appendChild(folderDiv); searchObserver.observe(folderDiv);
+        actionBtns.appendChild(addItemBtn);
+        actionBtns.appendChild(addHeadingBtn);
+        folderInner.appendChild(actionBtns); 
+
+        folderDiv.appendChild(folderInner); sliderContainer.appendChild(folderDiv); tabObserver.observe(folderDiv);
       });
-      const addFolderBtn = document.createElement('div'); addFolderBtn.className = 'tab add-folder-btn'; addFolderBtn.textContent = '＋ 追加'; addFolderBtn.title = '新しいフォルダを追加';
-      addFolderBtn.addEventListener('click', () => { openModal("検索フォルダを追加", "", "", "", false, "", false, (name) => { if (name && name.trim()) { searchEnginesData.push({ folderName: name.trim(), engines: [] }); saveSearchEngines(); renderSearchEngines(); setTimeout(() => { const slider = document.getElementById('searchSliderContainer'); slider.scrollLeft = slider.scrollWidth; }, 100); } }); });
-      searchTabs.appendChild(addFolderBtn);
-    }
-    renderSearchEngines();
 
-    /* =========================================================
-       10. コンテキストメニュー 各種アクション
-       ========================================================= */
-    document.getElementById('menuOpen').addEventListener('click', () => { 
-      if (window.currentContextTarget && window.currentContextType === 'bookmark') window.open(window.currentContextTarget.dataset.url, '_blank', 'noopener,noreferrer'); 
-      document.getElementById('contextMenu').style.display = 'none'; 
-    });
+      const addFolderBtn = document.createElement('div'); addFolderBtn.className = 'tab add-folder-btn'; addFolderBtn.textContent = '＋ 追加'; addFolderBtn.title = '新しいフォルダを追加';
+      addFolderBtn.addEventListener('click', () => { openEditModal("フォルダを追加", "", "", "", "", "", 'folder', (name) => { if (name && name.trim()) { appData.push({ folderName: name.trim(), engines: [] }); saveAppData(); renderApp(); setTimeout(() => { sliderContainer.scrollLeft = sliderContainer.scrollWidth; }, 100); } }); });
+      tabsContainer.appendChild(addFolderBtn);
+
+      setTimeout(() => { if(sliderContainer.children.length > currentTabIndex) sliderContainer.scrollLeft = sliderContainer.clientWidth * currentTabIndex; }, 0);
+    }
+    renderApp();
+
+    document.getElementById('menuOpen').addEventListener('click', () => { if (window.currentContextTarget) window.open(window.currentContextTarget.dataset.home, '_blank', 'noopener,noreferrer'); document.getElementById('contextMenu').style.display = 'none'; });
     
     document.getElementById('menuEdit').addEventListener('click', () => {
-      const target = window.currentContextTarget; const type = window.currentContextType;
-      if (!target) return;
-      if (type === 'bookmark') {
-        const bm = bookmarkData[target.dataset.folderIndex].bookmarks[target.dataset.itemIndex];
-        openModal("ブックマークを編集", bm.title, bm.url, bm.iconUrl || "", true, "URL (例: https://example.com)", true, (newTitle, newUrl, newIconUrl) => {
-          if (newTitle) bm.title = newTitle; 
-          if (newUrl) { if (!newUrl.startsWith('http')) newUrl = 'https://' + newUrl; bm.url = newUrl; }
-          bm.iconUrl = newIconUrl; saveBookmarks(); renderFavorites();
-        });
-      } else if (type === 'search-engine') {
-        const eng = searchEnginesData[target.dataset.folderIndex].engines[target.dataset.itemIndex];
-        openModal("検索エンジンを編集", eng.name, eng.url, eng.iconUrl || "", true, "検索URL (例: https://google.com/search?q=)", true, (newName, newUrl, newIconUrl) => {
-          if (newName) eng.name = newName; 
-          if (newUrl) { if (!newUrl.startsWith('http')) newUrl = 'https://' + newUrl; eng.url = newUrl; try{ const u = new URL(newUrl); eng.home = u.origin; eng.domain = u.hostname; }catch(e){} }
-          eng.iconUrl = newIconUrl; saveSearchEngines(); renderSearchEngines();
-        });
-      } else if (type === 'heading') {
-        const bm = bookmarkData[target.dataset.folderIndex].bookmarks[target.dataset.itemIndex];
-        openModal("小見出しを編集", bm.title, "", "", false, "", false, (newTitle) => { if (newTitle) { bm.title = newTitle; saveBookmarks(); renderFavorites(); } });
-      } else if (type === 'search-heading') {
-        const eng = searchEnginesData[target.dataset.folderIndex].engines[target.dataset.itemIndex];
-        openModal("小見出しを編集", eng.name, "", "", false, "", false, (newName) => { if (newName) { eng.name = newName; saveSearchEngines(); renderSearchEngines(); } });
+      const target = window.currentContextTarget; const type = window.currentContextType; if (!target) return;
+      if (type === 'item') {
+        // 編集時はプリセットから選ぶボタン(onPresetClick)を渡さないため null を指定
+        openEditModal("編集", target.dataset.name, target.dataset.home, target.dataset.url, target.dataset.iconUrl || "", target.dataset.encoding || "UTF-8", 'item', 
+        (newName, newHome, newUrl, newIconUrl, newEnc) => {
+          if (newName) target.dataset.name = newName; 
+          if (newHome) { if (!newHome.startsWith('http')) newHome = 'https://' + newHome; target.dataset.home = newHome; try{ target.dataset.domain = new URL(newHome).hostname; }catch(e){} }
+          if (newUrl !== undefined) { if (newUrl && !newUrl.startsWith('http')) newUrl = 'https://' + newUrl; target.dataset.url = newUrl; }
+          target.dataset.iconUrl = newIconUrl; target.dataset.encoding = newEnc; updateDOMData();
+        }, null);
+      } else if (type === 'heading') { 
+        openEditModal("小見出しを編集", target.dataset.name, "", "", "", "", 'heading', (newName) => { if (newName) { target.dataset.name = newName; updateDOMData(); } }, null); 
       }
       document.getElementById('contextMenu').style.display = 'none';
     });
 
-    document.getElementById('menuCopy').addEventListener('click', () => { 
-      if (window.currentContextTarget) { navigator.clipboard.writeText(window.currentContextTarget.dataset.url).then(() => { const btn = document.getElementById('menuCopy'); const orig = btn.innerHTML; btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Copied!`; setTimeout(() => btn.innerHTML = orig, 1500); }); } 
-    });
+    document.getElementById('menuCopy').addEventListener('click', () => { if (window.currentContextTarget) { navigator.clipboard.writeText(window.currentContextTarget.dataset.home).then(() => { const btn = document.getElementById('menuCopy'); const orig = btn.innerHTML; btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Copied!`; setTimeout(() => btn.innerHTML = orig, 1500); }); } });
     
-    document.getElementById('menuRemove').addEventListener('click', () => {
-      const target = window.currentContextTarget; const type = window.currentContextType;
-      if (target) {
-        target.style.transform = 'scale(0.8)'; target.style.opacity = '0';
-        setTimeout(() => {
-          if (type === 'bookmark' || type === 'heading') { bookmarkData[target.dataset.folderIndex].bookmarks.splice(target.dataset.itemIndex, 1); saveBookmarks(); renderFavorites(); }
-          else if (type === 'search-engine' || type === 'search-heading') { searchEnginesData[target.dataset.folderIndex].engines.splice(target.dataset.itemIndex, 1); saveSearchEngines(); renderSearchEngines(); }
-        }, 200);
-      }
-    });
-
-    document.getElementById('menuRenameFolder').addEventListener('click', () => {
-      const target = window.currentContextTarget; const type = window.currentContextType;
-      if (target) {
-        if (type === 'folder') {
-          const folder = bookmarkData[parseInt(target.dataset.index)];
-          openModal("フォルダ名を変更", folder.folderName, "", "", false, "", false, (newName) => { if (newName && newName.trim()) { folder.folderName = newName.trim(); saveBookmarks(); renderFavorites(); } });
-        } else if (type === 'search-folder') {
-          const folder = searchEnginesData[parseInt(target.dataset.index)];
-          openModal("フォルダ名を変更", folder.folderName, "", "", false, "", false, (newName) => { if (newName && newName.trim()) { folder.folderName = newName.trim(); saveSearchEngines(); renderSearchEngines(); } });
-        }
-      }
-      document.getElementById('contextMenu').style.display = 'none';
-    });
-
-    document.getElementById('menuRemoveFolder').addEventListener('click', () => {
-      const target = window.currentContextTarget; const type = window.currentContextType;
-      if (target) {
-        const dataArr = type === 'folder' ? bookmarkData : searchEnginesData;
-        if (dataArr.length <= 1) { alert("最後のフォルダは削除できません。"); return; }
-        if (confirm("このフォルダと中身をすべて削除しますか？")) {
-          dataArr.splice(parseInt(target.dataset.index), 1);
-          if (type === 'folder') { saveBookmarks(); renderFavorites(); } else { saveSearchEngines(); renderSearchEngines(); }
-        }
-      }
-      document.getElementById('contextMenu').style.display = 'none';
-    });
-
-    /* =========================================================
-       11. インポート・エクスポート・初期化
-       ========================================================= */
-    document.getElementById('initDataBtn').addEventListener('click', () => { 
-      if(confirm("すべてのお気に入り・検索エンジン設定・検索履歴を初期化し、デフォルトに戻します。\nよろしいですか？")) { 
-        localStorage.removeItem('bookmarks_data'); localStorage.removeItem('search_engines_data'); localStorage.removeItem('search_history'); localStorage.removeItem('save_history_pref'); localStorage.removeItem('link_open_mode'); localStorage.removeItem('heading_space'); localStorage.removeItem('fab_size'); localStorage.removeItem('grid_size'); localStorage.removeItem('edit_mode'); location.reload(); 
+    document.getElementById('menuRemove').addEventListener('click', () => { 
+      const target = window.currentContextTarget; 
+      if (target) { 
+        target.style.transform = 'scale(0.8)'; target.style.opacity = '0'; 
+        setTimeout(() => { target.remove(); updateDOMData(); }, 200); 
       } 
+      document.getElementById('contextMenu').style.display = 'none'; 
     });
 
-    document.getElementById('exportDataBtn').addEventListener('click', () => {
-      const exportObj = { bookmarks_data: bookmarkData, search_engines_data: searchEnginesData, search_history: searchHistory, save_history_pref: settingSaveHistory.checked, link_open_mode: settingLinkOpenMode.value, heading_space: settingHeadingSpace.value, fab_size: settingFabSize.value, grid_size: settingGridSize.value };
-      const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = "launch_backup.json"; a.click(); URL.revokeObjectURL(url);
+    document.getElementById('menuRenameFolder').addEventListener('click', () => { 
+      const target = window.currentContextTarget; 
+      if (target) { 
+        const folder = appData[parseInt(target.dataset.index)]; 
+        openEditModal("フォルダ名を変更", folder.folderName, "", "", "", "", 'folder', (newName) => { 
+          if (newName && newName.trim()) { folder.folderName = newName.trim(); saveAppData(); renderApp(); } 
+        }, null); 
+      } 
+      document.getElementById('contextMenu').style.display = 'none'; 
     });
 
-    document.getElementById('importDataBtn').addEventListener('click', () => { document.getElementById('importFileInput').click(); });
-    document.getElementById('importFileInput').addEventListener('change', (e) => {
-      const file = e.target.files[0]; if (!file) return; const reader = new FileReader();
-      reader.onload = (event) => {
-        try {
-          const importedData = JSON.parse(event.target.result);
-          if (importedData.bookmarks_data) localStorage.setItem('bookmarks_data', JSON.stringify(importedData.bookmarks_data));
-          if (importedData.search_engines_data) localStorage.setItem('search_engines_data', JSON.stringify(importedData.search_engines_data));
-          if (importedData.search_history) localStorage.setItem('search_history', JSON.stringify(importedData.search_history));
-          if (importedData.save_history_pref !== undefined) localStorage.setItem('save_history_pref', importedData.save_history_pref);
-          if (importedData.link_open_mode !== undefined) localStorage.setItem('link_open_mode', importedData.link_open_mode);
-          if (importedData.heading_space !== undefined) localStorage.setItem('heading_space', importedData.heading_space);
-          if (importedData.fab_size !== undefined) localStorage.setItem('fab_size', importedData.fab_size);
-          if (importedData.grid_size !== undefined) localStorage.setItem('grid_size', importedData.grid_size);
-          alert("データのインポートが完了しました。ページを再読み込みします。"); location.reload();
-        } catch (err) { alert("無効なJSONファイルです。"); }
-      }; reader.readAsText(file);
+    document.getElementById('menuRemoveFolder').addEventListener('click', () => { 
+      const target = window.currentContextTarget; 
+      if (target) { 
+        if (appData.length <= 1) return showConfirm("エラー", "最後のフォルダは削除できません。", false, null, true);
+        showConfirm("フォルダの削除", "このフォルダと中身をすべて削除しますか？", true, () => { 
+          appData.splice(parseInt(target.dataset.index), 1); 
+          saveAppData(); 
+          renderApp(); 
+        }); 
+      } 
+      document.getElementById('contextMenu').style.display = 'none'; 
     });
+
+    document.getElementById('initDataBtn').addEventListener('click', () => { 
+      showConfirm("データ初期化", "すべての設定と全プロファイルを初期化し、デフォルトに戻します。\n本当によろしいですか？", true, () => { 
+        localStorage.clear(); 
+        location.reload(); 
+      }); 
+    });
+
   </script>
 </body>
 </html>
