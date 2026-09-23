@@ -75,14 +75,45 @@ header {
 @media (max-width: 768px) { .folder { padding: 20px 16px; overflow-x: hidden; } }
 
 .folder-inner { max-width: 1400px; margin: 0 auto; padding-bottom: 120px; min-height: 100%; }
-.folder-columns { width: 100%; }
 
-body.layout-split .folder-columns { column-count: 2; column-gap: 32px; }
-@media (max-width: 1024px) { body.layout-split .folder-columns { column-count: 1; } }
+/* ★玉突き事故を防ぐため column-count から CSS Grid に変更★ */
+.folder-columns { 
+  width: 100%; 
+  display: grid; 
+  grid-template-columns: 1fr; 
+  gap: 24px; 
+  align-items: start;
+}
 
-.section-group { break-inside: avoid; page-break-inside: avoid; -webkit-column-break-inside: avoid; margin-bottom: 24px; }
-body.layout-split .section-group { display: inline-block; width: 100%; vertical-align: top; margin-bottom: 24px;}
-.section-group.dragging-group { opacity: 0.4; }
+body.layout-split .folder-columns { 
+  grid-template-columns: repeat(2, minmax(0, 1fr)); 
+  column-gap: 32px; 
+  row-gap: 32px;
+}
+@media (max-width: 1024px) { 
+  body.layout-split .folder-columns { 
+    grid-template-columns: 1fr; 
+  } 
+}
+
+.section-group { 
+  position: relative;
+  border-radius: 16px;
+  padding: 8px;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 2px dashed transparent;
+}
+.section-group.dragging-group { 
+  opacity: 0.3; 
+  transform: scale(0.98);
+}
+/* スワップ対象のグループに重なったときのハイライト */
+.section-group.swap-target { 
+  border-color: var(--app-blue) !important;
+  background-color: rgba(0, 122, 255, 0.05);
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.15);
+}
 
 .grid { display: grid; gap: 12px; align-content: start; }
 body.grid-size-120 .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
@@ -90,10 +121,25 @@ body.grid-size-140 .grid { grid-template-columns: repeat(auto-fill, minmax(140px
 body.grid-size-160 .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 @media (max-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px; } }
 
-.section-heading { font-size: 14px; font-weight: 600; color: var(--text-main); letter-spacing: -0.2px; padding: 0 4px; display: flex; align-items: center; gap: 8px; user-select: none; cursor: grab; transition: opacity 0.2s; margin-top: 40px; margin-bottom: 16px; }
+.section-heading { 
+  font-size: 14px; 
+  font-weight: 600; 
+  color: var(--text-main); 
+  letter-spacing: -0.2px; 
+  padding: 6px 8px; 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  user-select: none; 
+  cursor: grab; 
+  transition: background-color 0.2s, opacity 0.2s; 
+  margin-bottom: 12px; 
+  border-radius: 8px;
+}
+.section-heading:hover {
+  background-color: var(--menu-hover);
+}
 .section-heading:active { cursor: grabbing; }
-.section-heading.dragging { opacity: 0.4; pointer-events: none; }
-.section-heading:first-child { margin-top: 0px !important; }
 
 .add-heading-btn { font-size: 13px; font-weight: 600; color: var(--text-sub); background: transparent; border: 2px dashed var(--nav-border); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.2s ease; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0; }
 .add-heading-btn:hover { background: var(--menu-hover); color: var(--app-blue); border-color: var(--app-blue); transform: translateY(-2px); opacity: 1 !important; }
@@ -101,7 +147,8 @@ body.grid-size-160 .grid { grid-template-columns: repeat(auto-fill, minmax(160px
 
 .card { background: var(--card-bg); border-radius: 12px; text-decoration: none; color: var(--text-main); display: flex; flex-direction: column; align-items: center; justify-content: space-between; aspect-ratio: 4 / 3; padding: 16px 12px 12px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 2px 8px var(--shadow-color), 0 1px 2px var(--shadow-color); border: 1px solid rgba(128, 128, 128, 0.05); cursor: pointer; user-select: none; width: 100%; min-width: 0; position: relative; }
 .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px var(--hover-shadow), 0 4px 8px var(--shadow-color); }
-.card.dragging { opacity: 0.4; transform: scale(0.95); box-shadow: none; pointer-events: none; }
+.card.dragging { opacity: 0.3; transform: scale(0.95); box-shadow: none; }
+.card.card-drag-target { border: 2px solid var(--app-blue) !important; transform: scale(1.05); }
 .card-icon { width: 100%; flex-grow: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; pointer-events: none; min-height: 0; }
 .card-icon img { max-width: 56px; max-height: 56px; width: 100%; height: 100%; object-fit: contain; border-radius: 8px; background: transparent; }
 .card-title { font-size: 13px; font-weight: 600; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-sub); pointer-events: none; }
@@ -109,7 +156,7 @@ body.grid-size-160 .grid { grid-template-columns: repeat(auto-fill, minmax(160px
 body.mode-search.has-query .card[data-has-search="false"] { opacity: 0.3; filter: grayscale(100%); pointer-events: none; box-shadow: none; }
 @media (max-width: 768px) { .card { padding: 12px 8px 8px; border-radius: 10px; aspect-ratio: 1 / 1; } .card-title { font-size: 11px; } }
 
-/* 🌟 リストから選ぶ用のカードスタイル */
+/* リストから選ぶ用のカードスタイル */
 .selectable-card { position: relative; cursor: pointer; border: 2px solid transparent !important; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); }
 .selectable-card:hover { border-color: var(--nav-border) !important; transform: translateY(-4px); }
 .selectable-card.selected { border-color: var(--app-blue) !important; background-color: rgba(0, 122, 255, 0.04); box-shadow: 0 8px 24px rgba(0,122,255,0.15) !important; transform: translateY(-4px); }
@@ -145,7 +192,7 @@ body.mode-search .search-top-bar { max-height: 120px; padding-top: 32px; padding
 .history-remove:hover { fill: #ff3b30; background: rgba(255,59,48,0.1); }
 .history-empty { padding: 16px; text-align: center; color: var(--text-sub); font-size: 14px; }
 
-/* 🌟 FAB (真ん中に浮いているボタン) */
+/* FAB */
 .fab-switch {
   position: fixed; bottom: calc(86px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); border-radius: 50%;
   background: var(--card-bg); border: 1px solid var(--nav-border); box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08);
@@ -163,7 +210,7 @@ body.fab-size-small .fab-switch { width: 64px; height: 64px; } body.fab-size-sma
 body.fab-size-medium .fab-switch { width: 72px; height: 72px; } body.fab-size-medium .fab-switch svg { width: 32px; height: 32px; }
 body.fab-size-large .fab-switch { width: 80px; height: 80px; } body.fab-size-large .fab-switch svg { width: 36px; height: 36px; }
 
-/* 🌟 下部ナビゲーション */
+/* 下部ナビゲーション */
 .bottom-nav { 
   position: fixed; bottom: 0; right: 0; left: 0; height: 74px; padding-bottom: env(safe-area-inset-bottom); 
   background-color: transparent; border-top: 1px solid transparent; 
@@ -186,14 +233,14 @@ body.fab-size-large .fab-switch { width: 80px; height: 80px; } body.fab-size-lar
 .nav-item svg { width: 26px; height: 26px; fill: currentColor; }
 .nav-label { font-size: 11px; font-weight: 600; letter-spacing: 0.3px; }
 
-/* 🌟 編集オフモード時の非表示設定 */
+/* 編集オフモード時の非表示設定 */
 body.read-only-mode .add-folder-btn, 
 body.read-only-mode .add-heading-btn,
 body.read-only-mode .edit-only { display: none !important; }
 body.read-only-mode .section-heading, 
 body.read-only-mode .tab { cursor: default; }
 
-/* 🌟 新しいガラスモーダル (設定＆プロファイル＆JSON選択用) */
+/* ガラスモーダル */
 .glass-modal-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
@@ -220,7 +267,7 @@ body.read-only-mode .tab { cursor: default; }
 .glass-modal-close:hover { background: var(--nav-border); fill: var(--text-main); }
 .glass-modal-body { padding: 24px; overflow-y: auto; flex: 1; scrollbar-width: thin; }
 
-/* モーダル内の設定UI (iOS Settings風) */
+/* 設定UI */
 .settings-section { margin-bottom: 24px; }
 .settings-section:last-child { margin-bottom: 0; }
 .settings-section-title { font-size: 13px; text-transform: uppercase; color: var(--text-sub); margin-bottom: 8px; margin-left: 16px; letter-spacing: 0.5px; }

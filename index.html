@@ -10,7 +10,6 @@
   <link rel="icon" type="image/png" href="favicon-32.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/encoding-japanese/2.0.0/encoding.min.js"></script>
-  <!-- ▼ CSSを外部ファイル化 ▼ -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="fab-size-medium grid-size-140 layout-single">
@@ -28,7 +27,6 @@
       <div class="search-top-bar">
         <div class="search-input-wrapper">
           <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-          <!-- ▼ プレースホルダーの文字を削除 ▼ -->
           <input type="text" id="searchInput" class="search-input" placeholder="" autocomplete="off">
           <div class="search-actions">
             <button class="icon-btn" id="historyBtn" title="検索履歴"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></button>
@@ -62,7 +60,7 @@
     </div>
   </nav>
 
-  <!-- 🌟 プロファイルモーダル (ガラスモーダル) -->
+  <!-- 🌟 プロファイルモーダル -->
   <div id="profilesModal" class="glass-modal-overlay">
     <div class="glass-modal" style="max-width: 440px;">
       <div class="glass-modal-header">
@@ -84,7 +82,7 @@
     </div>
   </div>
 
-  <!-- 🌟 設定モーダル (ガラスモーダル) -->
+  <!-- 🌟 設定モーダル -->
   <div id="settingsModal" class="glass-modal-overlay">
     <div class="glass-modal" style="max-width: 600px;">
       <div class="glass-modal-header">
@@ -93,7 +91,6 @@
       </div>
       <div class="glass-modal-body">
         
-        <!-- ▼ デフォルト検索エンジンの設定を追加 ▼ -->
         <div class="settings-section">
           <div class="settings-section-title">検索</div>
           <div class="settings-group">
@@ -154,7 +151,6 @@
         <input type="text" id="modalInput4" autocomplete="off" placeholder="カスタムアイコンURL (任意)">
       </div>
       <div class="modal-actions">
-        <!-- 🌟 リストから選ぶボタン (アイテム追加時のみ表示される) -->
         <button id="modalPresetBtn" class="modal-btn" style="background: var(--app-green); color: white; display: none; padding: 12px 14px; font-size: 14px;">
           <svg style="width:18px;height:18px;fill:currentColor;vertical-align:middle;margin-right:6px;" viewBox="0 0 24 24"><path d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/></svg>リストから選ぶ
         </button>
@@ -166,18 +162,16 @@
     </div>
   </div>
 
-  <!-- 🌟 JSONリスト選択用モーダル (ガラスモーダル) -->
+  <!-- 🌟 JSONリスト選択用モーダル -->
   <div id="jsonSelectModal" class="glass-modal-overlay">
     <div class="glass-modal" style="max-width: 860px; max-height: 85vh; width: 95%;">
       <div class="glass-modal-header">
         リストからアイテムを選ぶ
         <button class="glass-modal-close" onclick="closeModalUi('jsonSelectModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
       </div>
-      <!-- スクロール領域 -->
       <div class="glass-modal-body" id="jsonSelectBody" style="padding: 24px; padding-bottom: 40px;">
         <div style="text-align: center; color: var(--text-sub); margin-top: 20px;">読み込み中...</div>
       </div>
-      <!-- アクション領域 -->
       <div style="padding: 16px 24px; border-top: 1px solid var(--nav-border); background: var(--card-bg); display: flex; justify-content: flex-end; gap: 12px; flex-shrink: 0;">
         <button class="modal-btn cancel" onclick="closeModalUi('jsonSelectModal')">キャンセル</button>
         <button id="jsonSelectAddBtn" class="modal-btn save" disabled>アイテムを追加</button>
@@ -185,7 +179,7 @@
     </div>
   </div>
 
-  <!-- カスタム確認モーダル (アラート兼用) -->
+  <!-- カスタム確認モーダル -->
   <div id="confirmModal" class="glass-modal-overlay confirm-modal-overlay">
     <div class="confirm-box">
       <h3 id="confirmTitle">確認</h3>
@@ -204,11 +198,11 @@
     <div class="menu-item menu-type-edit" id="menuEdit"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>編集</div>
     <div class="menu-item menu-type-item" id="menuCopy"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>URLをコピー</div>
     <div class="menu-item menu-type-edit" id="menuRemove"><svg viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>削除</div>
+    <div class="menu-item menu-type-heading" id="menuRemoveHeading"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.12-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg>小見出しを削除</div>
     <div class="menu-item menu-type-folder" id="menuRenameFolder"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>名前変更</div>
     <div class="menu-item menu-type-folder" id="menuRemoveFolder"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.12-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg>削除</div>
   </div>
 
-  <!-- ▼ JavaScriptを外部ファイル化 ▼ -->
   <script src="script.js"></script>
 </body>
 </html>
