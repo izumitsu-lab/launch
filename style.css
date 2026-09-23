@@ -71,35 +71,37 @@ header {
 
 .slider { display: flex; flex: 1; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
 .slider::-webkit-scrollbar { display: none; }
-.folder { min-width: 100%; width: 100%; flex-shrink: 0; height: 100%; padding: 32px; scroll-snap-align: start; overflow-y: auto; overflow-x: hidden; }
-@media (max-width: 768px) { .folder { padding: 20px 16px; overflow-x: hidden; } }
+.folder { min-width: 100%; width: 100%; flex-shrink: 0; height: 100%; padding: 24px 32px; scroll-snap-align: start; overflow-y: auto; overflow-x: hidden; }
+@media (max-width: 768px) { .folder { padding: 16px 14px; overflow-x: hidden; } }
 
 .folder-inner { max-width: 1400px; margin: 0 auto; padding-bottom: 120px; min-height: 100%; }
 
-/* ★玉突き事故を防ぐため column-count から CSS Grid に変更★ */
+/* ★行間ギャップ（gap / row-gap）を大幅に短縮★ */
 .folder-columns { 
   width: 100%; 
   display: grid; 
   grid-template-columns: 1fr; 
-  gap: 24px; 
+  gap: 14px; 
   align-items: start;
 }
 
 body.layout-split .folder-columns { 
   grid-template-columns: repeat(2, minmax(0, 1fr)); 
-  column-gap: 32px; 
-  row-gap: 32px;
+  column-gap: 24px; 
+  row-gap: 16px; 
 }
 @media (max-width: 1024px) { 
   body.layout-split .folder-columns { 
     grid-template-columns: 1fr; 
+    row-gap: 14px;
   } 
 }
 
+/* ★余白の原因だった上下パディングを削除★ */
 .section-group { 
   position: relative;
-  border-radius: 16px;
-  padding: 8px;
+  border-radius: 12px;
+  padding: 0 4px;
   transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   border: 2px dashed transparent;
 }
@@ -107,7 +109,6 @@ body.layout-split .folder-columns {
   opacity: 0.3; 
   transform: scale(0.98);
 }
-/* スワップ対象のグループに重なったときのハイライト */
 .section-group.swap-target { 
   border-color: var(--app-blue) !important;
   background-color: rgba(0, 122, 255, 0.05);
@@ -115,46 +116,47 @@ body.layout-split .folder-columns {
   box-shadow: 0 8px 24px rgba(0, 122, 255, 0.15);
 }
 
-.grid { display: grid; gap: 12px; align-content: start; }
+.grid { display: grid; gap: 10px; align-content: start; }
 body.grid-size-120 .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 body.grid-size-140 .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 body.grid-size-160 .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-@media (max-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px; } }
+@media (max-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr) !important; gap: 8px; } }
 
+/* ★見出しの余白をコンパクトに圧縮★ */
 .section-heading { 
-  font-size: 14px; 
+  font-size: 13px; 
   font-weight: 600; 
   color: var(--text-main); 
   letter-spacing: -0.2px; 
-  padding: 6px 8px; 
+  padding: 4px 6px; 
   display: flex; 
   align-items: center; 
   gap: 8px; 
   user-select: none; 
   cursor: grab; 
   transition: background-color 0.2s, opacity 0.2s; 
-  margin-bottom: 12px; 
-  border-radius: 8px;
+  margin-bottom: 8px; 
+  border-radius: 6px;
 }
 .section-heading:hover {
   background-color: var(--menu-hover);
 }
 .section-heading:active { cursor: grabbing; }
 
-.add-heading-btn { font-size: 13px; font-weight: 600; color: var(--text-sub); background: transparent; border: 2px dashed var(--nav-border); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.2s ease; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0; }
+.add-heading-btn { font-size: 13px; font-weight: 600; color: var(--text-sub); background: transparent; border: 2px dashed var(--nav-border); border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; transition: all 0.2s ease; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0; }
 .add-heading-btn:hover { background: var(--menu-hover); color: var(--app-blue); border-color: var(--app-blue); transform: translateY(-2px); opacity: 1 !important; }
 .add-heading-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
-.card { background: var(--card-bg); border-radius: 12px; text-decoration: none; color: var(--text-main); display: flex; flex-direction: column; align-items: center; justify-content: space-between; aspect-ratio: 4 / 3; padding: 16px 12px 12px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 2px 8px var(--shadow-color), 0 1px 2px var(--shadow-color); border: 1px solid rgba(128, 128, 128, 0.05); cursor: pointer; user-select: none; width: 100%; min-width: 0; position: relative; }
-.card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px var(--hover-shadow), 0 4px 8px var(--shadow-color); }
+.card { background: var(--card-bg); border-radius: 12px; text-decoration: none; color: var(--text-main); display: flex; flex-direction: column; align-items: center; justify-content: space-between; aspect-ratio: 4 / 3; padding: 14px 10px 10px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 2px 8px var(--shadow-color), 0 1px 2px var(--shadow-color); border: 1px solid rgba(128, 128, 128, 0.05); cursor: pointer; user-select: none; width: 100%; min-width: 0; position: relative; }
+.card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px var(--hover-shadow), 0 3px 6px var(--shadow-color); }
 .card.dragging { opacity: 0.3; transform: scale(0.95); box-shadow: none; }
-.card.card-drag-target { border: 2px solid var(--app-blue) !important; transform: scale(1.05); }
-.card-icon { width: 100%; flex-grow: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; pointer-events: none; min-height: 0; }
-.card-icon img { max-width: 56px; max-height: 56px; width: 100%; height: 100%; object-fit: contain; border-radius: 8px; background: transparent; }
+.card.card-drag-target { border: 2px solid var(--app-blue) !important; transform: scale(1.04); }
+.card-icon { width: 100%; flex-grow: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 6px; pointer-events: none; min-height: 0; }
+.card-icon img { max-width: 52px; max-height: 52px; width: 100%; height: 100%; object-fit: contain; border-radius: 8px; background: transparent; }
 .card-title { font-size: 13px; font-weight: 600; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-sub); pointer-events: none; }
 
 body.mode-search.has-query .card[data-has-search="false"] { opacity: 0.3; filter: grayscale(100%); pointer-events: none; box-shadow: none; }
-@media (max-width: 768px) { .card { padding: 12px 8px 8px; border-radius: 10px; aspect-ratio: 1 / 1; } .card-title { font-size: 11px; } }
+@media (max-width: 768px) { .card { padding: 10px 6px 6px; border-radius: 10px; aspect-ratio: 1 / 1; } .card-title { font-size: 11px; } }
 
 /* リストから選ぶ用のカードスタイル */
 .selectable-card { position: relative; cursor: pointer; border: 2px solid transparent !important; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); }
@@ -165,11 +167,11 @@ body.mode-search.has-query .card[data-has-search="false"] { opacity: 0.3; filter
 @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
 
 .search-top-bar { overflow: hidden; max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background-color: var(--bg-color); z-index: 20; flex-shrink: 0; }
-body.mode-search .search-top-bar { max-height: 120px; padding-top: 32px; padding-bottom: 16px; opacity: 1; }
-@media (max-width: 768px) { body.mode-search .search-top-bar { padding-top: 24px; padding-bottom: 12px; } }
+body.mode-search .search-top-bar { max-height: 120px; padding-top: 24px; padding-bottom: 12px; opacity: 1; }
+@media (max-width: 768px) { body.mode-search .search-top-bar { padding-top: 20px; padding-bottom: 10px; } }
 .search-input-wrapper { position: relative; width: 100%; max-width: 680px; margin: 0 auto; display: flex; align-items: center; padding: 0 32px; }
 .search-icon { position: absolute; left: 48px; width: 20px; height: 20px; fill: var(--text-sub); pointer-events: none; z-index: 2; }
-.search-input { width: 100%; padding: 16px 88px 16px 48px; font-size: 17px; border-radius: 16px; border: 1px solid var(--nav-border); background: var(--card-bg); color: var(--text-main); box-shadow: 0 4px 16px var(--shadow-color); outline: none; transition: all 0.2s ease; -webkit-appearance: none; position: relative; z-index: 1; }
+.search-input { width: 100%; padding: 14px 88px 14px 48px; font-size: 16px; border-radius: 14px; border: 1px solid var(--nav-border); background: var(--card-bg); color: var(--text-main); box-shadow: 0 4px 16px var(--shadow-color); outline: none; transition: all 0.2s ease; -webkit-appearance: none; position: relative; z-index: 1; }
 .search-input::-webkit-search-cancel-button { display: none; }
 .search-input:focus { border-color: var(--app-blue); box-shadow: 0 4px 20px rgba(0, 122, 255, 0.15); }
 .search-actions { position: absolute; right: 40px; display: flex; align-items: center; gap: 4px; z-index: 2; }
@@ -178,7 +180,7 @@ body.mode-search .search-top-bar { max-height: 120px; padding-top: 32px; padding
 .icon-btn svg { width: 18px; height: 18px; }
 
 .history-dropdown { 
-  position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-10px);
+  position: fixed; top: 90px; left: 50%; transform: translateX(-50%) translateY(-10px);
   width: calc(100% - 64px); max-width: 616px; background: var(--card-bg); border: 1px solid var(--nav-border); 
   border-radius: 16px; box-shadow: 0 8px 32px var(--shadow-color); opacity: 0; visibility: hidden; 
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10000; overflow: hidden; pointer-events: none; 
