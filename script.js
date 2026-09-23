@@ -16,6 +16,18 @@ function escapeHtml(str) {
   });
 }
 
+// 🌟 クリップボード管理（別プロファイル間でも保持可能）
+const setAppClipboard = (type, data) => {
+  localStorage.setItem('launch_clipboard', JSON.stringify({ type, data }));
+};
+const getAppClipboard = () => {
+  try {
+    return JSON.parse(localStorage.getItem('launch_clipboard'));
+  } catch (e) {
+    return null;
+  }
+};
+
 const toggleClearBtn = () => {
   const hasQuery = searchInput.value.trim().length > 0;
   clearBtn.style.display = hasQuery ? 'flex' : 'none';
@@ -182,7 +194,6 @@ document.getElementById('modalSaveBtn').addEventListener('click', () => {
   customModal.classList.remove('show'); 
 });
 
-// 平坦配列 ⇔ グループ階層構造 の相互変換アダプタ
 function enginesToGroups(engines = []) {
   const groups = [];
   let currentGroup = null;
@@ -223,7 +234,6 @@ function groupsToEngines(groups = []) {
 let profiles = JSON.parse(localStorage.getItem('launch_profiles')) || [];
 let currentProfileId = localStorage.getItem('launch_current_profile_id');
 
-// 初期データ
 const fallbackDefaultData = [
   {
     folderName: "ウェブ",
@@ -491,21 +501,38 @@ searchInput.addEventListener('keypress', (e) => {
   } 
 });
 
+// 🌟 コンテキストメニュー表示
 function showContextMenu(e, type, targetData) {
   if (!isEditMode) return;
   window.currentContextTarget = targetData; 
   window.currentContextType = type;
   const menu = document.getElementById('contextMenu');
-  document.querySelectorAll('.menu-item, .menu-divider').forEach(el => el.style.display = 'none');
   
+  // 初期化：すべての専用項目を非表示
+  menu.querySelectorAll('.menu-item, .menu-divider').forEach(el => el.style.display = 'none');
+  
+  const clip = getAppClipboard();
+
   if (type === 'item') { 
     document.querySelectorAll('.menu-type-item, .menu-type-edit').forEach(el => el.style.display = 'flex'); 
-    document.getElementById('menuDivider').style.display = 'block'; 
-  } else if (type === 'folder') { 
-    document.querySelectorAll('.menu-type-folder').forEach(el => el.style.display = 'flex'); 
+    document.getElementById('menuDividerItem').style.display = 'block'; 
+    document.getElementById('menuDividerDelete').style.display = 'block'; 
+    if (clip && clip.type === 'item') document.getElementById('menuPasteItem').style.display = 'flex';
   } else if (type === 'heading') { 
     document.querySelectorAll('.menu-type-edit, .menu-type-heading').forEach(el => el.style.display = 'flex'); 
+    document.getElementById('menuDividerDelete').style.display = 'block'; 
+    if (clip && clip.type === 'item') document.getElementById('menuPasteItem').style.display = 'flex';
+  } else if (type === 'folder') { 
+    document.querySelectorAll('.menu-type-folder').forEach(el => el.style.display = 'flex'); 
+    document.getElementById('menuDividerDelete').style.display = 'block'; 
+    if (clip && clip.type === 'folder') document.getElementById('menuPasteFolder').style.display = 'flex';
+  } else if (type === 'folder-area') {
+    // フォルダ内の背景エリア
+    if (clip && clip.type === 'group') document.getElementById('menuPasteHeading').style.display = 'flex';
+    if (clip && clip.type === 'folder') document.getElementById('menuPasteFolder').style.display = 'flex';
+    if (!clip || (clip.type !== 'group' && clip.type !== 'folder')) return; // 貼るものがなければ出さない
   }
+
   menu.style.display = 'block';
   let x = e.clientX, y = e.clientY;
   if (x + menu.offsetWidth > window.innerWidth) x -= menu.offsetWidth;
@@ -517,9 +544,8 @@ document.addEventListener('click', (e) => { if (e.button !== 2) document.getElem
 const tabsContainer = document.getElementById('tabsContainer'); 
 const sliderContainer = document.getElementById('sliderContainer');
 
-// ドラッグ管理変数
-let draggedGroupData = null; // { folderIndex, groupIndex }
-let draggedCardData = null;  // { folderIndex, groupIndex, itemIndex }
+let draggedGroupData = null; 
+let draggedCardData = null;  
 let draggedTab = null;
 
 const tabObserver = new IntersectionObserver((entries) => { 
@@ -634,7 +660,6 @@ async function openJsonSelectModal(targetFolderIndex) {
   };
 }
 
-// 🌟 メインの画面レンダリング（State駆動 & 1対1スワップ）
 function renderApp() {
   tabsContainer.innerHTML = ''; 
   sliderContainer.innerHTML = ''; 
@@ -643,10 +668,9 @@ function renderApp() {
   const folderDivsToObserve = [];
 
   appData.forEach((folder, folderIndex) => {
-    // フォルダ階層のグループ取得
     const groups = enginesToGroups(folder.engines);
 
-    // タブ要素
+    // タブ
     const tab = document.createElement('div');
     tab.className = `tab ${folderIndex === currentTabIndex ? 'active' : ''}`;
     tab.textContent = folder.folderName;
@@ -680,8 +704,7 @@ function renderApp() {
         const rect = tab.getBoundingClientRect(); 
         if (e.clientX < rect.left + rect.width / 2) tabsContainer.insertBefore(draggedTab, tab); 
         else tabsContainer.insertBefore(draggedTab, tab.nextSibling); 
-      } 
-      else if (draggedCardData) {
+      } else if (draggedCardData) {
         tab.classList.add('drag-over'); 
       }
     });
@@ -691,7 +714,6 @@ function renderApp() {
     tab.addEventListener('drop', e => { 
       e.preventDefault(); 
       tab.classList.remove('drag-over'); 
-      // カードを別のフォルダのタブへ移動
       if (draggedCardData) { 
         const sourceFolder = appData[draggedCardData.folderIndex];
         const sourceGroups = enginesToGroups(sourceFolder.engines);
@@ -716,10 +738,17 @@ function renderApp() {
     });
     tabsContainer.appendChild(tab);
 
-    // フォルダ表示
+    // フォルダ要素
     const folderDiv = document.createElement('div');
     folderDiv.className = 'folder';
     folderDiv.id = `app-folder-${folderIndex}`;
+
+    // フォルダ背景右クリックで「グループ貼り付け」「フォルダ貼り付け」
+    folderDiv.addEventListener('contextmenu', (e) => {
+      if (e.target.closest('.card') || e.target.closest('.section-heading') || e.target.closest('.add-heading-btn')) return;
+      e.preventDefault();
+      showContextMenu(e, 'folder-area', { folderIndex });
+    });
 
     const folderInner = document.createElement('div');
     folderInner.className = 'folder-inner';
@@ -727,12 +756,10 @@ function renderApp() {
     const folderColumns = document.createElement('div');
     folderColumns.className = 'folder-columns';
 
-    // 各グループの描画
     groups.forEach((group, groupIndex) => {
       const groupDiv = document.createElement('div');
       groupDiv.className = 'section-group';
 
-      // 🌟 グループ（小見出し）の1対1スワップ ドロップ領域
       groupDiv.addEventListener('dragover', (e) => {
         if (!draggedGroupData) return;
         e.preventDefault();
@@ -750,11 +777,9 @@ function renderApp() {
         e.preventDefault();
         groupDiv.classList.remove('swap-target');
 
-        // ★1対1スワップ実行★
         if (draggedGroupData.folderIndex === folderIndex && draggedGroupData.groupIndex !== groupIndex) {
           const fromIdx = draggedGroupData.groupIndex;
           const toIdx = groupIndex;
-
           const temp = groups[fromIdx];
           groups[fromIdx] = groups[toIdx];
           groups[toIdx] = temp;
@@ -766,7 +791,6 @@ function renderApp() {
         draggedGroupData = null;
       });
 
-      // 小見出し（ドラッグハンドル）
       if (group.heading || isEditMode) {
         const headingDiv = document.createElement('div');
         headingDiv.className = 'section-heading';
@@ -777,9 +801,7 @@ function renderApp() {
           if (!isEditMode) return e.preventDefault();
           draggedGroupData = { folderIndex, groupIndex };
           e.dataTransfer.effectAllowed = 'move';
-          setTimeout(() => {
-            groupDiv.classList.add('dragging-group');
-          }, 0);
+          setTimeout(() => groupDiv.classList.add('dragging-group'), 0);
         });
 
         headingDiv.addEventListener('dragend', () => {
@@ -790,17 +812,15 @@ function renderApp() {
 
         headingDiv.addEventListener('contextmenu', (e) => {
           e.preventDefault();
-          showContextMenu(e, 'heading', { folderIndex, groupIndex, headingName: group.heading });
+          showContextMenu(e, 'heading', { folderIndex, groupIndex, headingName: group.heading, group });
         });
 
         groupDiv.appendChild(headingDiv);
       }
 
-      // カード用グリッド
       const gridDiv = document.createElement('div');
       gridDiv.className = 'grid';
 
-      // 空白スペースへのカード移動受け入れ
       gridDiv.addEventListener('dragover', (e) => {
         if (!draggedCardData) return;
         e.preventDefault();
@@ -808,7 +828,6 @@ function renderApp() {
 
       gridDiv.addEventListener('drop', (e) => {
         if (!draggedCardData) return;
-        // カード同士のドロップでなければグループ末尾に追加
         if (e.target.closest('.card')) return;
         e.preventDefault();
 
@@ -827,7 +846,6 @@ function renderApp() {
         draggedCardData = null;
       });
 
-      // カード描画
       group.items.forEach((item, itemIndex) => {
         const card = document.createElement('div');
         card.className = 'card';
@@ -846,11 +864,10 @@ function renderApp() {
           }
         });
 
-        // 🌟 カードの1対1スワップ＆並び替え
         card.addEventListener('dragstart', (e) => {
           if (!isEditMode) return e.preventDefault();
           draggedCardData = { folderIndex, groupIndex, itemIndex };
-          e.stopPropagation(); // グループのドラッグと重複させない
+          e.stopPropagation();
           setTimeout(() => card.classList.add('dragging'), 0);
         });
 
@@ -882,7 +899,6 @@ function renderApp() {
           const srcFolder = appData[draggedCardData.folderIndex];
           const srcGroups = enginesToGroups(srcFolder.engines);
 
-          // 同一フォルダ・同一グループ内の場合は1対1スワップ
           if (draggedCardData.folderIndex === folderIndex && draggedCardData.groupIndex === groupIndex) {
             const fromIdx = draggedCardData.itemIndex;
             const toIdx = itemIndex;
@@ -891,7 +907,6 @@ function renderApp() {
             srcGroups[groupIndex].items[toIdx] = temp;
             srcFolder.engines = groupsToEngines(srcGroups);
           } else {
-            // 別グループからの場合は挿入
             const [movedItem] = srcGroups[draggedCardData.groupIndex].items.splice(draggedCardData.itemIndex, 1);
             srcFolder.engines = groupsToEngines(srcGroups);
 
@@ -925,11 +940,10 @@ function renderApp() {
 
     folderInner.appendChild(folderColumns);
 
-    // 追加ボタングループ
     const actionBtns = document.createElement('div');
     actionBtns.style.display = 'flex';
     actionBtns.style.gap = '12px';
-    actionBtns.style.marginTop = '24px';
+    actionBtns.style.marginTop = '20px';
 
     const addItemBtn = document.createElement('div');
     addItemBtn.className = 'add-heading-btn';
@@ -985,7 +999,6 @@ function renderApp() {
     folderDivsToObserve.push(folderDiv); 
   });
 
-  // フォルダ追加タブ
   const addFolderBtn = document.createElement('div'); 
   addFolderBtn.className = 'tab add-folder-btn'; 
   addFolderBtn.textContent = '＋ 追加'; 
@@ -1011,12 +1024,98 @@ function renderApp() {
 }
 renderApp();
 
-// コンテキストメニュー操作
+// 🌟 コンテキストメニューのアクション設定
 document.getElementById('menuOpen').addEventListener('click', () => { 
   if (window.currentContextTarget && window.currentContextTarget.item) {
     window.open(window.currentContextTarget.item.home, '_blank', 'noopener,noreferrer'); 
   }
   document.getElementById('contextMenu').style.display = 'none'; 
+});
+
+document.getElementById('menuCopy').addEventListener('click', () => { 
+  if (window.currentContextTarget && window.currentContextTarget.item) { 
+    navigator.clipboard.writeText(window.currentContextTarget.item.home).then(() => { 
+      const btn = document.getElementById('menuCopy'); 
+      const orig = btn.innerHTML; 
+      btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Copied!`; 
+      setTimeout(() => btn.innerHTML = orig, 1500); 
+    }); 
+  } 
+});
+
+// アイテムのコピー
+document.getElementById('menuCopyItem').addEventListener('click', () => {
+  const target = window.currentContextTarget;
+  if (target && target.item) {
+    setAppClipboard('item', JSON.parse(JSON.stringify(target.item)));
+  }
+  document.getElementById('contextMenu').style.display = 'none';
+});
+
+// グループのコピー
+document.getElementById('menuCopyHeading').addEventListener('click', () => {
+  const target = window.currentContextTarget;
+  if (target && target.group) {
+    setAppClipboard('group', JSON.parse(JSON.stringify(target.group)));
+  }
+  document.getElementById('contextMenu').style.display = 'none';
+});
+
+// フォルダのコピー
+document.getElementById('menuCopyFolder').addEventListener('click', () => {
+  const target = window.currentContextTarget;
+  if (target && target.folderIndex !== undefined) {
+    const folder = appData[target.folderIndex];
+    setAppClipboard('folder', JSON.parse(JSON.stringify(folder)));
+  }
+  document.getElementById('contextMenu').style.display = 'none';
+});
+
+// アイテムのペースト
+document.getElementById('menuPasteItem').addEventListener('click', () => {
+  const target = window.currentContextTarget;
+  const clip = getAppClipboard();
+  if (target && clip && clip.type === 'item') {
+    const { folderIndex, groupIndex } = target;
+    const groups = enginesToGroups(appData[folderIndex].engines);
+    const itemIndex = target.itemIndex !== undefined ? target.itemIndex + 1 : groups[groupIndex].items.length;
+    groups[groupIndex].items.splice(itemIndex, 0, JSON.parse(JSON.stringify(clip.data)));
+    appData[folderIndex].engines = groupsToEngines(groups);
+    saveAppData();
+    renderApp();
+  }
+  document.getElementById('contextMenu').style.display = 'none';
+});
+
+// グループのペースト
+document.getElementById('menuPasteHeading').addEventListener('click', () => {
+  const target = window.currentContextTarget;
+  const clip = getAppClipboard();
+  if (target && clip && clip.type === 'group') {
+    const { folderIndex } = target;
+    const groups = enginesToGroups(appData[folderIndex].engines);
+    const copyGroup = JSON.parse(JSON.stringify(clip.data));
+    copyGroup.heading = (copyGroup.heading || "グループ") + " (コピー)";
+    groups.push(copyGroup);
+    appData[folderIndex].engines = groupsToEngines(groups);
+    saveAppData();
+    renderApp();
+  }
+  document.getElementById('contextMenu').style.display = 'none';
+});
+
+// フォルダのペースト
+document.getElementById('menuPasteFolder').addEventListener('click', () => {
+  const clip = getAppClipboard();
+  if (clip && clip.type === 'folder') {
+    const copyFolder = JSON.parse(JSON.stringify(clip.data));
+    copyFolder.folderName = copyFolder.folderName + " (コピー)";
+    appData.push(copyFolder);
+    saveAppData();
+    renderApp();
+    setTimeout(() => { sliderContainer.scrollLeft = sliderContainer.scrollWidth; }, 100);
+  }
+  document.getElementById('contextMenu').style.display = 'none';
 });
 
 document.getElementById('menuEdit').addEventListener('click', () => {
@@ -1061,17 +1160,6 @@ document.getElementById('menuEdit').addEventListener('click', () => {
   document.getElementById('contextMenu').style.display = 'none'; 
 });
 
-document.getElementById('menuCopy').addEventListener('click', () => { 
-  if (window.currentContextTarget && window.currentContextTarget.item) { 
-    navigator.clipboard.writeText(window.currentContextTarget.item.home).then(() => { 
-      const btn = document.getElementById('menuCopy'); 
-      const orig = btn.innerHTML; 
-      btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Copied!`; 
-      setTimeout(() => btn.innerHTML = orig, 1500); 
-    }); 
-  } 
-});
-
 document.getElementById('menuRemove').addEventListener('click', () => { 
   const target = window.currentContextTarget; 
   if (target && target.item) { 
@@ -1092,11 +1180,9 @@ document.getElementById('menuRemoveHeading').addEventListener('click', () => {
       const { folderIndex, groupIndex } = target;
       const groups = enginesToGroups(appData[folderIndex].engines);
       if (groupIndex > 0) {
-        // 直前のグループにアイテムを合流
         groups[groupIndex - 1].items.push(...groups[groupIndex].items);
         groups.splice(groupIndex, 1);
       } else {
-        // 先頭の場合は見出し名のみ消去
         groups[groupIndex].heading = "";
       }
       appData[folderIndex].engines = groupsToEngines(groups);
